@@ -1,0 +1,12 @@
+{
+  "label": "qwen2.5:1.5b",
+  "model_path": "qwen2.5:1.5b",
+  "scenarios": 100,
+  "avg_reward": 1.741,
+  "tool_accuracy": 0.38,
+  "json_valid_rate": 0.99,
+  "positive_reward_pct": 0.99,
+  "strong_reward_pct": 0.38,
+  "total_time_s": 707.2,
+  "per_scenario_s": 7.1
+}

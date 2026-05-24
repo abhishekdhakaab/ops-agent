@@ -1,0 +1,3372 @@
+[
+  {
+    "id": "sc_cdn-edge_4657",
+    "question": "Why is cdn-edge slow right now?",
+    "service": "cdn-edge",
+    "scenario_id": "sc_cdn-edge_4657",
+    "category": "deploy_regression",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "sam",
+        "28"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_health-checker_7543",
+    "question": "health-checker is running slow. Can you investigate?",
+    "service": "health-checker",
+    "scenario_id": "sc_health-checker_7543",
+    "category": "resource_exhaustion",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "CPU"
+      ],
+      "should_mention": [
+        "cpu",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_audit-log_8953",
+    "question": "audit-log started having problems recently. What happened?",
+    "service": "audit-log",
+    "scenario_id": "sc_audit-log_8953",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "morgan",
+        "76"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_shipping-calc_5915",
+    "question": "shipping-calc is throwing connection errors. Investigate.",
+    "service": "shipping-calc",
+    "scenario_id": "sc_shipping-calc_5915",
+    "category": "upstream_dependency",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "s3",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_scheduler-svc_4652",
+    "question": "What's happening with scheduler-svc? It seems degraded.",
+    "service": "scheduler-svc",
+    "scenario_id": "sc_scheduler-svc_4652",
+    "category": "resource_exhaustion",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "db pool"
+      ],
+      "should_mention": [
+        "exhausted",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_cart-svc_9099",
+    "question": "Did the latest deployment cause issues in cart-svc?",
+    "service": "cart-svc",
+    "scenario_id": "sc_cart-svc_9099",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "sam",
+        "38"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_file-upload_5558",
+    "question": "file-upload is running slow. Can you investigate?",
+    "service": "file-upload",
+    "scenario_id": "sc_file-upload_5558",
+    "category": "resource_exhaustion",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "DISK"
+      ],
+      "should_mention": [
+        "disk",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_metrics-collector_4130",
+    "question": "metrics-collector is running slow. Can you investigate?",
+    "service": "metrics-collector",
+    "scenario_id": "sc_metrics-collector_4130",
+    "category": "resource_exhaustion",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "db pool"
+      ],
+      "should_mention": [
+        "exhausted",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_rate-limiter_1986",
+    "question": "Error spike in rate-limiter — what's going on?",
+    "service": "rate-limiter",
+    "scenario_id": "sc_rate-limiter_1986",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "notification",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_order-svc_7770",
+    "question": "Is order-svc having any issues right now?",
+    "service": "order-svc",
+    "scenario_id": "sc_order-svc_7770",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_analytics-ingest_1042",
+    "question": "Something changed in analytics-ingest. What's going on?",
+    "service": "analytics-ingest",
+    "scenario_id": "sc_analytics-ingest_1042",
+    "category": "config_change",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "flag"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_session-store_8622",
+    "question": "Is session-store having any issues right now?",
+    "service": "session-store",
+    "scenario_id": "sc_session-store_8622",
+    "category": "healthy",
+    "difficulty": "hard",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_media-svc_6992",
+    "question": "Quick health check on media-svc please.",
+    "service": "media-svc",
+    "scenario_id": "sc_media-svc_6992",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_notification-svc_4394",
+    "question": "notification-svc has errors but no recent deploys. What's happening?",
+    "service": "notification-svc",
+    "scenario_id": "sc_notification-svc_4394",
+    "category": "infrastructure",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "cluster"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_search-svc_1982",
+    "question": "Is search-svc having any issues right now?",
+    "service": "search-svc",
+    "scenario_id": "sc_search-svc_1982",
+    "category": "healthy",
+    "difficulty": "easy",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_import-worker_5640",
+    "question": "Is there a deployment regression in import-worker?",
+    "service": "import-worker",
+    "scenario_id": "sc_import-worker_5640",
+    "category": "deploy_regression",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "alex",
+        "82"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_billing-svc_9312",
+    "question": "billing-svc has errors but no recent deploys. What's happening?",
+    "service": "billing-svc",
+    "scenario_id": "sc_billing-svc_9312",
+    "category": "infrastructure",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "cluster"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_email-worker_3962",
+    "question": "email-worker is unstable. Is it infrastructure?",
+    "service": "email-worker",
+    "scenario_id": "sc_email-worker_3962",
+    "category": "infrastructure",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "infrastructure"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_queue-worker_4963",
+    "question": "Is there a deployment regression in queue-worker?",
+    "service": "queue-worker",
+    "scenario_id": "sc_queue-worker_4963",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "jordan",
+        "48"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_config-svc_6776",
+    "question": "Error spike in config-svc — what's going on?",
+    "service": "config-svc",
+    "scenario_id": "sc_config-svc_6776",
+    "category": "upstream_dependency",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "notification",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_api-gateway_3102",
+    "question": "api-gateway is throwing connection errors. Investigate.",
+    "service": "api-gateway",
+    "scenario_id": "sc_api-gateway_3102",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "auth",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_pdf-generator_7442",
+    "question": "Performance issue in pdf-generator — help me triage.",
+    "service": "pdf-generator",
+    "scenario_id": "sc_pdf-generator_7442",
+    "category": "resource_exhaustion",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "DISK"
+      ],
+      "should_mention": [
+        "disk",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_user-auth_9221",
+    "question": "Is user-auth down? Users can't complete their actions.",
+    "service": "user-auth",
+    "scenario_id": "sc_user-auth_9221",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "notification",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_checkout-svc_5742",
+    "question": "We are seeing errors in checkout-svc. What is causing this?",
+    "service": "checkout-svc",
+    "scenario_id": "sc_checkout-svc_5742",
+    "category": "upstream_dependency",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "payments",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_webhook-svc_9361",
+    "question": "webhook-svc is behaving differently. Investigate.",
+    "service": "webhook-svc",
+    "scenario_id": "sc_webhook-svc_9361",
+    "category": "config_change",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "flag"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_review-svc_7999",
+    "question": "review-svc is unstable. Is it infrastructure?",
+    "service": "review-svc",
+    "scenario_id": "sc_review-svc_7999",
+    "category": "infrastructure",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "cluster"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_cache-proxy_6530",
+    "question": "Performance issue in cache-proxy — help me triage.",
+    "service": "cache-proxy",
+    "scenario_id": "sc_cache-proxy_6530",
+    "category": "resource_exhaustion",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "CPU"
+      ],
+      "should_mention": [
+        "cpu",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_auth-proxy_3938",
+    "question": "Are there any issues with auth-proxy right now?",
+    "service": "auth-proxy",
+    "scenario_id": "sc_auth-proxy_3938",
+    "category": "config_change",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_recommendation-svc_5911",
+    "question": "Is recommendation-svc down? Users can't complete their actions.",
+    "service": "recommendation-svc",
+    "scenario_id": "sc_recommendation-svc_5911",
+    "category": "upstream_dependency",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "s3",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_feed-svc_1402",
+    "question": "Quick health check on feed-svc please.",
+    "service": "feed-svc",
+    "scenario_id": "sc_feed-svc_1402",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_inventory-svc_2667",
+    "question": "What's happening with inventory-svc? It seems degraded.",
+    "service": "inventory-svc",
+    "scenario_id": "sc_inventory-svc_2667",
+    "category": "resource_exhaustion",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "MEMORY"
+      ],
+      "should_mention": [
+        "memory",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_payment-svc_5877",
+    "question": "Any problems with payment-svc?",
+    "service": "payment-svc",
+    "scenario_id": "sc_payment-svc_5877",
+    "category": "healthy",
+    "difficulty": "easy",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_pricing-engine_5646",
+    "question": "Something changed in pricing-engine. What's going on?",
+    "service": "pricing-engine",
+    "scenario_id": "sc_pricing-engine_5646",
+    "category": "config_change",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_export-svc_1439",
+    "question": "export-svc has errors but no recent deploys. What's happening?",
+    "service": "export-svc",
+    "scenario_id": "sc_export-svc_1439",
+    "category": "infrastructure",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "infrastructure"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_image-resize_1908",
+    "question": "Check if image-resize is working correctly.",
+    "service": "image-resize",
+    "scenario_id": "sc_image-resize_1908",
+    "category": "config_change",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_catalog-svc_6161",
+    "question": "catalog-svc is running slow. Can you investigate?",
+    "service": "catalog-svc",
+    "scenario_id": "sc_catalog-svc_6161",
+    "category": "resource_exhaustion",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "DISK"
+      ],
+      "should_mention": [
+        "disk",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_user-auth_3248",
+    "question": "user-auth started having problems recently. What happened?",
+    "service": "user-auth",
+    "scenario_id": "sc_user-auth_3248",
+    "category": "deploy_regression",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "sam",
+        "40"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_file-upload_3304",
+    "question": "Investigate file-upload — seems like a platform issue.",
+    "service": "file-upload",
+    "scenario_id": "sc_file-upload_3304",
+    "category": "infrastructure",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "cluster"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_cart-svc_6052",
+    "question": "Is there a deployment regression in cart-svc?",
+    "service": "cart-svc",
+    "scenario_id": "sc_cart-svc_6052",
+    "category": "deploy_regression",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "sam",
+        "72"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_cache-proxy_4892",
+    "question": "cache-proxy started having problems recently. What happened?",
+    "service": "cache-proxy",
+    "scenario_id": "sc_cache-proxy_4892",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "morgan",
+        "69"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_catalog-svc_8520",
+    "question": "We are seeing errors in catalog-svc. What is causing this?",
+    "service": "catalog-svc",
+    "scenario_id": "sc_catalog-svc_8520",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "elasticsearch",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_queue-worker_3954",
+    "question": "Error spike in queue-worker — what's going on?",
+    "service": "queue-worker",
+    "scenario_id": "sc_queue-worker_3954",
+    "category": "upstream_dependency",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "stripe",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_webhook-svc_3247",
+    "question": "Something changed in webhook-svc. What's going on?",
+    "service": "webhook-svc",
+    "scenario_id": "sc_webhook-svc_3247",
+    "category": "config_change",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_health-checker_5286",
+    "question": "Error spike in health-checker — what's going on?",
+    "service": "health-checker",
+    "scenario_id": "sc_health-checker_5286",
+    "category": "upstream_dependency",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "cdn",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_cdn-edge_1761",
+    "question": "Is cdn-edge having any issues right now?",
+    "service": "cdn-edge",
+    "scenario_id": "sc_cdn-edge_1761",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_scheduler-svc_9866",
+    "question": "scheduler-svc is timing out for some users. What should we check?",
+    "service": "scheduler-svc",
+    "scenario_id": "sc_scheduler-svc_9866",
+    "category": "resource_exhaustion",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "db pool"
+      ],
+      "should_mention": [
+        "exhausted",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_billing-svc_1404",
+    "question": "billing-svc is timing out for some users. What should we check?",
+    "service": "billing-svc",
+    "scenario_id": "sc_billing-svc_1404",
+    "category": "resource_exhaustion",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "CPU"
+      ],
+      "should_mention": [
+        "cpu",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_audit-log_4617",
+    "question": "Is there a deployment regression in audit-log?",
+    "service": "audit-log",
+    "scenario_id": "sc_audit-log_4617",
+    "category": "deploy_regression",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "taylor",
+        "30"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_api-gateway_9542",
+    "question": "What's happening with api-gateway? It seems degraded.",
+    "service": "api-gateway",
+    "scenario_id": "sc_api-gateway_9542",
+    "category": "resource_exhaustion",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "CPU"
+      ],
+      "should_mention": [
+        "cpu",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_rate-limiter_2577",
+    "question": "Is rate-limiter having any issues right now?",
+    "service": "rate-limiter",
+    "scenario_id": "sc_rate-limiter_2577",
+    "category": "healthy",
+    "difficulty": "easy",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_pricing-engine_2951",
+    "question": "Is pricing-engine having any issues right now?",
+    "service": "pricing-engine",
+    "scenario_id": "sc_pricing-engine_2951",
+    "category": "healthy",
+    "difficulty": "hard",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_review-svc_1448",
+    "question": "Quick health check on review-svc please.",
+    "service": "review-svc",
+    "scenario_id": "sc_review-svc_1448",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_checkout-svc_9066",
+    "question": "Are there any issues with checkout-svc right now?",
+    "service": "checkout-svc",
+    "scenario_id": "sc_checkout-svc_9066",
+    "category": "config_change",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_pdf-generator_6818",
+    "question": "Why is pdf-generator slow right now?",
+    "service": "pdf-generator",
+    "scenario_id": "sc_pdf-generator_6818",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "jordan",
+        "77"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_shipping-calc_5973",
+    "question": "shipping-calc is throwing connection errors. Investigate.",
+    "service": "shipping-calc",
+    "scenario_id": "sc_shipping-calc_5973",
+    "category": "upstream_dependency",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "payments",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_metrics-collector_7375",
+    "question": "Is metrics-collector having any issues right now?",
+    "service": "metrics-collector",
+    "scenario_id": "sc_metrics-collector_7375",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_import-worker_3627",
+    "question": "Performance issue in import-worker — help me triage.",
+    "service": "import-worker",
+    "scenario_id": "sc_import-worker_3627",
+    "category": "resource_exhaustion",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "db pool"
+      ],
+      "should_mention": [
+        "exhausted",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_recommendation-svc_9747",
+    "question": "Are there any issues with recommendation-svc right now?",
+    "service": "recommendation-svc",
+    "scenario_id": "sc_recommendation-svc_9747",
+    "category": "config_change",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_session-store_9269",
+    "question": "Error spike in session-store — what's going on?",
+    "service": "session-store",
+    "scenario_id": "sc_session-store_9269",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "stripe",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_config-svc_7237",
+    "question": "Is config-svc down? Users can't complete their actions.",
+    "service": "config-svc",
+    "scenario_id": "sc_config-svc_7237",
+    "category": "upstream_dependency",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "auth",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_payment-svc_9230",
+    "question": "Quick health check on payment-svc please.",
+    "service": "payment-svc",
+    "scenario_id": "sc_payment-svc_9230",
+    "category": "healthy",
+    "difficulty": "easy",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_auth-proxy_8449",
+    "question": "Investigate auth-proxy — seems like a platform issue.",
+    "service": "auth-proxy",
+    "scenario_id": "sc_auth-proxy_8449",
+    "category": "infrastructure",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "infrastructure"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_export-svc_3204",
+    "question": "export-svc started having problems recently. What happened?",
+    "service": "export-svc",
+    "scenario_id": "sc_export-svc_3204",
+    "category": "deploy_regression",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "morgan",
+        "45"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_email-worker_2838",
+    "question": "What's happening with email-worker? It seems degraded.",
+    "service": "email-worker",
+    "scenario_id": "sc_email-worker_2838",
+    "category": "resource_exhaustion",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "CPU"
+      ],
+      "should_mention": [
+        "cpu",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_search-svc_3159",
+    "question": "Any problems with search-svc?",
+    "service": "search-svc",
+    "scenario_id": "sc_search-svc_3159",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_analytics-ingest_7208",
+    "question": "Why is analytics-ingest slow right now?",
+    "service": "analytics-ingest",
+    "scenario_id": "sc_analytics-ingest_7208",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "sam",
+        "78"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_image-resize_9220",
+    "question": "Quick health check on image-resize please.",
+    "service": "image-resize",
+    "scenario_id": "sc_image-resize_9220",
+    "category": "healthy",
+    "difficulty": "hard",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_order-svc_7533",
+    "question": "Is there a deployment regression in order-svc?",
+    "service": "order-svc",
+    "scenario_id": "sc_order-svc_7533",
+    "category": "deploy_regression",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "taylor",
+        "50"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_notification-svc_3483",
+    "question": "Did the latest deployment cause issues in notification-svc?",
+    "service": "notification-svc",
+    "scenario_id": "sc_notification-svc_3483",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "taylor",
+        "64"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_inventory-svc_7586",
+    "question": "inventory-svc is throwing connection errors. Investigate.",
+    "service": "inventory-svc",
+    "scenario_id": "sc_inventory-svc_7586",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "rabbitmq",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_feed-svc_8287",
+    "question": "Investigate feed-svc — users are reporting errors after a release.",
+    "service": "feed-svc",
+    "scenario_id": "sc_feed-svc_8287",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "alex",
+        "61"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_media-svc_8452",
+    "question": "Investigate media-svc — seems like a platform issue.",
+    "service": "media-svc",
+    "scenario_id": "sc_media-svc_8452",
+    "category": "infrastructure",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "cluster"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_email-worker_1351",
+    "question": "Are there any issues with email-worker right now?",
+    "service": "email-worker",
+    "scenario_id": "sc_email-worker_1351",
+    "category": "config_change",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_notification-svc_6206",
+    "question": "notification-svc is behaving differently. Investigate.",
+    "service": "notification-svc",
+    "scenario_id": "sc_notification-svc_6206",
+    "category": "config_change",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "flag"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_webhook-svc_1798",
+    "question": "Is webhook-svc down? Users can't complete their actions.",
+    "service": "webhook-svc",
+    "scenario_id": "sc_webhook-svc_1798",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "elasticsearch",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_catalog-svc_9202",
+    "question": "catalog-svc has errors but no recent deploys. What's happening?",
+    "service": "catalog-svc",
+    "scenario_id": "sc_catalog-svc_9202",
+    "category": "infrastructure",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "infrastructure"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_cart-svc_7557",
+    "question": "Quick health check on cart-svc please.",
+    "service": "cart-svc",
+    "scenario_id": "sc_cart-svc_7557",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_feed-svc_7189",
+    "question": "Why is feed-svc slow right now?",
+    "service": "feed-svc",
+    "scenario_id": "sc_feed-svc_7189",
+    "category": "deploy_regression",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "jordan",
+        "46"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_review-svc_8656",
+    "question": "review-svc started having problems recently. What happened?",
+    "service": "review-svc",
+    "scenario_id": "sc_review-svc_8656",
+    "category": "deploy_regression",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "alex",
+        "85"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_recommendation-svc_6947",
+    "question": "Performance issue in recommendation-svc — help me triage.",
+    "service": "recommendation-svc",
+    "scenario_id": "sc_recommendation-svc_6947",
+    "category": "resource_exhaustion",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "DISK"
+      ],
+      "should_mention": [
+        "disk",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_checkout-svc_5262",
+    "question": "Is checkout-svc down? Users can't complete their actions.",
+    "service": "checkout-svc",
+    "scenario_id": "sc_checkout-svc_5262",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "postgres",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_analytics-ingest_9470",
+    "question": "analytics-ingest has errors but no recent deploys. What's happening?",
+    "service": "analytics-ingest",
+    "scenario_id": "sc_analytics-ingest_9470",
+    "category": "infrastructure",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "infrastructure"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_cdn-edge_3525",
+    "question": "cdn-edge is throwing connection errors. Investigate.",
+    "service": "cdn-edge",
+    "scenario_id": "sc_cdn-edge_3525",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "stripe",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_queue-worker_8974",
+    "question": "Is queue-worker down? Users can't complete their actions.",
+    "service": "queue-worker",
+    "scenario_id": "sc_queue-worker_8974",
+    "category": "upstream_dependency",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "elasticsearch",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_session-store_2412",
+    "question": "session-store has errors but no recent deploys. What's happening?",
+    "service": "session-store",
+    "scenario_id": "sc_session-store_2412",
+    "category": "infrastructure",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "cluster"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_cache-proxy_6157",
+    "question": "Investigate cache-proxy — users are reporting errors after a release.",
+    "service": "cache-proxy",
+    "scenario_id": "sc_cache-proxy_6157",
+    "category": "deploy_regression",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "deployments"
+    ],
+    "expected_tools_any": [
+      "metrics",
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 2,
+    "expected_max_tools": 5,
+    "ground_truth": {
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "correct_action": "rollback",
+      "must_mention": [
+        "deploy"
+      ],
+      "should_mention": [
+        "alex",
+        "32"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable",
+        "no issues"
+      ]
+    }
+  },
+  {
+    "id": "sc_api-gateway_4483",
+    "question": "Check if api-gateway is working correctly.",
+    "service": "api-gateway",
+    "scenario_id": "sc_api-gateway_4483",
+    "category": "config_change",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_order-svc_1394",
+    "question": "Performance issue in order-svc — help me triage.",
+    "service": "order-svc",
+    "scenario_id": "sc_order-svc_1394",
+    "category": "resource_exhaustion",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "CPU"
+      ],
+      "should_mention": [
+        "cpu",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_search-svc_3014",
+    "question": "What's happening with search-svc? It seems degraded.",
+    "service": "search-svc",
+    "scenario_id": "sc_search-svc_3014",
+    "category": "resource_exhaustion",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "MEMORY"
+      ],
+      "should_mention": [
+        "memory",
+        "no deploy",
+        "cache"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_user-auth_5489",
+    "question": "user-auth is timing out for some users. What should we check?",
+    "service": "user-auth",
+    "scenario_id": "sc_user-auth_5489",
+    "category": "resource_exhaustion",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "db pool"
+      ],
+      "should_mention": [
+        "exhausted",
+        "no deploy"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_image-resize_3064",
+    "question": "image-resize has errors but no recent deploys. What's happening?",
+    "service": "image-resize",
+    "scenario_id": "sc_image-resize_3064",
+    "category": "infrastructure",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "infrastructure"
+      ],
+      "should_mention": [
+        "no deploy",
+        "down",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_rate-limiter_5029",
+    "question": "Quick health check on rate-limiter please.",
+    "service": "rate-limiter",
+    "scenario_id": "sc_rate-limiter_5029",
+    "category": "healthy",
+    "difficulty": "hard",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_audit-log_7963",
+    "question": "Is audit-log down? Users can't complete their actions.",
+    "service": "audit-log",
+    "scenario_id": "sc_audit-log_7963",
+    "category": "upstream_dependency",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "kafka",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_media-svc_9808",
+    "question": "Status update on media-svc?",
+    "service": "media-svc",
+    "scenario_id": "sc_media-svc_9808",
+    "category": "healthy",
+    "difficulty": "medium",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  },
+  {
+    "id": "sc_inventory-svc_9615",
+    "question": "Error spike in inventory-svc — what's going on?",
+    "service": "inventory-svc",
+    "scenario_id": "sc_inventory-svc_9615",
+    "category": "upstream_dependency",
+    "difficulty": "easy",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "correct_action": "escalate",
+      "must_mention": [
+        "error"
+      ],
+      "should_mention": [
+        "rabbitmq",
+        "upstream",
+        "connection"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "rollback"
+      ]
+    }
+  },
+  {
+    "id": "sc_scheduler-svc_2684",
+    "question": "Are there any issues with scheduler-svc right now?",
+    "service": "scheduler-svc",
+    "scenario_id": "sc_scheduler-svc_2684",
+    "category": "config_change",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_shipping-calc_3484",
+    "question": "shipping-calc is behaving differently. Investigate.",
+    "service": "shipping-calc",
+    "scenario_id": "sc_shipping-calc_3484",
+    "category": "config_change",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_auth-proxy_8688",
+    "question": "What's happening with auth-proxy? It seems degraded.",
+    "service": "auth-proxy",
+    "scenario_id": "sc_auth-proxy_8688",
+    "category": "resource_exhaustion",
+    "difficulty": "hard",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "metrics"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "correct_action": "mitigate",
+      "must_mention": [
+        "MEMORY"
+      ],
+      "should_mention": [
+        "memory",
+        "no deploy",
+        "cache"
+      ],
+      "should_not_conclude": [
+        "deploy caused",
+        "healthy"
+      ]
+    }
+  },
+  {
+    "id": "sc_file-upload_4482",
+    "question": "Check if file-upload is working correctly.",
+    "service": "file-upload",
+    "scenario_id": "sc_file-upload_4482",
+    "category": "config_change",
+    "difficulty": "medium",
+    "expected_tools_all": [
+      "logs"
+    ],
+    "expected_tools_any": [
+      "logs",
+      "deployments"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 4,
+    "ground_truth": {
+      "root_cause": "config_change",
+      "severity": "medium",
+      "correct_action": "rollback",
+      "must_mention": [
+        "config"
+      ],
+      "should_mention": [
+        "change",
+        "certificate"
+      ],
+      "should_not_conclude": [
+        "healthy",
+        "stable"
+      ]
+    }
+  },
+  {
+    "id": "sc_config-svc_9520",
+    "question": "Is config-svc having any issues right now?",
+    "service": "config-svc",
+    "scenario_id": "sc_config-svc_9520",
+    "category": "healthy",
+    "difficulty": "hard",
+    "expected_tools_all": [],
+    "expected_tools_any": [
+      "metrics",
+      "logs"
+    ],
+    "expected_min_tools": 1,
+    "expected_max_tools": 3,
+    "ground_truth": {
+      "root_cause": "healthy",
+      "severity": "low",
+      "correct_action": "investigate",
+      "must_mention": [],
+      "should_mention": [
+        "healthy",
+        "stable",
+        "normal",
+        "no spike"
+      ],
+      "should_not_conclude": [
+        "critical",
+        "outage",
+        "regression",
+        "spike"
+      ]
+    }
+  }
+]

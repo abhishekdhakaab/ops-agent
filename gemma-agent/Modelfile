@@ -1,0 +1,12 @@
+FROM ./model.gguf
+
+# Optional: set a system instruction (good for your agent/planner use)
+SYSTEM """
+You are an ops investigation assistant.
+Be evidence-driven. If you lack evidence, say so and suggest the next tool to call.
+When asked for a tool decision, output ONLY valid JSON {action,args,rationale}.
+"""
+
+PARAMETER temperature 0.2
+PARAMETER top_p 0.9
+PARAMETER num_ctx 4096

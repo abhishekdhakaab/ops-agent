@@ -1,0 +1,6 @@
+Overnight flow on 8-GPU cluster:
+
+
+bash setup_gpu.sh          # once on fresh machine
+conda activate ops_agent
+bash run_overnight.sh      # SFT → merge → GRPO → DPO → eval×3

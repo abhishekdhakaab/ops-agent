@@ -1,0 +1,43 @@
+{
+  "label": "SFT (unseen)",
+  "model_path": "/Users/abhishekdhaka/Project winter 2027/ML/ops_agent(new changes)_updated/data/trained_models/sft_qwen2.5_1.5b/final",
+  "eval_type": "unseen_scenarios",
+  "scenarios": 100,
+  "first_step_avg_reward": 2.185,
+  "first_tool_accuracy": 0.75,
+  "json_valid_rate": 0.95,
+  "first_step_strong_pct": 0.95,
+  "total_time_s": 1847.4,
+  "per_root_cause": {
+    "config_change": {
+      "accuracy": 0.875,
+      "avg_reward": 2.062,
+      "count": 16
+    },
+    "deploy_regression": {
+      "accuracy": 1.0,
+      "avg_reward": 2.5,
+      "count": 17
+    },
+    "healthy": {
+      "accuracy": 1.0,
+      "avg_reward": 2.5,
+      "count": 17
+    },
+    "infrastructure": {
+      "accuracy": 0.25,
+      "avg_reward": 1.975,
+      "count": 16
+    },
+    "resource_exhaustion": {
+      "accuracy": 0.529,
+      "avg_reward": 1.676,
+      "count": 17
+    },
+    "upstream_dependency": {
+      "accuracy": 0.824,
+      "avg_reward": 2.376,
+      "count": 17
+    }
+  }
+}

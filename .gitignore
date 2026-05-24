@@ -1,0 +1,33 @@
+# ── Model weights (can be GBs — retrain on the cluster instead) ───
+data/trained_models/
+
+# ── Secrets ───────────────────────────────────────────────────────
+.env
+*.env
+
+# ── macOS junk ────────────────────────────────────────────────────
+.DS_Store
+**/.DS_Store
+
+# ── Python cache ──────────────────────────────────────────────────
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+
+# ── Logs (generated at runtime) ───────────────────────────────────
+logs/
+*.log
+
+# ── Large binary / archive files ──────────────────────────────────
+*.zip
+*.docx
+*.pdf
+
+# ── Jupyter ───────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── IDE ───────────────────────────────────────────────────────────
+.vscode/
+.idea/

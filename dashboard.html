@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ops Agent — Eval Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  
+  :root {
+    --bg: #0c0c0f;
+    --surface: #16161a;
+    --surface2: #1e1e24;
+    --border: #2a2a32;
+    --text: #e8e6e3;
+    --text2: #94929d;
+    --accent: #7f5af0;
+    --accent2: #2cb67d;
+    --warn: #f0a05a;
+    --danger: #e05252;
+    --blue: #5a9cf0;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.3rem;
+  }
+  .header p {
+    color: var(--text2);
+    font-size: 0.9rem;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .card h2 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+    margin-bottom: 1rem;
+  }
+  .card.full { grid-column: 1 / -1; }
+  
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-label { font-size: 0.85rem; color: var(--text2); }
+  .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .metric-value.good { color: var(--accent2); }
+  .metric-value.mid { color: var(--warn); }
+  .metric-value.bad { color: var(--danger); }
+  
+  .big-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .big-label {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-top: 0.3rem;
+  }
+  
+  .delta {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+  }
+  .delta.up { background: #2cb67d22; color: var(--accent2); }
+  .delta.down { background: #e0525222; color: var(--danger); }
+  
+  .chart-container {
+    position: relative;
+    height: 260px;
+  }
+  
+  .model-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .model-tab {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    transition: all 0.15s;
+  }
+  .model-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  
+  .load-section {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+  .load-section textarea {
+    width: 100%;
+    max-width: 600px;
+    height: 120px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.8rem;
+    resize: vertical;
+    margin: 1rem 0;
+  }
+  .load-section textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+    margin-left: 0.5rem;
+  }
+  
+  .per-question {
+    overflow-x: auto;
+  }
+  .per-question table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+  .per-question th {
+    text-align: left;
+    padding: 0.5rem 0.6rem;
+    color: var(--text2);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .per-question td {
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+  }
+  .tools-badge {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    margin: 0.1rem;
+  }
+  .tools-badge.metrics { background: #5a9cf022; color: var(--blue); }
+  .tools-badge.logs { background: #f0a05a22; color: var(--warn); }
+  .tools-badge.deployments { background: #2cb67d22; color: var(--accent2); }
+  .tools-badge.ticket { background: #7f5af022; color: var(--accent); }
+  
+  .score-bar {
+    display: inline-block;
+    height: 6px;
+    border-radius: 3px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Ops Agent — Eval Dashboard</h1>
+  <p>Multi-model comparison across operational investigation scenarios</p>
+</div>
+
+<div id="app">
+  <div class="load-section card" style="max-width:700px; margin:0 auto;">
+    <h2>Load eval results</h2>
+    <p style="color:var(--text2); font-size:0.85rem; margin-bottom:0.5rem;">
+      Paste the JSON from <code style="color:var(--accent)">data/eval_results/eval_*.json</code> files.<br>
+      You can paste multiple files — separate them with a blank line.
+    </p>
+    <textarea id="jsonInput" placeholder='Paste eval result JSON here...
+Or click "Load demo" to see sample data.'></textarea>
+    <br>
+    <button class="btn btn-primary" onclick="loadFromInput()">Load results</button>
+    <button class="btn btn-ghost" onclick="loadDemo()">Load demo</button>
+  </div>
+</div>
+
+<div id="dashboard" style="display:none">
+  <div class="model-tabs" id="modelTabs"></div>
+  <div class="grid" id="dashGrid"></div>
+</div>
+
+<script>
+const COLORS = ['#7f5af0', '#2cb67d', '#5a9cf0', '#f0a05a', '#e05252'];
+
+// Demo data for people who don't have results yet
+const DEMO_DATA = [
+  {
+    summary: {
+      model: "gemma3:1b", timestamp: "2025-12-17T18:30:00Z",
+      total_questions: 15, success_count: 12, error_count: 3,
+      success_rate: 0.8, tool_selection_accuracy: 0.45, tool_any_accuracy: 0.83,
+      tool_diversity_avg: 0.19, efficiency_score_avg: 0.31,
+      grounding_score_avg: 0.35, conclusion_accuracy: 0.38,
+      answer_quality_avg: 0.6, avg_latency_s: 34.2, median_latency_s: 33.1,
+    },
+    results: []
+  },
+  {
+    summary: {
+      model: "gemma3:4b", timestamp: "2025-12-18T10:00:00Z",
+      total_questions: 15, success_count: 14, error_count: 1,
+      success_rate: 0.93, tool_selection_accuracy: 0.78, tool_any_accuracy: 0.93,
+      tool_diversity_avg: 0.52, efficiency_score_avg: 0.72,
+      grounding_score_avg: 0.58, conclusion_accuracy: 0.64,
+      answer_quality_avg: 0.85, avg_latency_s: 18.5, median_latency_s: 16.3,
+    },
+    results: []
+  },
+  {
+    summary: {
+      model: "qwen2.5:7b", timestamp: "2025-12-18T12:00:00Z",
+      total_questions: 15, success_count: 15, error_count: 0,
+      success_rate: 1.0, tool_selection_accuracy: 0.91, tool_any_accuracy: 1.0,
+      tool_diversity_avg: 0.82, efficiency_score_avg: 0.89,
+      grounding_score_avg: 0.72, conclusion_accuracy: 0.81,
+      answer_quality_avg: 0.92, avg_latency_s: 11.8, median_latency_s: 10.2,
+    },
+    results: []
+  }
+];
+
+let allData = [];
+
+function loadFromInput() {
+  const raw = document.getElementById('jsonInput').value.trim();
+  if (!raw) return;
+  
+  // Try parsing as single JSON or multiple JSONs
+  const chunks = raw.split(/\n\s*\n/).filter(c => c.trim());
+  allData = [];
+  for (const chunk of chunks) {
+    try {
+      const obj = JSON.parse(chunk.trim());
+      allData.push(obj);
+    } catch(e) {
+      // Try wrapping in array
+      try {
+        const arr = JSON.parse('[' + chunk.trim() + ']');
+        allData.push(...arr);
+      } catch(e2) {
+        alert('Could not parse JSON. Check the format.');
+        return;
+      }
+    }
+  }
+  render();
+}
+
+function loadDemo() {
+  allData = DEMO_DATA;
+  render();
+}
+
+function render() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  
+  renderTabs();
+  renderDashboard();
+}
+
+function renderTabs() {
+  const el = document.getElementById('modelTabs');
+  el.innerHTML = '<button class="model-tab active" onclick="showAll(this)">All models</button>';
+  allData.forEach((d, i) => {
+    el.innerHTML += `<button class="model-tab" onclick="showModel(${i}, this)" style="border-color:${COLORS[i%COLORS.length]}">${d.summary.model}</button>`;
+  });
+}
+
+function showAll(btn) {
+  document.querySelectorAll('.model-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderDashboard();
+}
+
+function showModel(idx, btn) {
+  document.querySelectorAll('.model-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderDashboard(idx);
+}
+
+function valClass(v, thresholds) {
+  if (v >= thresholds[0]) return 'good';
+  if (v >= thresholds[1]) return 'mid';
+  return 'bad';
+}
+
+function renderDashboard(selectedIdx) {
+  const grid = document.getElementById('dashGrid');
+  const data = selectedIdx !== undefined ? [allData[selectedIdx]] : allData;
+  const isComparison = data.length > 1;
+  
+  let html = '';
+  
+  if (isComparison) {
+    // Hero metrics — best model
+    const best = [...data].sort((a,b) => b.summary.conclusion_accuracy - a.summary.conclusion_accuracy)[0];
+    const worst = [...data].sort((a,b) => a.summary.conclusion_accuracy - b.summary.conclusion_accuracy)[0];
+    
+    html += `
+    <div class="card">
+      <h2>Best conclusion accuracy</h2>
+      <div class="big-number" style="color:var(--accent2)">${(best.summary.conclusion_accuracy*100).toFixed(1)}%</div>
+      <div class="big-label">${best.summary.model}</div>
+    </div>
+    <div class="card">
+      <h2>Improvement over baseline</h2>
+      <div class="big-number" style="color:var(--accent)">+${((best.summary.conclusion_accuracy - worst.summary.conclusion_accuracy)*100).toFixed(1)}pp</div>
+      <div class="big-label">${worst.summary.model} → ${best.summary.model}</div>
+    </div>
+    <div class="card">
+      <h2>Best tool diversity</h2>
+      <div class="big-number" style="color:var(--blue)">${(Math.max(...data.map(d=>d.summary.tool_diversity_avg))).toFixed(2)}</div>
+      <div class="big-label">Unique/total tool calls ratio</div>
+    </div>
+    `;
+    
+    // Radar chart
+    html += `<div class="card full"><h2>Model comparison</h2><div class="chart-container"><canvas id="radarChart"></canvas></div></div>`;
+    
+    // Comparison table
+    html += `<div class="card full"><h2>Detailed metrics</h2><div class="per-question"><table>
+      <tr><th>Metric</th>${data.map((d,i) => `<th style="color:${COLORS[i%COLORS.length]}">${d.summary.model}</th>`).join('')}</tr>`;
+    
+    const metrics = [
+      ['Success rate', 'success_rate', v => (v*100).toFixed(0)+'%', [0.9, 0.7]],
+      ['Tool selection accuracy', 'tool_selection_accuracy', v => (v*100).toFixed(1)+'%', [0.8, 0.5]],
+      ['Conclusion accuracy', 'conclusion_accuracy', v => (v*100).toFixed(1)+'%', [0.7, 0.4]],
+      ['Tool diversity', 'tool_diversity_avg', v => v.toFixed(3), [0.6, 0.3]],
+      ['Efficiency', 'efficiency_score_avg', v => v.toFixed(3), [0.7, 0.4]],
+      ['Grounding', 'grounding_score_avg', v => v.toFixed(3), [0.6, 0.3]],
+      ['Avg latency', 'avg_latency_s', v => v.toFixed(1)+'s', [15, 30]],  // inverted — lower is better
+    ];
+    
+    for (const [label, key, fmt, thresh] of metrics) {
+      html += `<tr><td class="metric-label">${label}</td>`;
+      for (const d of data) {
+        const v = d.summary[key] || 0;
+        const cls = key === 'avg_latency_s'
+          ? valClass(v, [thresh[1], thresh[0]].reverse()) // invert for latency
+          : valClass(v, thresh);
+        html += `<td class="metric-value ${cls}">${fmt(v)}</td>`;
+      }
+      html += '</tr>';
+    }
+    html += '</table></div></div>';
+    
+  } else {
+    // Single model view
+    const s = data[0].summary;
+    html += `
+    <div class="card">
+      <h2>Conclusion accuracy</h2>
+      <div class="big-number ${valClass(s.conclusion_accuracy||0, [0.7, 0.4])}">${((s.conclusion_accuracy||0)*100).toFixed(1)}%</div>
+      <div class="big-label">${s.model} — ${s.success_count}/${s.total_questions} questions</div>
+    </div>
+    <div class="card">
+      <h2>Tool selection</h2>
+      <div class="big-number ${valClass(s.tool_selection_accuracy, [0.8, 0.5])}">${(s.tool_selection_accuracy*100).toFixed(1)}%</div>
+      <div class="big-label">Required tools used correctly</div>
+    </div>
+    <div class="card">
+      <h2>Avg latency</h2>
+      <div class="big-number" style="color:var(--blue)">${s.avg_latency_s.toFixed(1)}s</div>
+      <div class="big-label">Per investigation</div>
+    </div>
+    `;
+    
+    // All metrics
+    html += `<div class="card"><h2>All metrics</h2>`;
+    const rows = [
+      ['Success rate', (s.success_rate*100).toFixed(0)+'%', valClass(s.success_rate, [0.9, 0.7])],
+      ['Tool selection', (s.tool_selection_accuracy*100).toFixed(1)+'%', valClass(s.tool_selection_accuracy, [0.8, 0.5])],
+      ['Tool any', (s.tool_any_accuracy*100).toFixed(1)+'%', valClass(s.tool_any_accuracy, [0.9, 0.7])],
+      ['Conclusion accuracy', ((s.conclusion_accuracy||0)*100).toFixed(1)+'%', valClass(s.conclusion_accuracy||0, [0.7, 0.4])],
+      ['Tool diversity', s.tool_diversity_avg.toFixed(3), valClass(s.tool_diversity_avg, [0.6, 0.3])],
+      ['Efficiency', s.efficiency_score_avg.toFixed(3), valClass(s.efficiency_score_avg, [0.7, 0.4])],
+      ['Grounding', s.grounding_score_avg.toFixed(3), valClass(s.grounding_score_avg, [0.6, 0.3])],
+    ];
+    for (const [label, value, cls] of rows) {
+      html += `<div class="metric-row"><span class="metric-label">${label}</span><span class="metric-value ${cls}">${value}</span></div>`;
+    }
+    html += '</div>';
+    
+    // Bar chart for single model
+    html += `<div class="card"><h2>Score breakdown</h2><div class="chart-container"><canvas id="barChart"></canvas></div></div>`;
+  }
+  
+  // Per-question results (if available)
+  if (data[0].results && data[0].results.length > 0) {
+    html += `<div class="card full"><h2>Per-question results — ${data[0].summary.model}</h2><div class="per-question"><table>
+      <tr><th>Question</th><th>Tools</th><th>ToolSel</th><th>Conclusion</th><th>Latency</th></tr>`;
+    for (const r of data[0].results) {
+      if (r.error) {
+        html += `<tr><td>${r.question.slice(0,50)}...</td><td colspan="4" style="color:var(--danger)">ERROR: ${r.error.slice(0,60)}</td></tr>`;
+        continue;
+      }
+      const tools = (r.tools_used||[]).map(t => `<span class="tools-badge ${t}">${t}</span>`).join('');
+      const ts = r.tool_score?.all_score || 0;
+      const cs = r.conclusion?.conclusion_score || 0;
+      html += `<tr>
+        <td style="font-family:'DM Sans';max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.question}</td>
+        <td>${tools}</td>
+        <td class="${valClass(ts,[0.8,0.5])}">${(ts*100).toFixed(0)}%</td>
+        <td class="${valClass(cs,[0.7,0.4])}">${(cs*100).toFixed(0)}%</td>
+        <td>${r.latency_s}s</td>
+      </tr>`;
+    }
+    html += '</table></div></div>';
+  }
+  
+  grid.innerHTML = html;
+  
+  // Render charts
+  if (isComparison) {
+    renderRadarChart(data);
+  } else {
+    renderBarChart(data[0]);
+  }
+}
+
+function renderRadarChart(data) {
+  const ctx = document.getElementById('radarChart');
+  if (!ctx) return;
+  
+  new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Tool selection', 'Conclusion', 'Diversity', 'Efficiency', 'Grounding', 'Quality'],
+      datasets: data.map((d, i) => ({
+        label: d.summary.model,
+        data: [
+          d.summary.tool_selection_accuracy,
+          d.summary.conclusion_accuracy || 0,
+          d.summary.tool_diversity_avg,
+          d.summary.efficiency_score_avg,
+          d.summary.grounding_score_avg,
+          d.summary.answer_quality_avg,
+        ],
+        borderColor: COLORS[i % COLORS.length],
+        backgroundColor: COLORS[i % COLORS.length] + '15',
+        pointBackgroundColor: COLORS[i % COLORS.length],
+        borderWidth: 2,
+        pointRadius: 3,
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        r: {
+          min: 0, max: 1,
+          ticks: { stepSize: 0.25, color: '#94929d', backdropColor: 'transparent', font: { size: 10 } },
+          grid: { color: '#2a2a32' },
+          pointLabels: { color: '#e8e6e3', font: { size: 11, family: 'DM Sans' } },
+          angleLines: { color: '#2a2a32' },
+        }
+      },
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#e8e6e3', font: { family: 'DM Sans' }, padding: 16, usePointStyle: true } }
+      }
+    }
+  });
+}
+
+function renderBarChart(data) {
+  const ctx = document.getElementById('barChart');
+  if (!ctx) return;
+  
+  const s = data.summary;
+  const labels = ['Tool sel.', 'Conclusion', 'Diversity', 'Efficiency', 'Grounding'];
+  const values = [s.tool_selection_accuracy, s.conclusion_accuracy||0, s.tool_diversity_avg, s.efficiency_score_avg, s.grounding_score_avg];
+  const colors = values.map(v => v >= 0.7 ? '#2cb67d' : v >= 0.4 ? '#f0a05a' : '#e05252');
+  
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: colors, borderRadius: 4, barThickness: 40 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      scales: {
+        x: { min: 0, max: 1, grid: { color: '#2a2a3220' }, ticks: { color: '#94929d', callback: v => (v*100)+'%' } },
+        y: { grid: { display: false }, ticks: { color: '#e8e6e3', font: { family: 'DM Sans' } } },
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+</script>
+</body>
+</html>

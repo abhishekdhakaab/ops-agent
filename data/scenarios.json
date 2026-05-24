@@ -1,0 +1,4476 @@
+{
+  "version": "3.0",
+  "description": "Procedurally generated: 100 scenarios, seed=42, hard_ratio=0.3",
+  "count": 100,
+  "scenarios": [
+    {
+      "id": "sc_cdn-edge_4657",
+      "service": "cdn-edge",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 297.7,
+        "p95_latency_ms": 912.9,
+        "spike_start_minutes_ago": 23
+      },
+      "logs": {
+        "error_count": 319,
+        "error_messages": [
+          "OOM killed worker pid 1434: used 18GB of 16GB",
+          "heap usage 94%: GC pause 55ms",
+          "cannot allocate 398MB for request buffer"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 28,
+        "deploy_summary": "Upgrade axios from v5 to v7",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "sam",
+          "28"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_health-checker_7543",
+      "service": "health-checker",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 360.3,
+        "p95_latency_ms": 1203.1,
+        "spike_start_minutes_ago": 36
+      },
+      "logs": {
+        "error_count": 100,
+        "error_messages": [
+          "queue depth 389: processing backlog",
+          "request processing timeout (396s)",
+          "CPU throttled: 99% utilization"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2361,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "CPU"
+        ],
+        "should_mention": [
+          "cpu",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_audit-log_8953",
+      "service": "audit-log",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 668.8,
+        "p95_latency_ms": 1561.1,
+        "spike_start_minutes_ago": 79
+      },
+      "logs": {
+        "error_count": 332,
+        "error_messages": [
+          "cannot allocate 404MB for request buffer",
+          "heap usage 89%: GC pause 100ms",
+          "OOM killed worker pid 1035: used 112GB of 6GB"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 76,
+        "deploy_summary": "Increase retry count from 3 to 302 and reduce backoff interval",
+        "deploy_author": "morgan"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "morgan",
+          "76"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_shipping-calc_5915",
+      "service": "shipping-calc",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 355.7,
+        "p95_latency_ms": 1134.0,
+        "spike_start_minutes_ago": 25
+      },
+      "logs": {
+        "error_count": 87,
+        "error_messages": [
+          "connection refused from redis-cluster",
+          "circuit breaker OPEN for rabbitmq (failures: 138/9)",
+          "DNS resolution failed for stripe-api.internal"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 57,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "s3",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_scheduler-svc_4652",
+      "service": "scheduler-svc",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 518.8,
+        "p95_latency_ms": 1715.4,
+        "spike_start_minutes_ago": 92
+      },
+      "logs": {
+        "error_count": 128,
+        "error_messages": [
+          "waiting for connection timeout after 445s",
+          "payment failed: db unavailable",
+          "db pool exhausted: 0/344 connections available"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2009,
+        "deploy_summary": "Update email templates for Q4 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "db pool"
+        ],
+        "should_mention": [
+          "exhausted",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_cart-svc_9099",
+      "service": "cart-svc",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 382.1,
+        "p95_latency_ms": 900.4,
+        "spike_start_minutes_ago": 41
+      },
+      "logs": {
+        "error_count": 42,
+        "error_messages": [
+          "JSON parse error: unexpected token at position 93",
+          "schema validation failed: missing field 'amount'",
+          "response size 364MB exceeds limit 7MB"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 38,
+        "deploy_summary": "Switch to new HTTP client library with different timeout defaults",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "sam",
+          "38"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_file-upload_5558",
+      "service": "file-upload",
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 48.0,
+        "p95_latency_ms": 109.2,
+        "spike_start_minutes_ago": 40
+      },
+      "logs": {
+        "error_count": 71,
+        "error_messages": [
+          "disk usage 97% on /var/log volume",
+          "ENOSPC: no space left on device",
+          "write failed: cannot write to /data/uploads"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2104,
+        "deploy_summary": "Update email templates for Q3 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "DISK"
+        ],
+        "should_mention": [
+          "disk",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_metrics-collector_4130",
+      "service": "metrics-collector",
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 836.0,
+        "p95_latency_ms": 1927.4,
+        "spike_start_minutes_ago": 38
+      },
+      "logs": {
+        "error_count": 238,
+        "error_messages": [
+          "waiting for connection timeout after 333s",
+          "db pool exhausted: 0/141 connections available",
+          "payment failed: db unavailable"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 410,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "db pool"
+        ],
+        "should_mention": [
+          "exhausted",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_rate-limiter_1986",
+      "service": "rate-limiter",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 805.4,
+        "p95_latency_ms": 2579.2,
+        "spike_start_minutes_ago": 11
+      },
+      "logs": {
+        "error_count": 156,
+        "error_messages": [
+          "circuit breaker OPEN for notification-gateway (failures: 83/14)",
+          "DNS resolution failed for stripe-api.internal",
+          "connection refused from stripe-api"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 20,
+        "deploy_summary": "Update email templates for Q4 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "notification",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_order-svc_7770",
+      "service": "order-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 97.3,
+        "p95_latency_ms": 254.0,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 0,
+        "error_messages": [
+          "slow query warning: 321ms (threshold 43ms)"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 3842,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_analytics-ingest_1042",
+      "service": "analytics-ingest",
+      "root_cause": "config_change",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 66.1,
+        "p95_latency_ms": 121.0,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 86,
+        "error_messages": [
+          "config value out of range: 165",
+          "feature flag amount-v12 causing unexpected behavior",
+          "TLS handshake failed: certificate expired"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 123,
+        "deploy_summary": "Enable dynamic-pricing-v8 feature flag",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "flag"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_session-store_8622",
+      "service": "session-store",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 95.4,
+        "p95_latency_ms": 171.1,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 4,
+        "error_messages": [
+          "minor: GC pause 229ms"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 17,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_media-svc_6992",
+      "service": "media-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 25.1,
+        "p95_latency_ms": 48.5,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 1,
+        "error_messages": [
+          "minor: GC pause 277ms",
+          "rate limit applied for client xyz-corp"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 4508,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_notification-svc_4394",
+      "service": "notification-svc",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 782.2,
+        "p95_latency_ms": 1531.9,
+        "spike_start_minutes_ago": 21
+      },
+      "logs": {
+        "error_count": 190,
+        "error_messages": [
+          "MOVED 406 10.0.1.34:6379",
+          "consumer lag 382 messages on partition 9",
+          "CLUSTERDOWN: kafka cluster is down"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1406,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "cluster"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_search-svc_1982",
+      "service": "search-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 61.4,
+        "p95_latency_ms": 109.3,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 8,
+        "error_messages": [
+          "minor: GC pause 184ms",
+          "rate limit applied for client abc-corp"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1251,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_import-worker_5640",
+      "service": "import-worker",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 509.5,
+        "p95_latency_ms": 1179.4,
+        "spike_start_minutes_ago": 77
+      },
+      "logs": {
+        "error_count": 197,
+        "error_messages": [
+          "JSON parse error: unexpected token at position 309",
+          "response size 39MB exceeds limit 50MB",
+          "schema validation failed: missing field 'status'"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 82,
+        "deploy_summary": "Upgrade httpx from v3 to v7",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "alex",
+          "82"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_billing-svc_9312",
+      "service": "billing-svc",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 663.4,
+        "p95_latency_ms": 2182.5,
+        "spike_start_minutes_ago": 5
+      },
+      "logs": {
+        "error_count": 238,
+        "error_messages": [
+          "rebalance triggered: etcd consumer left group",
+          "connection reset by peer (kafka)",
+          "CLUSTERDOWN: etcd cluster is down"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2268,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "cluster"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_email-worker_3962",
+      "service": "email-worker",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 785.7,
+        "p95_latency_ms": 2081.9,
+        "spike_start_minutes_ago": 29
+      },
+      "logs": {
+        "error_count": 434,
+        "error_messages": [
+          "connection reset by peer (kafka)",
+          "MOVED 497 10.0.9.32:5432",
+          "consumer lag 421 messages on partition 0"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 3851,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "infrastructure"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_queue-worker_4963",
+      "service": "queue-worker",
+      "root_cause": "deploy_regression",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 498.3,
+        "p95_latency_ms": 1481.2,
+        "spike_start_minutes_ago": 47
+      },
+      "logs": {
+        "error_count": 40,
+        "error_messages": [
+          "cannot allocate 295MB for request buffer",
+          "heap usage 90%: GC pause 126ms",
+          "OOM killed worker pid 9444: used 25GB of 5GB"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 48,
+        "deploy_summary": "Add concurrent batch processing with 98 workers",
+        "deploy_author": "jordan"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "jordan",
+          "48"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_config-svc_6776",
+      "service": "config-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 880.7,
+        "p95_latency_ms": 2547.0,
+        "spike_start_minutes_ago": 32
+      },
+      "logs": {
+        "error_count": 190,
+        "error_messages": [
+          "connection refused from s3-storage",
+          "DNS resolution failed for cdn-origin.internal",
+          "circuit breaker OPEN for stripe-api (failures: 363/16)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 29,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "medium",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "notification",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_api-gateway_3102",
+      "service": "api-gateway",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 897.2,
+        "p95_latency_ms": 2327.0,
+        "spike_start_minutes_ago": 45
+      },
+      "logs": {
+        "error_count": 350,
+        "error_messages": [
+          "circuit breaker OPEN for redis-cluster (failures: 260/10)",
+          "connection refused from notification-gateway",
+          "DNS resolution failed for s3-storage.internal"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 47,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "auth",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_pdf-generator_7442",
+      "service": "pdf-generator",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 21.9,
+        "p95_latency_ms": 41.8,
+        "spike_start_minutes_ago": 38
+      },
+      "logs": {
+        "error_count": 140,
+        "error_messages": [
+          "write failed: cannot write to /tmp/cache",
+          "disk usage 98% on /data volume",
+          "ENOSPC: no space left on device"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 268,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "DISK"
+        ],
+        "should_mention": [
+          "disk",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_user-auth_9221",
+      "service": "user-auth",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 817.6,
+        "p95_latency_ms": 1716.0,
+        "spike_start_minutes_ago": 35
+      },
+      "logs": {
+        "error_count": 81,
+        "error_messages": [
+          "circuit breaker OPEN for auth-provider (failures: 290/45)",
+          "gateway timeout from auth-provider (>397s)",
+          "connection refused from auth-provider"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 58,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "notification",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_checkout-svc_5742",
+      "service": "checkout-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 281.4,
+        "p95_latency_ms": 604.8,
+        "spike_start_minutes_ago": 5
+      },
+      "logs": {
+        "error_count": 202,
+        "error_messages": [
+          "connection refused from stripe-api",
+          "circuit breaker OPEN for postgres-primary (failures: 92/30)",
+          "gateway timeout from kafka-broker (>337s)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1720,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "medium",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "payments",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_webhook-svc_9361",
+      "service": "webhook-svc",
+      "root_cause": "config_change",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 489.5,
+        "p95_latency_ms": 1110.1,
+        "spike_start_minutes_ago": 6
+      },
+      "logs": {
+        "error_count": 126,
+        "error_messages": [
+          "TLS handshake failed: certificate expired",
+          "config value out of range: 481",
+          "feature flag timestamp-v10 causing unexpected behavior"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 71,
+        "deploy_summary": "Enable dynamic-pricing-v9 feature flag",
+        "deploy_author": "security-bot"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "flag"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_review-svc_7999",
+      "service": "review-svc",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 337.3,
+        "p95_latency_ms": 739.0,
+        "spike_start_minutes_ago": 20
+      },
+      "logs": {
+        "error_count": 333,
+        "error_messages": [
+          "CLUSTERDOWN: kafka cluster is down",
+          "consumer lag 201 messages on partition 10",
+          "rebalance triggered: kafka consumer left group"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2263,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "cluster"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_cache-proxy_6530",
+      "service": "cache-proxy",
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 232.6,
+        "p95_latency_ms": 448.1,
+        "spike_start_minutes_ago": 105
+      },
+      "logs": {
+        "error_count": 280,
+        "error_messages": [
+          "queue depth 89: processing backlog",
+          "request processing timeout (7s)",
+          "CPU throttled: 88% utilization"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2877,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "CPU"
+        ],
+        "should_mention": [
+          "cpu",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_auth-proxy_3938",
+      "service": "auth-proxy",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 387.9,
+        "p95_latency_ms": 794.5,
+        "spike_start_minutes_ago": 15
+      },
+      "logs": {
+        "error_count": 14,
+        "error_messages": [
+          "feature flag timestamp-v12 causing unexpected behavior",
+          "TLS handshake failed: certificate expired",
+          "config value out of range: 226"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 124,
+        "deploy_summary": "Change log level from INFO to DEBUG",
+        "deploy_author": "product-team"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_recommendation-svc_5911",
+      "service": "recommendation-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 473.8,
+        "p95_latency_ms": 1474.9,
+        "spike_start_minutes_ago": 9
+      },
+      "logs": {
+        "error_count": 234,
+        "error_messages": [
+          "gateway timeout from notification-gateway (>307s)",
+          "connection refused from kafka-broker",
+          "circuit breaker OPEN for cdn-origin (failures: 227/47)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 49,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "medium",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "s3",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_feed-svc_1402",
+      "service": "feed-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 58.9,
+        "p95_latency_ms": 142.3,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 7,
+        "error_messages": [
+          "slow query warning: 215ms (threshold 10ms)"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1395,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_inventory-svc_2667",
+      "service": "inventory-svc",
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 582.4,
+        "p95_latency_ms": 2028.3,
+        "spike_start_minutes_ago": 54
+      },
+      "logs": {
+        "error_count": 196,
+        "error_messages": [
+          "heap usage 94%: approaching OOM",
+          "GC pause 125ms (stop-the-world)",
+          "OOM killed worker pid 8389"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2201,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "MEMORY"
+        ],
+        "should_mention": [
+          "memory",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_payment-svc_5877",
+      "service": "payment-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 41.8,
+        "p95_latency_ms": 86.0,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 0,
+        "error_messages": [
+          "slow query warning: 444ms (threshold 31ms)",
+          "rate limit applied for client xyz-corp"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1664,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_pricing-engine_5646",
+      "service": "pricing-engine",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 44.8,
+        "p95_latency_ms": 102.2,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 157,
+        "error_messages": [
+          "TLS handshake failed: certificate expired",
+          "feature flag user_id-v11 causing unexpected behavior",
+          "config value out of range: 50"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 145,
+        "deploy_summary": "Change log level from INFO to DEBUG",
+        "deploy_author": "security-bot"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_export-svc_1439",
+      "service": "export-svc",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 390.4,
+        "p95_latency_ms": 745.1,
+        "spike_start_minutes_ago": 30
+      },
+      "logs": {
+        "error_count": 417,
+        "error_messages": [
+          "consumer lag 313 messages on partition 8",
+          "MOVED 393 10.0.7.130:5432",
+          "connection reset by peer (etcd)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2857,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "infrastructure"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_image-resize_1908",
+      "service": "image-resize",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 614.3,
+        "p95_latency_ms": 1170.8,
+        "spike_start_minutes_ago": 23
+      },
+      "logs": {
+        "error_count": 52,
+        "error_messages": [
+          "TLS handshake failed: certificate expired",
+          "feature flag currency-v10 causing unexpected behavior",
+          "config value out of range: 130"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 10,
+        "deploy_summary": "Enable new A/B test variant for checkout flow",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_catalog-svc_6161",
+      "service": "catalog-svc",
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 61.2,
+        "p95_latency_ms": 135.6,
+        "spike_start_minutes_ago": 97
+      },
+      "logs": {
+        "error_count": 197,
+        "error_messages": [
+          "disk usage 87% on /tmp volume",
+          "write failed: cannot write to /var/log/app",
+          "ENOSPC: no space left on device"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 576,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "DISK"
+        ],
+        "should_mention": [
+          "disk",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_user-auth_3248",
+      "service": "user-auth",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 327.5,
+        "p95_latency_ms": 766.7,
+        "spike_start_minutes_ago": 35
+      },
+      "logs": {
+        "error_count": 309,
+        "error_messages": [
+          "JSON parse error: unexpected token at position 403",
+          "response size 395MB exceeds limit 17MB",
+          "schema validation failed: missing field 'timestamp'",
+          "minor: notification-gateway response slow (377ms) [not causal]"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 40,
+        "deploy_summary": "Replace connection pool implementation",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "sam",
+          "40"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_file-upload_3304",
+      "service": "file-upload",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 218.0,
+        "p95_latency_ms": 455.7,
+        "spike_start_minutes_ago": 13
+      },
+      "logs": {
+        "error_count": 461,
+        "error_messages": [
+          "CLUSTERDOWN: kafka cluster is down",
+          "MOVED 255 10.0.3.116:6379",
+          "rebalance triggered: redis consumer left group"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 3855,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "cluster"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_cart-svc_6052",
+      "service": "cart-svc",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 482.1,
+        "p95_latency_ms": 1374.5,
+        "spike_start_minutes_ago": 70
+      },
+      "logs": {
+        "error_count": 175,
+        "error_messages": [
+          "JSON parse error: unexpected token at position 192",
+          "schema validation failed: missing field 'status'",
+          "response size 91MB exceeds limit 16MB"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 72,
+        "deploy_summary": "Increase retry count from 3 to 405 and reduce backoff interval",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "sam",
+          "72"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_cache-proxy_4892",
+      "service": "cache-proxy",
+      "root_cause": "deploy_regression",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 763.6,
+        "p95_latency_ms": 1771.0,
+        "spike_start_minutes_ago": 70
+      },
+      "logs": {
+        "error_count": 230,
+        "error_messages": [
+          "timeout talking to upstream (162ms)",
+          "retry budget exhausted: 423/35 retries failed",
+          "context deadline exceeded after 424s"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 69,
+        "deploy_summary": "Increase retry count from 3 to 200 and reduce backoff interval",
+        "deploy_author": "morgan"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "morgan",
+          "69"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_catalog-svc_8520",
+      "service": "catalog-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 439.9,
+        "p95_latency_ms": 1530.1,
+        "spike_start_minutes_ago": 18
+      },
+      "logs": {
+        "error_count": 288,
+        "error_messages": [
+          "gateway timeout from elasticsearch (>302s)",
+          "DNS resolution failed for payments-svc.internal",
+          "circuit breaker OPEN for cdn-origin (failures: 354/43)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 34,
+        "deploy_summary": "Update email templates for Q2 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "medium",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "elasticsearch",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_queue-worker_3954",
+      "service": "queue-worker",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 410.8,
+        "p95_latency_ms": 1201.5,
+        "spike_start_minutes_ago": 36
+      },
+      "logs": {
+        "error_count": 220,
+        "error_messages": [
+          "circuit breaker OPEN for stripe-api (failures: 5/20)",
+          "DNS resolution failed for stripe-api.internal",
+          "connection refused from s3-storage"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 39,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "stripe",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_webhook-svc_3247",
+      "service": "webhook-svc",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 538.2,
+        "p95_latency_ms": 1415.4,
+        "spike_start_minutes_ago": 8
+      },
+      "logs": {
+        "error_count": 140,
+        "error_messages": [
+          "feature flag currency-v12 causing unexpected behavior",
+          "TLS handshake failed: certificate expired",
+          "config value out of range: 172"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 112,
+        "deploy_summary": "Update rate limit thresholds from 142 to 3259/min",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_health-checker_5286",
+      "service": "health-checker",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 350.9,
+        "p95_latency_ms": 1123.5,
+        "spike_start_minutes_ago": 25
+      },
+      "logs": {
+        "error_count": 56,
+        "error_messages": [
+          "circuit breaker OPEN for rabbitmq (failures: 268/47)",
+          "gateway timeout from redis-cluster (>126s)",
+          "DNS resolution failed for cdn-origin.internal"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 559,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "cdn",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_cdn-edge_1761",
+      "service": "cdn-edge",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 34.6,
+        "p95_latency_ms": 54.7,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 1,
+        "error_messages": [
+          "minor: email delivery delayed 304s for batch 9259",
+          "slow query warning: 217ms (threshold 20ms)"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1445,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_scheduler-svc_9866",
+      "service": "scheduler-svc",
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 841.2,
+        "p95_latency_ms": 2865.5,
+        "spike_start_minutes_ago": 53
+      },
+      "logs": {
+        "error_count": 261,
+        "error_messages": [
+          "db pool exhausted: 0/124 connections available",
+          "checkout failed: db unavailable",
+          "waiting for connection timeout after 241s"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1903,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "db pool"
+        ],
+        "should_mention": [
+          "exhausted",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_billing-svc_1404",
+      "service": "billing-svc",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 488.9,
+        "p95_latency_ms": 1416.9,
+        "spike_start_minutes_ago": 73
+      },
+      "logs": {
+        "error_count": 290,
+        "error_messages": [
+          "request processing timeout (154s)",
+          "queue depth 15: processing backlog",
+          "CPU throttled: 96% utilization"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2385,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "CPU"
+        ],
+        "should_mention": [
+          "cpu",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_audit-log_4617",
+      "service": "audit-log",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 817.1,
+        "p95_latency_ms": 1526.2,
+        "spike_start_minutes_ago": 34
+      },
+      "logs": {
+        "error_count": 132,
+        "error_messages": [
+          "db pool utilization 89%",
+          "slow query: INSERT INTO audit_log (233ms, expected <42ms)",
+          "N+1 detected: 239 individual SELECTs per request",
+          "minor: s3-storage response slow (94ms) [not causal]"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 30,
+        "deploy_summary": "Increase retry count from 3 to 285 and reduce backoff interval",
+        "deploy_author": "taylor"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "taylor",
+          "30"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_api-gateway_9542",
+      "service": "api-gateway",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 341.6,
+        "p95_latency_ms": 1114.1,
+        "spike_start_minutes_ago": 114
+      },
+      "logs": {
+        "error_count": 164,
+        "error_messages": [
+          "queue depth 337: processing backlog",
+          "CPU throttled: 90% utilization",
+          "request processing timeout (25s)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1087,
+        "deploy_summary": "Update email templates for Q1 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "CPU"
+        ],
+        "should_mention": [
+          "cpu",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_rate-limiter_2577",
+      "service": "rate-limiter",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 118.9,
+        "p95_latency_ms": 267.6,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 2,
+        "error_messages": [
+          "minor: GC pause 260ms",
+          "slow query warning: 71ms (threshold 33ms)"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 3467,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_pricing-engine_2951",
+      "service": "pricing-engine",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 95.7,
+        "p95_latency_ms": 263.1,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 3,
+        "error_messages": [
+          "rate limit applied for client abc-corp",
+          "minor: GC pause 317ms"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 53,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_review-svc_1448",
+      "service": "review-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 96.4,
+        "p95_latency_ms": 212.5,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 7,
+        "error_messages": [
+          "slow query warning: 37ms (threshold 43ms)"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 3396,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_checkout-svc_9066",
+      "service": "checkout-svc",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 603.8,
+        "p95_latency_ms": 1753.9,
+        "spike_start_minutes_ago": 23
+      },
+      "logs": {
+        "error_count": 80,
+        "error_messages": [
+          "feature flag amount-v9 causing unexpected behavior",
+          "config value out of range: 9",
+          "TLS handshake failed: certificate expired"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 86,
+        "deploy_summary": "Rotate TLS certificates for cdn.example.com",
+        "deploy_author": "product-team"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_pdf-generator_6818",
+      "service": "pdf-generator",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 763.3,
+        "p95_latency_ms": 1947.3,
+        "spike_start_minutes_ago": 75
+      },
+      "logs": {
+        "error_count": 268,
+        "error_messages": [
+          "slow query: INSERT INTO audit_log (240ms, expected <13ms)",
+          "N+1 detected: 402 individual SELECTs per request",
+          "db pool utilization 86%"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 77,
+        "deploy_summary": "Add concurrent batch processing with 443 workers",
+        "deploy_author": "jordan"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "jordan",
+          "77"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_shipping-calc_5973",
+      "service": "shipping-calc",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 522.6,
+        "p95_latency_ms": 1625.6,
+        "spike_start_minutes_ago": 5
+      },
+      "logs": {
+        "error_count": 317,
+        "error_messages": [
+          "circuit breaker OPEN for elasticsearch (failures: 243/3)",
+          "DNS resolution failed for cdn-origin.internal",
+          "gateway timeout from postgres-primary (>142s)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 46,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "payments",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_metrics-collector_7375",
+      "service": "metrics-collector",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 74.4,
+        "p95_latency_ms": 142.9,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 4,
+        "error_messages": [
+          "rate limit applied for client xyz-corp",
+          "slow query warning: 205ms (threshold 3ms)"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1530,
+        "deploy_summary": "Update email templates for Q2 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_import-worker_3627",
+      "service": "import-worker",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 316.8,
+        "p95_latency_ms": 667.4,
+        "spike_start_minutes_ago": 75
+      },
+      "logs": {
+        "error_count": 109,
+        "error_messages": [
+          "waiting for connection timeout after 280s",
+          "login failed: db unavailable",
+          "db pool exhausted: 0/28 connections available"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 488,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "db pool"
+        ],
+        "should_mention": [
+          "exhausted",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_recommendation-svc_9747",
+      "service": "recommendation-svc",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 307.2,
+        "p95_latency_ms": 904.8,
+        "spike_start_minutes_ago": 19
+      },
+      "logs": {
+        "error_count": 100,
+        "error_messages": [
+          "TLS handshake failed: certificate expired",
+          "feature flag status-v12 causing unexpected behavior",
+          "config value out of range: 374"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 19,
+        "deploy_summary": "Enable new A/B test variant for checkout flow",
+        "deploy_author": "security-bot"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_session-store_9269",
+      "service": "session-store",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 213.4,
+        "p95_latency_ms": 698.8,
+        "spike_start_minutes_ago": 19
+      },
+      "logs": {
+        "error_count": 271,
+        "error_messages": [
+          "gateway timeout from stripe-api (>70s)",
+          "circuit breaker OPEN for rabbitmq (failures: 127/20)",
+          "connection refused from notification-gateway"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 50,
+        "deploy_summary": "Update email templates for Q1 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "stripe",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_config-svc_7237",
+      "service": "config-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 361.6,
+        "p95_latency_ms": 666.9,
+        "spike_start_minutes_ago": 11
+      },
+      "logs": {
+        "error_count": 211,
+        "error_messages": [
+          "DNS resolution failed for elasticsearch.internal",
+          "gateway timeout from postgres-primary (>418s)",
+          "connection refused from redis-cluster"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 22,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "medium",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "auth",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_payment-svc_9230",
+      "service": "payment-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 52.3,
+        "p95_latency_ms": 80.1,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 7,
+        "error_messages": [
+          "rate limit applied for client acme-corp",
+          "minor: email delivery delayed 221s for batch 7347"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2055,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_auth-proxy_8449",
+      "service": "auth-proxy",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 774.2,
+        "p95_latency_ms": 2391.8,
+        "spike_start_minutes_ago": 5
+      },
+      "logs": {
+        "error_count": 208,
+        "error_messages": [
+          "consumer lag 378 messages on partition 6",
+          "MOVED 94 10.0.1.160:5432",
+          "connection reset by peer (consul)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 3732,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "infrastructure"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_export-svc_3204",
+      "service": "export-svc",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 460.1,
+        "p95_latency_ms": 1477.0,
+        "spike_start_minutes_ago": 45
+      },
+      "logs": {
+        "error_count": 309,
+        "error_messages": [
+          "retry budget exhausted: 316/9 retries failed",
+          "timeout talking to upstream (255ms)",
+          "context deadline exceeded after 356s",
+          "minor: notification-gateway response slow (499ms) [not causal]"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 45,
+        "deploy_summary": "Switch to new HTTP client library with different timeout defaults",
+        "deploy_author": "morgan"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "morgan",
+          "45"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_email-worker_2838",
+      "service": "email-worker",
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 772.2,
+        "p95_latency_ms": 2325.8,
+        "spike_start_minutes_ago": 108
+      },
+      "logs": {
+        "error_count": 49,
+        "error_messages": [
+          "CPU throttled: 90% utilization",
+          "queue depth 480: processing backlog",
+          "request processing timeout (398s)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1475,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "CPU"
+        ],
+        "should_mention": [
+          "cpu",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_search-svc_3159",
+      "service": "search-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 50.8,
+        "p95_latency_ms": 103.0,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 1,
+        "error_messages": [
+          "minor: GC pause 161ms",
+          "rate limit applied for client xyz-corp"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 4451,
+        "deploy_summary": "Update email templates for Q2 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_analytics-ingest_7208",
+      "service": "analytics-ingest",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 497.3,
+        "p95_latency_ms": 901.4,
+        "spike_start_minutes_ago": 73
+      },
+      "logs": {
+        "error_count": 71,
+        "error_messages": [
+          "slow query: INSERT INTO audit_log (457ms, expected <43ms)",
+          "db pool utilization 98%",
+          "N+1 detected: 323 individual SELECTs per request"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 78,
+        "deploy_summary": "Refactor request pipeline to async/await pattern",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "sam",
+          "78"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_image-resize_9220",
+      "service": "image-resize",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 84.2,
+        "p95_latency_ms": 209.0,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 4,
+        "error_messages": [
+          "slow query warning: 22ms (threshold 33ms)",
+          "minor: GC pause 316ms"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 57,
+        "deploy_summary": "Update email templates for Q3 campaign",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_order-svc_7533",
+      "service": "order-svc",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 827.6,
+        "p95_latency_ms": 1699.1,
+        "spike_start_minutes_ago": 48
+      },
+      "logs": {
+        "error_count": 312,
+        "error_messages": [
+          "JSON parse error: unexpected token at position 245",
+          "schema validation failed: missing field 'status'",
+          "response size 353MB exceeds limit 25MB",
+          "minor: kafka-broker response slow (254ms) [not causal]"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 50,
+        "deploy_summary": "Refactor request pipeline to async/await pattern",
+        "deploy_author": "taylor"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "taylor",
+          "50"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_notification-svc_3483",
+      "service": "notification-svc",
+      "root_cause": "deploy_regression",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 759.4,
+        "p95_latency_ms": 1651.7,
+        "spike_start_minutes_ago": 60
+      },
+      "logs": {
+        "error_count": 41,
+        "error_messages": [
+          "db pool utilization 85%",
+          "N+1 detected: 44 individual SELECTs per request",
+          "slow query: UPDATE inventory SET stock = ? (253ms, expected <7ms)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 64,
+        "deploy_summary": "Replace connection pool implementation",
+        "deploy_author": "taylor"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "taylor",
+          "64"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_inventory-svc_7586",
+      "service": "inventory-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 310.6,
+        "p95_latency_ms": 574.4,
+        "spike_start_minutes_ago": 12
+      },
+      "logs": {
+        "error_count": 400,
+        "error_messages": [
+          "circuit breaker OPEN for kafka-broker (failures: 394/40)",
+          "DNS resolution failed for rabbitmq.internal",
+          "connection refused from stripe-api"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 32,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "rabbitmq",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_feed-svc_8287",
+      "service": "feed-svc",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 535.8,
+        "p95_latency_ms": 1242.1,
+        "spike_start_minutes_ago": 63
+      },
+      "logs": {
+        "error_count": 206,
+        "error_messages": [
+          "slow query: UPDATE inventory SET stock = ? (119ms, expected <18ms)",
+          "db pool utilization 85%",
+          "N+1 detected: 47 individual SELECTs per request"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 61,
+        "deploy_summary": "Increase retry count from 3 to 23 and reduce backoff interval",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "alex",
+          "61"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_media-svc_8452",
+      "service": "media-svc",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 878.7,
+        "p95_latency_ms": 2390.5,
+        "spike_start_minutes_ago": 17
+      },
+      "logs": {
+        "error_count": 475,
+        "error_messages": [
+          "MOVED 407 10.0.5.110:5432",
+          "rebalance triggered: consul consumer left group",
+          "CLUSTERDOWN: redis cluster is down"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 4276,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "cluster"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_email-worker_1351",
+      "service": "email-worker",
+      "root_cause": "config_change",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 28.4,
+        "p95_latency_ms": 74.0,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 26,
+        "error_messages": [
+          "TLS handshake failed: certificate expired",
+          "config value out of range: 183",
+          "feature flag timestamp-v9 causing unexpected behavior"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 84,
+        "deploy_summary": "Change log level from INFO to DEBUG",
+        "deploy_author": "security-bot"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_notification-svc_6206",
+      "service": "notification-svc",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 450.2,
+        "p95_latency_ms": 850.8,
+        "spike_start_minutes_ago": 21
+      },
+      "logs": {
+        "error_count": 24,
+        "error_messages": [
+          "config value out of range: 86",
+          "feature flag status-v11 causing unexpected behavior",
+          "TLS handshake failed: certificate expired"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 175,
+        "deploy_summary": "Enable dynamic-pricing-v6 feature flag",
+        "deploy_author": "security-bot"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "flag"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_webhook-svc_1798",
+      "service": "webhook-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 220.5,
+        "p95_latency_ms": 451.5,
+        "spike_start_minutes_ago": 23
+      },
+      "logs": {
+        "error_count": 321,
+        "error_messages": [
+          "connection refused from cdn-origin",
+          "gateway timeout from redis-cluster (>193s)",
+          "DNS resolution failed for elasticsearch.internal"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 45,
+        "deploy_summary": "Update email templates for Q3 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "elasticsearch",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_catalog-svc_9202",
+      "service": "catalog-svc",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 395.0,
+        "p95_latency_ms": 1190.1,
+        "spike_start_minutes_ago": 27
+      },
+      "logs": {
+        "error_count": 453,
+        "error_messages": [
+          "connection reset by peer (consul)",
+          "MOVED 347 10.0.6.32:8500",
+          "consumer lag 170 messages on partition 6"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 3752,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "infrastructure"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_cart-svc_7557",
+      "service": "cart-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 67.6,
+        "p95_latency_ms": 176.5,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 5,
+        "error_messages": [
+          "minor: email delivery delayed 264s for batch 3502",
+          "rate limit applied for client beta-corp"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 4187,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_feed-svc_7189",
+      "service": "feed-svc",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 816.6,
+        "p95_latency_ms": 2341.5,
+        "spike_start_minutes_ago": 46
+      },
+      "logs": {
+        "error_count": 71,
+        "error_messages": [
+          "slow query: SELECT * FROM orders WHERE user_id = ? (431ms, expected <25ms)",
+          "db pool utilization 85%",
+          "N+1 detected: 54 individual SELECTs per request"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 46,
+        "deploy_summary": "Replace connection pool implementation",
+        "deploy_author": "jordan"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "jordan",
+          "46"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_review-svc_8656",
+      "service": "review-svc",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 582.0,
+        "p95_latency_ms": 1517.4,
+        "spike_start_minutes_ago": 78
+      },
+      "logs": {
+        "error_count": 262,
+        "error_messages": [
+          "db pool utilization 98%",
+          "slow query: UPDATE inventory SET stock = ? (101ms, expected <18ms)",
+          "N+1 detected: 403 individual SELECTs per request"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 85,
+        "deploy_summary": "Rebuild search index with new schema v12",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "alex",
+          "85"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_recommendation-svc_6947",
+      "service": "recommendation-svc",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 46.2,
+        "p95_latency_ms": 120.5,
+        "spike_start_minutes_ago": 99
+      },
+      "logs": {
+        "error_count": 218,
+        "error_messages": [
+          "disk usage 89% on /data volume",
+          "ENOSPC: no space left on device",
+          "write failed: cannot write to /tmp/cache"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2049,
+        "deploy_summary": "Update email templates for Q4 campaign",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "DISK"
+        ],
+        "should_mention": [
+          "disk",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_checkout-svc_5262",
+      "service": "checkout-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 848.4,
+        "p95_latency_ms": 1935.2,
+        "spike_start_minutes_ago": 10
+      },
+      "logs": {
+        "error_count": 238,
+        "error_messages": [
+          "circuit breaker OPEN for redis-cluster (failures: 10/30)",
+          "gateway timeout from redis-cluster (>95s)",
+          "connection refused from payments-svc"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 50,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "postgres",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_analytics-ingest_9470",
+      "service": "analytics-ingest",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 262.4,
+        "p95_latency_ms": 852.5,
+        "spike_start_minutes_ago": 13
+      },
+      "logs": {
+        "error_count": 303,
+        "error_messages": [
+          "MOVED 254 10.0.8.67:9092",
+          "consumer lag 237 messages on partition 9",
+          "rebalance triggered: consul consumer left group"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 3687,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "infrastructure"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_cdn-edge_3525",
+      "service": "cdn-edge",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 320.2,
+        "p95_latency_ms": 836.1,
+        "spike_start_minutes_ago": 24
+      },
+      "logs": {
+        "error_count": 301,
+        "error_messages": [
+          "DNS resolution failed for s3-storage.internal",
+          "gateway timeout from cdn-origin (>265s)",
+          "circuit breaker OPEN for kafka-broker (failures: 154/6)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 41,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "stripe",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_queue-worker_8974",
+      "service": "queue-worker",
+      "root_cause": "upstream_dependency",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 757.2,
+        "p95_latency_ms": 2392.4,
+        "spike_start_minutes_ago": 44
+      },
+      "logs": {
+        "error_count": 365,
+        "error_messages": [
+          "gateway timeout from redis-cluster (>414s)",
+          "DNS resolution failed for s3-storage.internal",
+          "circuit breaker OPEN for elasticsearch (failures: 215/50)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 56,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "medium",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "elasticsearch",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_session-store_2412",
+      "service": "session-store",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 739.1,
+        "p95_latency_ms": 2232.1,
+        "spike_start_minutes_ago": 24
+      },
+      "logs": {
+        "error_count": 327,
+        "error_messages": [
+          "MOVED 83 10.0.6.67:5432",
+          "connection reset by peer (consul)",
+          "CLUSTERDOWN: redis cluster is down"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2398,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "cluster"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_cache-proxy_6157",
+      "service": "cache-proxy",
+      "root_cause": "deploy_regression",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 539.3,
+        "p95_latency_ms": 1390.4,
+        "spike_start_minutes_ago": 31
+      },
+      "logs": {
+        "error_count": 71,
+        "error_messages": [
+          "schema validation failed: missing field 'currency'",
+          "JSON parse error: unexpected token at position 400",
+          "response size 374MB exceeds limit 35MB",
+          "minor: notification-gateway response slow (457ms) [not causal]"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 32,
+        "deploy_summary": "Add concurrent batch processing with 156 workers",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "deploy_regression",
+        "severity": "high",
+        "correct_action": "rollback",
+        "must_mention": [
+          "deploy"
+        ],
+        "should_mention": [
+          "alex",
+          "32"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable",
+          "no issues"
+        ]
+      }
+    },
+    {
+      "id": "sc_api-gateway_4483",
+      "service": "api-gateway",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 481.3,
+        "p95_latency_ms": 903.1,
+        "spike_start_minutes_ago": 6
+      },
+      "logs": {
+        "error_count": 50,
+        "error_messages": [
+          "feature flag amount-v10 causing unexpected behavior",
+          "TLS handshake failed: certificate expired",
+          "config value out of range: 75"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 153,
+        "deploy_summary": "Enable new A/B test variant for checkout flow",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_order-svc_1394",
+      "service": "order-svc",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 313.0,
+        "p95_latency_ms": 847.6,
+        "spike_start_minutes_ago": 56
+      },
+      "logs": {
+        "error_count": 161,
+        "error_messages": [
+          "CPU throttled: 97% utilization",
+          "queue depth 214: processing backlog",
+          "request processing timeout (17s)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2413,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "CPU"
+        ],
+        "should_mention": [
+          "cpu",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_search-svc_3014",
+      "service": "search-svc",
+      "root_cause": "resource_exhaustion",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 201.4,
+        "p95_latency_ms": 508.8,
+        "spike_start_minutes_ago": 100
+      },
+      "logs": {
+        "error_count": 314,
+        "error_messages": [
+          "GC pause 315ms (stop-the-world)",
+          "OOM killed worker pid 9011",
+          "heap usage 88%: approaching OOM"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 466,
+        "deploy_summary": "Add in-memory cache for frequently accessed data",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "MEMORY"
+        ],
+        "should_mention": [
+          "memory",
+          "no deploy",
+          "cache"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_user-auth_5489",
+      "service": "user-auth",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 275.6,
+        "p95_latency_ms": 501.8,
+        "spike_start_minutes_ago": 95
+      },
+      "logs": {
+        "error_count": 295,
+        "error_messages": [
+          "waiting for connection timeout after 267s",
+          "login failed: db unavailable",
+          "db pool exhausted: 0/394 connections available"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 2490,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "db pool"
+        ],
+        "should_mention": [
+          "exhausted",
+          "no deploy"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_image-resize_3064",
+      "service": "image-resize",
+      "root_cause": "infrastructure",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 398.9,
+        "p95_latency_ms": 866.5,
+        "spike_start_minutes_ago": 23
+      },
+      "logs": {
+        "error_count": 340,
+        "error_messages": [
+          "consumer lag 249 messages on partition 4",
+          "connection reset by peer (redis)",
+          "MOVED 439 10.0.1.127:9092"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 4008,
+        "deploy_summary": "Add new logging fields for audit trail",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "infrastructure",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "infrastructure"
+        ],
+        "should_mention": [
+          "no deploy",
+          "down",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_rate-limiter_5029",
+      "service": "rate-limiter",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 109.5,
+        "p95_latency_ms": 228.6,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 2,
+        "error_messages": [
+          "minor: GC pause 93ms"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 45,
+        "deploy_summary": "Add health check endpoint",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_audit-log_7963",
+      "service": "audit-log",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 437.9,
+        "p95_latency_ms": 1100.2,
+        "spike_start_minutes_ago": 41
+      },
+      "logs": {
+        "error_count": 130,
+        "error_messages": [
+          "gateway timeout from s3-storage (>71s)",
+          "circuit breaker OPEN for auth-provider (failures: 229/19)",
+          "connection refused from payments-svc"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 29,
+        "deploy_summary": "Bump CI/CD pipeline version",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "kafka",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_media-svc_9808",
+      "service": "media-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 20.7,
+        "p95_latency_ms": 34.9,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 4,
+        "error_messages": [
+          "minor: GC pause 405ms",
+          "slow query warning: 426ms (threshold 4ms)"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 1786,
+        "deploy_summary": "Update UI copy and translations",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    },
+    {
+      "id": "sc_inventory-svc_9615",
+      "service": "inventory-svc",
+      "root_cause": "upstream_dependency",
+      "severity": "high",
+      "difficulty": "easy",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 509.4,
+        "p95_latency_ms": 958.3,
+        "spike_start_minutes_ago": 41
+      },
+      "logs": {
+        "error_count": 301,
+        "error_messages": [
+          "DNS resolution failed for kafka-broker.internal",
+          "circuit breaker OPEN for kafka-broker (failures: 125/20)",
+          "connection refused from kafka-broker"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 690,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "ci-bot"
+      },
+      "ground_truth": {
+        "root_cause": "upstream_dependency",
+        "severity": "high",
+        "correct_action": "escalate",
+        "must_mention": [
+          "error"
+        ],
+        "should_mention": [
+          "rabbitmq",
+          "upstream",
+          "connection"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "rollback"
+        ]
+      }
+    },
+    {
+      "id": "sc_scheduler-svc_2684",
+      "service": "scheduler-svc",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 82.0,
+        "p95_latency_ms": 129.4,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 88,
+        "error_messages": [
+          "TLS handshake failed: certificate expired",
+          "config value out of range: 411",
+          "feature flag user_id-v6 causing unexpected behavior"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 44,
+        "deploy_summary": "Rotate TLS certificates for auth.example.com",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_shipping-calc_3484",
+      "service": "shipping-calc",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 57.5,
+        "p95_latency_ms": 131.6,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 174,
+        "error_messages": [
+          "config value out of range: 467",
+          "TLS handshake failed: certificate expired",
+          "feature flag timestamp-v9 causing unexpected behavior"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 52,
+        "deploy_summary": "Update rate limit thresholds from 228 to 3562/min",
+        "deploy_author": "security-bot"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_auth-proxy_8688",
+      "service": "auth-proxy",
+      "root_cause": "resource_exhaustion",
+      "severity": "high",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": true,
+        "avg_latency_ms": 692.8,
+        "p95_latency_ms": 1480.3,
+        "spike_start_minutes_ago": 27
+      },
+      "logs": {
+        "error_count": 127,
+        "error_messages": [
+          "heap usage 91%: approaching OOM",
+          "OOM killed worker pid 7313",
+          "GC pause 129ms (stop-the-world)"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 371,
+        "deploy_summary": "Add in-memory cache for frequently accessed data",
+        "deploy_author": "alex"
+      },
+      "ground_truth": {
+        "root_cause": "resource_exhaustion",
+        "severity": "high",
+        "correct_action": "mitigate",
+        "must_mention": [
+          "MEMORY"
+        ],
+        "should_mention": [
+          "memory",
+          "no deploy",
+          "cache"
+        ],
+        "should_not_conclude": [
+          "deploy caused",
+          "healthy"
+        ]
+      }
+    },
+    {
+      "id": "sc_file-upload_4482",
+      "service": "file-upload",
+      "root_cause": "config_change",
+      "severity": "medium",
+      "difficulty": "medium",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 93.4,
+        "p95_latency_ms": 175.8,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 25,
+        "error_messages": [
+          "TLS handshake failed: certificate expired",
+          "feature flag user_id-v12 causing unexpected behavior",
+          "config value out of range: 347"
+        ],
+        "log_level": "ERROR"
+      },
+      "deployments": {
+        "has_recent_deploy": false,
+        "deploy_minutes_ago": 125,
+        "deploy_summary": "Change log level from INFO to DEBUG",
+        "deploy_author": "security-bot"
+      },
+      "ground_truth": {
+        "root_cause": "config_change",
+        "severity": "medium",
+        "correct_action": "rollback",
+        "must_mention": [
+          "config"
+        ],
+        "should_mention": [
+          "change",
+          "certificate"
+        ],
+        "should_not_conclude": [
+          "healthy",
+          "stable"
+        ]
+      }
+    },
+    {
+      "id": "sc_config-svc_9520",
+      "service": "config-svc",
+      "root_cause": "healthy",
+      "severity": "low",
+      "difficulty": "hard",
+      "metrics": {
+        "has_latency_spike": false,
+        "avg_latency_ms": 97.1,
+        "p95_latency_ms": 246.3,
+        "spike_start_minutes_ago": null
+      },
+      "logs": {
+        "error_count": 8,
+        "error_messages": [
+          "rate limit applied for client xyz-corp"
+        ],
+        "log_level": "WARN"
+      },
+      "deployments": {
+        "has_recent_deploy": true,
+        "deploy_minutes_ago": 29,
+        "deploy_summary": "Routine dependency update (security patches)",
+        "deploy_author": "sam"
+      },
+      "ground_truth": {
+        "root_cause": "healthy",
+        "severity": "low",
+        "correct_action": "investigate",
+        "must_mention": [],
+        "should_mention": [
+          "healthy",
+          "stable",
+          "normal",
+          "no spike"
+        ],
+        "should_not_conclude": [
+          "critical",
+          "outage",
+          "regression",
+          "spike"
+        ]
+      }
+    }
+  ]
+}

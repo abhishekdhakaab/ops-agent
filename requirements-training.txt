@@ -1,0 +1,9 @@
+# Training dependencies (install ONLY when you want to train)
+# pip install -r requirements-training.txt
+
+trl>=0.12.0
+transformers>=4.45.0
+peft>=0.13.0
+datasets>=3.0.0
+torch>=2.1.0
+accelerate>=1.0.0

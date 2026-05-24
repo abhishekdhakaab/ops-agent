@@ -1,0 +1,91 @@
+{
+  "summary": {
+    "model": "llama3.2:1b",
+    "timestamp": "2026-03-22T00:21:11.121860Z",
+    "total_questions": 3,
+    "success_count": 1,
+    "error_count": 2,
+    "success_rate": 0.3333,
+    "combined_score": 0.119,
+    "tool_selection_accuracy": 0.0,
+    "tool_diversity": 0.286,
+    "efficiency": 0.6,
+    "structured_score": 0.0,
+    "llm_judge_score": null,
+    "avg_latency_s": 22.39
+  },
+  "results": [
+    {
+      "id": "sc_cdn-edge_4657",
+      "question": "Why is cdn-edge slow right now?",
+      "category": "deploy_regression",
+      "difficulty": "easy",
+      "latency_s": 22.39,
+      "tools_used": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "ticket"
+      ],
+      "scores": {
+        "tool_score": {
+          "all_ok": false,
+          "any_ok": true,
+          "all_score": 0.0,
+          "any_score": 1.0
+        },
+        "diversity": {
+          "unique_tools": 2,
+          "total_calls": 7,
+          "diversity_ratio": 0.286,
+          "repeated_calls": 5
+        },
+        "efficiency": {
+          "tools_count": 7,
+          "in_range": false,
+          "efficiency_score": 0.6
+        },
+        "structured": {
+          "severity_match": false,
+          "severity_close": false,
+          "action_match": false,
+          "grounded": false,
+          "agent_severity": "low",
+          "expected_severity": "high",
+          "agent_action": "investigate",
+          "expected_action": "rollback",
+          "structured_score": 0.0
+        },
+        "llm_judge": {
+          "llm_judge_score": null,
+          "judge_error": "skipped"
+        },
+        "combined_score": 0.119
+      },
+      "reasoning": [
+        "Retrieval Agent: retrieved 0 chunks.",
+        "Check if latency is spiking before correlating with deploys.",
+        "Check if latency is spiking before correlating with deploys.",
+        "Check if latency is spiking before correlating with deploys.",
+        "Check if latency is spiking before correlating with deploys.",
+        "Check if latency is spiking before correlating with deploys.",
+        "Check if latency is spiking before correlating with deploys.",
+        "Validation Agent: grounded=True, next=final. Key claims are supported by metrics/logs evidence.",
+        "Action Agent: recommended_action=investigate, create_ticket=True"
+      ]
+    },
+    {
+      "id": "sc_health-checker_7543",
+      "error": "HTTP 500",
+      "latency_s": 16.62
+    },
+    {
+      "id": "sc_audit-log_8953",
+      "error": "",
+      "latency_s": 0.01
+    }
+  ]
+}
