@@ -47,8 +47,8 @@ conda activate "$ENV_NAME"
 
 # ── 3. PyTorch (CUDA) ─────────────────────────────────────────────
 echo ""
-echo "[3/6] Installing PyTorch with CUDA 12.1..."
-pip install --quiet torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+echo "[3/6] Installing PyTorch with CUDA 12.4..."
+pip install --quiet torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 python3 -c "import torch; print(f'  PyTorch {torch.__version__}, CUDA available: {torch.cuda.is_available()}')"
 
 # ── 4. ML Training dependencies ───────────────────────────────────
