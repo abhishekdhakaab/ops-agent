@@ -26,25 +26,41 @@ RESULTS_DIR="$SCRIPT_DIR/data/eval_results"
 LOG_DIR="$SCRIPT_DIR/logs"
 mkdir -p "$LOG_DIR"
 
-# ── GPU Check ─────────────────────────────────────────────────────
-GPU_COUNT=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | wc -l || echo 0)
+# ── GPU Check — only use GPUs with < 500 MB already occupied ──────
+# On a shared cluster other users may be running jobs. We detect free
+# GPUs by checking used memory; anything under 500 MB is considered free.
+FREE_GPU_IDS=()
+if command -v nvidia-smi &> /dev/null; then
+    while IFS=", " read -r idx mem_used; do
+        idx="${idx// /}"
+        mem_used="${mem_used// /}"
+        if [ "$mem_used" -lt 500 ] 2>/dev/null; then
+            FREE_GPU_IDS+=("$idx")
+        fi
+    done < <(nvidia-smi --query-gpu=index,memory.used --format=csv,noheader,nounits 2>/dev/null)
+fi
+
+GPU_COUNT=${#FREE_GPU_IDS[@]}
+FREE_GPU_LIST=$(IFS=,; echo "${FREE_GPU_IDS[*]}")
+
 echo ""
 echo "============================================================"
 echo "  Ops Agent — Overnight GPU Pipeline"
-echo "  GPUs detected: $GPU_COUNT"
+echo "  Free GPUs: $GPU_COUNT  (IDs: ${FREE_GPU_LIST:-none})"
 echo "  Models to train: ${MODELS[*]}"
 echo "  Started: $(date)"
 echo "============================================================"
 echo ""
 
 if [ "$GPU_COUNT" -eq 0 ]; then
-    echo "WARNING: No GPUs detected — falling back to CPU. Training will be slow."
+    echo "WARNING: No free GPUs found — falling back to CPU. Training will be slow."
     LAUNCH_CMD="python3"
+    unset CUDA_VISIBLE_DEVICES
 else
-    # Use accelerate for multi-GPU; single GPU also works
-    LAUNCH_CMD="accelerate launch --config_file $SCRIPT_DIR/accelerate_config.yaml"
-    # Override num_processes with actual GPU count
+    # Restrict PyTorch to only the free GPUs so we never touch busy ones
+    export CUDA_VISIBLE_DEVICES="$FREE_GPU_LIST"
     LAUNCH_CMD="accelerate launch --num_processes $GPU_COUNT --mixed_precision bf16"
+    echo "  CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
 fi
 
 # ── Helper ────────────────────────────────────────────────────────
@@ -156,8 +172,8 @@ echo "============================================================"
 echo "  PHASE 5: Evaluation"
 echo "============================================================"
 
-# Use single GPU for eval to avoid complexity
-export CUDA_VISIBLE_DEVICES=0
+# Use only the first free GPU for eval (no distributed needed)
+export CUDA_VISIBLE_DEVICES="${FREE_GPU_IDS[0]:-0}"
 
 for MODEL in "${MODELS[@]}"; do
     echo ""
