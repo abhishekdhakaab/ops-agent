@@ -1,0 +1,7 @@
+/workspace/miniconda3/envs/ops_agent/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+`torch_dtype` is deprecated! Use `dtype` instead!
+  Merging SFT adapter into base model...
+  Adapter: /workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b/final
+  Base:    Qwen/Qwen2.5-1.5B-Instruct
+  Saved merged model: /workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b/merged_for_grpo
