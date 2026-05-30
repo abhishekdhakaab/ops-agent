@@ -16,7 +16,7 @@ __pycache__/
 *.pyo
 
 # ── Logs (generated at runtime) ───────────────────────────────────
-# logs/ and *.log are tracked — useful for comparing GPU runs
+
 
 # ── Large binary / archive files ──────────────────────────────────
 *.zip
