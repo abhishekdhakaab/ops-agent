@@ -1,0 +1,61 @@
+/workspace/miniconda3/envs/ops_agent/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+/workspace/miniconda3/envs/ops_agent/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+/workspace/miniconda3/envs/ops_agent/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+
+============================================================
+  SFT Training (GPU-optimized)
+  Model:        qwen2.5:1.5b  →  Qwen/Qwen2.5-1.5B-Instruct
+  Device:       cuda  |  bf16=True
+  Epochs:       3  |  LR: 2e-05  |  Batch/device: 8
+  Grad accum:   2  (effective batch: 16)
+  Output:       /workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b
+============================================================
+
+  Loaded 320 SFT training examples
+  Loading tokenizer: Qwen/Qwen2.5-1.5B-Instruct
+
+============================================================
+  SFT Training (GPU-optimized)
+  Model:        qwen2.5:1.5b  →  Qwen/Qwen2.5-1.5B-Instruct
+  Device:       cuda  |  bf16=True
+  Epochs:       3  |  LR: 2e-05  |  Batch/device: 8
+  Grad accum:   2  (effective batch: 16)
+  Output:       /workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b
+============================================================
+
+  Loaded 320 SFT training examples
+  Loading tokenizer: Qwen/Qwen2.5-1.5B-Instruct
+  Loading model: Qwen/Qwen2.5-1.5B-Instruct
+  Loading model: Qwen/Qwen2.5-1.5B-Instruct
+`torch_dtype` is deprecated! Use `dtype` instead!
+`torch_dtype` is deprecated! Use `dtype` instead!
+Tokenizing train dataset:   0%|          | 0/320 [00:00<?, ? examples/s]Tokenizing train dataset:  28%|██▊       | 90/320 [00:00<00:00, 881.89 examples/s]Tokenizing train dataset:  60%|██████    | 192/320 [00:00<00:00, 957.04 examples/s]Tokenizing train dataset:  93%|█████████▎| 297/320 [00:00<00:00, 995.46 examples/s]Tokenizing train dataset: 100%|██████████| 320/320 [00:00<00:00, 877.25 examples/s]
+NCCL version 2.21.5+cuda12.4
+Tokenizing train dataset:   0%|          | 0/320 [00:00<?, ? examples/s]Tokenizing train dataset:  23%|██▎       | 75/320 [00:00<00:00, 731.71 examples/s]Tokenizing train dataset:  55%|█████▍    | 175/320 [00:00<00:00, 881.15 examples/s]Tokenizing train dataset:  88%|████████▊ | 280/320 [00:00<00:00, 950.50 examples/s]Tokenizing train dataset: 100%|██████████| 320/320 [00:00<00:00, 850.56 examples/s]
+  Starting SFT training...
+
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+  Starting SFT training...
+
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+  0%|          | 0/30 [00:00<?, ?it/s][rank0]:[W529 23:24:25.585742334 reducer.cpp:1400] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[rank1]:[W529 23:24:25.605352452 reducer.cpp:1400] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+  3%|▎         | 1/30 [00:01<00:53,  1.85s/it]  7%|▋         | 2/30 [00:02<00:38,  1.36s/it] 10%|█         | 3/30 [00:03<00:31,  1.18s/it] 13%|█▎        | 4/30 [00:04<00:28,  1.09s/it] 17%|█▋        | 5/30 [00:05<00:25,  1.02s/it] 20%|██        | 6/30 [00:06<00:24,  1.00s/it] 23%|██▎       | 7/30 [00:07<00:22,  1.01it/s] 27%|██▋       | 8/30 [00:08<00:21,  1.05it/s] 30%|███       | 9/30 [00:09<00:18,  1.13it/s] 33%|███▎      | 10/30 [00:10<00:17,  1.13it/s]                                               {'loss': 2.7236, 'grad_norm': 5.549965858459473, 'learning_rate': 9e-06, 'entropy': 1.3661862075328828, 'num_tokens': 145750.0, 'mean_token_accuracy': 0.5308241277933121, 'epoch': 1.0}
+ 33%|███▎      | 10/30 [00:10<00:17,  1.13it/s] 37%|███▋      | 11/30 [00:12<00:24,  1.32s/it] 40%|████      | 12/30 [00:13<00:21,  1.21s/it] 43%|████▎     | 13/30 [00:14<00:22,  1.31s/it] 47%|████▋     | 14/30 [00:15<00:18,  1.18s/it] 50%|█████     | 15/30 [00:16<00:16,  1.07s/it] 53%|█████▎    | 16/30 [00:17<00:13,  1.01it/s] 57%|█████▋    | 17/30 [00:18<00:12,  1.04it/s] 60%|██████    | 18/30 [00:19<00:11,  1.09it/s] 63%|██████▎   | 19/30 [00:20<00:10,  1.07it/s] 67%|██████▋   | 20/30 [00:21<00:09,  1.06it/s]                                               {'loss': 2.3151, 'grad_norm': 1.7090867757797241, 'learning_rate': 1.9e-05, 'entropy': 1.668168407678604, 'num_tokens': 291500.0, 'mean_token_accuracy': 0.5516017347574234, 'epoch': 2.0}
+ 67%|██████▋   | 20/30 [00:21<00:09,  1.06it/s] 70%|███████   | 21/30 [00:23<00:12,  1.41s/it] 73%|███████▎  | 22/30 [00:24<00:10,  1.30s/it] 77%|███████▋  | 23/30 [00:25<00:08,  1.22s/it] 80%|████████  | 24/30 [00:26<00:06,  1.09s/it] 83%|████████▎ | 25/30 [00:27<00:05,  1.09s/it] 87%|████████▋ | 26/30 [00:28<00:04,  1.01s/it] 90%|█████████ | 27/30 [00:29<00:03,  1.07s/it] 93%|█████████▎| 28/30 [00:30<00:02,  1.02s/it] 97%|█████████▋| 29/30 [00:31<00:00,  1.00it/s]100%|██████████| 30/30 [00:32<00:00,  1.02s/it]                                               {'loss': 1.8508, 'grad_norm': 1.5135273933410645, 'learning_rate': 2.0000000000000003e-06, 'entropy': 1.8964613676071167, 'num_tokens': 437250.0, 'mean_token_accuracy': 0.5984152376651763, 'epoch': 3.0}
+100%|██████████| 30/30 [00:32<00:00,  1.02s/it]                                               {'train_runtime': 33.7847, 'train_samples_per_second': 28.415, 'train_steps_per_second': 0.888, 'train_loss': 2.296494166056315, 'epoch': 3.0}
+100%|██████████| 30/30 [00:33<00:00,  1.02s/it]100%|██████████| 30/30 [00:33<00:00,  1.13s/it]
+
+  SFT model saved to: /workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b/final
+
+  SFT model saved to: /workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b/final
+[rank0]:[W529 23:24:59.616519248 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())

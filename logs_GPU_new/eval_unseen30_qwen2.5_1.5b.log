@@ -1,0 +1,270 @@
+/workspace/miniconda3/envs/ops_agent/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+  Verified: 0 service overlap with 36 training services.
+
+  Evaluating BASE model on unseen data...
+
+=======================================================
+  Unseen eval: Base (unseen)
+  Model: qwen2.5:1.5b
+  Scenarios: 30 (all unseen services)
+=======================================================
+
+  Loading model: Qwen/Qwen2.5-1.5B-Instruct
+  Device: cuda
+  [1/30] waitlist-svc         (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [2/30] comment-svc          (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [3/30] tax-calculator       (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [4/30] spell-checker        (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [5/30] secret-manager       (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [6/30] ab-test-engine       (infrastructure      ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [7/30] feature-flag-svc     (deploy_regression   ) ✗ → metrics      (expected: {'deployments'})  r=+1.8
+  [8/30] push-notifier        (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [9/30] loyalty-svc          (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [10/30] badge-svc            (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [11/30] address-validator    (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [12/30] translation-svc      (infrastructure      ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [13/30] migration-runner     (deploy_regression   ) ✗ → metrics      (expected: {'deployments'})  r=+1.8
+  [14/30] event-bus            (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [15/30] leaderboard-svc      (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [16/30] digest-worker        (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [17/30] log-aggregator       (config_change       ) ✓ → logs         (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [18/30] video-transcoder     (infrastructure      ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [19/30] coupon-svc           (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.2
+  [20/30] report-engine        (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [21/30] referral-engine      (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [22/30] backup-agent         (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [23/30] graphql-proxy        (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [24/30] geo-lookup           (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [25/30] sitemap-builder      (deploy_regression   ) ✗ → metrics      (expected: {'deployments'})  r=+1.8
+  [26/30] fraud-detector       (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [27/30] compliance-checker   (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [28/30] auth-gateway         (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [29/30] data-pipeline        (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [30/30] chat-relay           (infrastructure      ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+
+  ┌─────────────────────────────────────────────┐
+  │                 Base (unseen)                │
+  ├─────────────────────────────────────────────┤
+  │  First-tool accuracy:   53.3%              │
+  │  First-step avg reward:  +2.163            │
+  │  Valid JSON rate:     100.0%              │
+  │  Strong (>1.5):      30/30 (100%)           │
+  │  Time: 29.1s                               │
+  ├─────────────────────────────────────────────┤
+  │  Per root cause:                             │
+  │  config_change          acc=100.0% r=+2.50  │
+  │  deploy_regression      acc= 40.0% r=+2.02  │
+  │  healthy                acc=100.0% r=+2.50  │
+  │  infrastructure         acc=  0.0% r=+1.80  │
+  │  resource_exhaustion    acc= 80.0% r=+2.36  │
+  │  upstream_dependency    acc=  0.0% r=+1.80  │
+  └─────────────────────────────────────────────┘
+  Saved: /workspace/tmp/ops-agent/data/eval_results/unseen_eval_Base_(unseen).json
+
+  Evaluating SFT model on unseen data...
+
+=======================================================
+  Unseen eval: SFT (unseen)
+  Model: /workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b/final
+  Scenarios: 30 (all unseen services)
+=======================================================
+
+  Loading LoRA adapter: /workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b/final
+  Device: cuda
+  [1/30] waitlist-svc         (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [2/30] comment-svc          (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [3/30] tax-calculator       (upstream_dependency ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [4/30] spell-checker        (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [5/30] secret-manager       (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [6/30] ab-test-engine       (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [7/30] feature-flag-svc     (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [8/30] push-notifier        (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [9/30] loyalty-svc          (upstream_dependency ) ✓ → logs         (expected: {'logs'})  r=+2.5
+  [10/30] badge-svc            (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [11/30] address-validator    (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [12/30] translation-svc      (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [13/30] migration-runner     (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [14/30] event-bus            (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [15/30] leaderboard-svc      (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [16/30] digest-worker        (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [17/30] log-aggregator       (config_change       ) ✓ → logs         (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [18/30] video-transcoder     (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [19/30] coupon-svc           (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [20/30] report-engine        (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [21/30] referral-engine      (upstream_dependency ) ✓ → logs         (expected: {'logs'})  r=+2.5
+  [22/30] backup-agent         (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [23/30] graphql-proxy        (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [24/30] geo-lookup           (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8The tokenizer you are loading from '/workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b/merged_for_grpo' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+The tokenizer you are loading from '/workspace/tmp/ops-agent/data/trained_models/sft_qwen2.5_1.5b/merged_for_grpo' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+  [25/30] sitemap-builder      (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [26/30] fraud-detector       (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [27/30] compliance-checker   (upstream_dependency ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [28/30] auth-gateway         (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [29/30] data-pipeline        (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [30/30] chat-relay           (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+
+  ┌─────────────────────────────────────────────┐
+  │                 SFT (unseen)                 │
+  ├─────────────────────────────────────────────┤
+  │  First-tool accuracy:   63.3%              │
+  │  First-step avg reward:  +2.243            │
+  │  Valid JSON rate:     100.0%              │
+  │  Strong (>1.5):      30/30 (100%)           │
+  │  Time: 27.3s                               │
+  ├─────────────────────────────────────────────┤
+  │  Per root cause:                             │
+  │  config_change          acc=100.0% r=+2.50  │
+  │  deploy_regression      acc=100.0% r=+2.50  │
+  │  healthy                acc=100.0% r=+2.50  │
+  │  infrastructure         acc=  0.0% r=+1.80  │
+  │  resource_exhaustion    acc= 40.0% r=+2.08  │
+  │  upstream_dependency    acc= 40.0% r=+2.08  │
+  └─────────────────────────────────────────────┘
+  Saved: /workspace/tmp/ops-agent/data/eval_results/unseen_eval_SFT_(unseen).json
+
+  Evaluating GRPO model on unseen data...
+
+=======================================================
+  Unseen eval: GRPO (unseen)
+  Model: /workspace/tmp/ops-agent/data/trained_models/grpo_on_sft_v2/final
+  Scenarios: 30 (all unseen services)
+=======================================================
+
+  Loading LoRA adapter: /workspace/tmp/ops-agent/data/trained_models/grpo_on_sft_v2/final
+  Device: cuda
+  [1/30] waitlist-svc         (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [2/30] comment-svc          (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [3/30] tax-calculator       (upstream_dependency ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [4/30] spell-checker        (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [5/30] secret-manager       (config_change       ) ✓ → deployments  (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [6/30] ab-test-engine       (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [7/30] feature-flag-svc     (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [8/30] push-notifier        (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [9/30] loyalty-svc          (upstream_dependency ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [10/30] badge-svc            (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [11/30] address-validator    (config_change       ) ✓ → deployments  (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [12/30] translation-svc      (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [13/30] migration-runner     (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [14/30] event-bus            (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [15/30] leaderboard-svc      (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [16/30] digest-worker        (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [17/30] log-aggregator       (config_change       ) ✓ → logs         (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [18/30] video-transcoder     (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [19/30] coupon-svc           (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [20/30] report-engine        (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [21/30] referral-engine      (upstream_dependency ) ✓ → logs         (expected: {'logs'})  r=+2.5
+  [22/30] backup-agent         (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [23/30] graphql-proxy        (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [24/30] geo-lookup           (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [25/30] sitemap-builder      (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [26/30] fraud-detector       (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [27/30] compliance-checker   (upstream_dependency ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [28/30] auth-gateway         (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [29/30] data-pipeline        (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [30/30] chat-relay           (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+
+  ┌─────────────────────────────────────────────┐
+  │                 GRPO (unseen)                │
+  ├─────────────────────────────────────────────┤
+  │  First-tool accuracy:   60.0%              │
+  │  First-step avg reward:  +2.220            │
+  │  Valid JSON rate:     100.0%              │
+  │  Strong (>1.5):      30/30 (100%)           │
+  │  Time: 26.8s                               │
+  ├─────────────────────────────────────────────┤
+  │  Per root cause:                             │
+  │  config_change          acc=100.0% r=+2.50  │
+  │  deploy_regression      acc=100.0% r=+2.50  │
+  │  healthy                acc=100.0% r=+2.50  │
+  │  infrastructure         acc=  0.0% r=+1.80  │
+  │  resource_exhaustion    acc= 40.0% r=+2.08  │
+  │  upstream_dependency    acc= 20.0% r=+1.94  │
+  └─────────────────────────────────────────────┘
+  Saved: /workspace/tmp/ops-agent/data/eval_results/unseen_eval_GRPO_(unseen).json
+
+  Evaluating DPO model on unseen data...
+
+=======================================================
+  Unseen eval: DPO (unseen)
+  Model: /workspace/tmp/ops-agent/data/trained_models/dpo_on_sft_v1/final
+  Scenarios: 30 (all unseen services)
+=======================================================
+
+  Loading LoRA adapter: /workspace/tmp/ops-agent/data/trained_models/dpo_on_sft_v1/final
+  Device: cuda
+  [1/30] waitlist-svc         (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [2/30] comment-svc          (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [3/30] tax-calculator       (upstream_dependency ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [4/30] spell-checker        (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [5/30] secret-manager       (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [6/30] ab-test-engine       (infrastructure      ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [7/30] feature-flag-svc     (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [8/30] push-notifier        (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [9/30] loyalty-svc          (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [10/30] badge-svc            (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [11/30] address-validator    (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [12/30] translation-svc      (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [13/30] migration-runner     (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [14/30] event-bus            (resource_exhaustion ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [15/30] leaderboard-svc      (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [16/30] digest-worker        (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [17/30] log-aggregator       (config_change       ) ✓ → logs         (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [18/30] video-transcoder     (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [19/30] coupon-svc           (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [20/30] report-engine        (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [21/30] referral-engine      (upstream_dependency ) ✓ → logs         (expected: {'logs'})  r=+2.5
+  [22/30] backup-agent         (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [23/30] graphql-proxy        (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [24/30] geo-lookup           (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+  [25/30] sitemap-builder      (deploy_regression   ) ✓ → deployments  (expected: {'deployments'})  r=+2.5
+  [26/30] fraud-detector       (resource_exhaustion ) ✗ → deployments  (expected: {'logs', 'metrics'})  r=+1.8
+  [27/30] compliance-checker   (upstream_dependency ) ✗ → metrics      (expected: {'logs'})  r=+1.8
+  [28/30] auth-gateway         (healthy             ) ✓ → metrics      (expected: {'logs', 'metrics'})  r=+2.5
+  [29/30] data-pipeline        (config_change       ) ✓ → metrics      (expected: {'deployments', 'logs', 'metrics'})  r=+2.5
+  [30/30] chat-relay           (infrastructure      ) ✗ → deployments  (expected: {'logs'})  r=+1.8
+
+  ┌─────────────────────────────────────────────┐
+  │                 DPO (unseen)                 │
+  ├─────────────────────────────────────────────┤
+  │  First-tool accuracy:   60.0%              │
+  │  First-step avg reward:  +2.220            │
+  │  Valid JSON rate:     100.0%              │
+  │  Strong (>1.5):      30/30 (100%)           │
+  │  Time: 27.2s                               │
+  ├─────────────────────────────────────────────┤
+  │  Per root cause:                             │
+  │  config_change          acc=100.0% r=+2.50  │
+  │  deploy_regression      acc=100.0% r=+2.50  │
+  │  healthy                acc=100.0% r=+2.50  │
+  │  infrastructure         acc=  0.0% r=+1.80  │
+  │  resource_exhaustion    acc= 40.0% r=+2.08  │
+  │  upstream_dependency    acc= 20.0% r=+1.94  │
+  └─────────────────────────────────────────────┘
+  Saved: /workspace/tmp/ops-agent/data/eval_results/unseen_eval_DPO_(unseen).json
+
+  ╔═══════════════════════════════════════════════════════════╗
+  ║         UNSEEN DATA COMPARISON                            ║
+  ║  (services the model has NEVER seen during training)       ║
+  ╠═══════════════════════════════════════════════════════════╣
+  ║  Model                  Reward  ToolAcc   JSON% ║
+  ╠═══════════════════════════════════════════════════════════╣
+  ║  Base (unseen)          +2.163    53.3%  100.0% ║
+  ║  SFT (unseen)           +2.243    63.3%  100.0% ║
+  ║  GRPO (unseen)          +2.220    60.0%  100.0% ║
+  ║  DPO (unseen)           +2.220    60.0%  100.0% ║
+  ╠═══════════════════════════════════════════════════════════╣
+  ║  IMPROVEMENT: Base (unse → SFT (unsee (best by first_tool_accuracy) ║
+  ║    Reward:     +0.080                                  ║
+  ║    Tool acc:   +10.0pp                                  ║
+  ╚═══════════════════════════════════════════════════════════╝
+
+  ┌─────────────────────────────────────────────────────────┐
+  │  GENERALIZATION CHECK (best model)                      │
+  │  Seen data tool acc:   from sft_aligned_eval results    │
+  │  Unseen data tool acc: 63.3%                           │
+  │                                                         │
+  │  If unseen ≥ 50% of seen → model generalized           │
+  │  If unseen < 30% → model memorized                     │
+  └─────────────────────────────────────────────────────────┘

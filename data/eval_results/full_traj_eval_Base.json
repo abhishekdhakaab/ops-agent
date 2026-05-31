@@ -1,0 +1,6700 @@
+{
+  "label": "Base",
+  "model_path": "Qwen/Qwen2.5-1.5B-Instruct",
+  "scenarios": 100,
+  "trajectory_accuracy": 0.18,
+  "avg_composite_score": 0.481,
+  "avg_coverage": 0.64,
+  "no_redundancy_rate": 0.3,
+  "completion_rate": 0.31,
+  "efficiency_rate": 0.31,
+  "avg_steps": 4.77,
+  "total_time_s": 512.4,
+  "per_root_cause": {
+    "config_change": {
+      "traj_accuracy": 0.0,
+      "avg_coverage": 0.0,
+      "completion": 0.429,
+      "count": 14
+    },
+    "deploy_regression": {
+      "traj_accuracy": 0.0,
+      "avg_coverage": 0.0,
+      "completion": 0.333,
+      "count": 18
+    },
+    "healthy": {
+      "traj_accuracy": 0.0,
+      "avg_coverage": 1.0,
+      "completion": 0.0,
+      "count": 18
+    },
+    "infrastructure": {
+      "traj_accuracy": 0.417,
+      "avg_coverage": 0.917,
+      "completion": 0.417,
+      "count": 12
+    },
+    "resource_exhaustion": {
+      "traj_accuracy": 0.111,
+      "avg_coverage": 1.0,
+      "completion": 0.167,
+      "count": 18
+    },
+    "upstream_dependency": {
+      "traj_accuracy": 0.55,
+      "avg_coverage": 0.85,
+      "completion": 0.55,
+      "count": 20
+    }
+  },
+  "scenario_results": [
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "First check CDN edge service metrics for latency spikes or e"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge",
+            "time_range_minutes": 60
+          },
+          "rationale": "To identify any sustained spikes or trends over a longer per"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge",
+            "time_range_minutes": 60
+          },
+          "rationale": "To identify any spikes or anomalies over the past hour that "
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "Further investigate the CDN edge service's latency and perfo"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "Further investigate the CDN edge service's latency and spike"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "Further investigate the CDN edge service's latency and spike"
+        }
+      ],
+      "scenario_id": "sc_cdn-edge_4657",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "health-checker"
+          },
+          "rationale": "Check health-checker's latency and response times to identif"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "health-checker",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "health-checker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "health-checker"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "health-checker",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could be ca"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "health-checker",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that could indicate on"
+        }
+      ],
+      "scenario_id": "sc_health-checker_7543",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "audit-log"
+          },
+          "rationale": "Check audit-log metrics for anomalies or spikes that could i"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "audit-log",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "audit-log",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "audit-log",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies in the last hour that c"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "audit-log",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "audit-log",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies in the last hour that c"
+        }
+      ],
+      "scenario_id": "sc_audit-log_8953",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "logs",
+        "deployments",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "Check shipping-calc service metrics for latency and spikes."
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "deployments",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "Recent spikes and errors suggest potential deployment issues"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "Further investigate the spike by checking the average and p9"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "Further investigate the spike by checking the average and p9"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "Further investigate by checking the current average latency "
+        }
+      ],
+      "scenario_id": "sc_shipping-calc_5915",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc"
+          },
+          "rationale": "First check scheduler-svc's latency and any potential spikes"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in the average l"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_scheduler-svc_4652",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc"
+          },
+          "rationale": "First check cart-svc's latency and any spikes to identify po"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "cart-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 382.1 ms and the presen"
+        }
+      ],
+      "scenario_id": "sc_cart-svc_9099",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "First check latency and error rates to identify potential bo"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any sustained spikes or long-term trends that c"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Re-run metrics to check for any changes or spikes that might"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Re-run metrics to check for any changes or spikes that might"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Re-run metrics to check for any changes or spikes that may i"
+        }
+      ],
+      "scenario_id": "sc_file-upload_5558",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "metrics",
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 5
+          },
+          "rationale": "Check recent metrics to identify any spikes or anomalies tha"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "metrics-collector"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 15
+          },
+          "rationale": "To investigate further and identify any spikes or anomalies "
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        },
+        {
+          "step": 5,
+          "action": "logs",
+          "args": {
+            "service": "metrics-collector"
+          },
+          "rationale": "The spike in latency and common error messages indicate pote"
+        }
+      ],
+      "scenario_id": "sc_metrics-collector_4130",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "metrics",
+        "logs",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Check rate-limiter's latency and error rates to identify pot"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Further investigate the spike by checking p95 latency and po"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Further investigate by checking p99 latency and error count "
+        },
+        {
+          "step": 4,
+          "action": "logs",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "The high average latency and frequent circuit breaker failur"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Further investigate the spike and potential failures by chec"
+        }
+      ],
+      "scenario_id": "sc_rate-limiter_1986",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 5
+          },
+          "rationale": "Check recent latency spikes to identify root cause."
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or changes in latency that could"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "order-svc"
+          },
+          "rationale": "Logs will provide immediate insights into any potential erro"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that may indicate ongo"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that could indicate on"
+        }
+      ],
+      "scenario_id": "sc_order-svc_7770",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest"
+          },
+          "rationale": "First check the latency and error rates of the service to id"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_analytics-ingest_1042",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "session-store"
+          },
+          "rationale": "Check session-store service metrics for latency and error sp"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_session-store_8622",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc"
+          },
+          "rationale": "First check media-svc's latency and any potential spikes or "
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any sustained spikes or long-term trends that c"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_media-svc_6992",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "notification-svc"
+          },
+          "rationale": "Check latency and error rates to identify potential bottlene"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "notification-svc"
+          },
+          "rationale": "Logs will provide immediate insight into any errors or anoma"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 782.2 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_notification-svc_4394",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc"
+          },
+          "rationale": "Check search-svc's latency and error rates to identify root "
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        }
+      ],
+      "scenario_id": "sc_search-svc_1982",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker"
+          },
+          "rationale": "First check import-worker's latency and error rates to ident"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_import-worker_5640",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc"
+          },
+          "rationale": "Check billing-svc's latency and error rates to identify root"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To capture real-time latency and identify any immediate spik"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "billing-svc"
+          },
+          "rationale": "To identify root causes of high latencies and potential erro"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "billing-svc"
+          },
+          "rationale": "More detailed logs will help identify root causes of the spi"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To identify any recent spikes or anomalies that could be cau"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To confirm the current state and detect any new spikes or tr"
+        }
+      ],
+      "scenario_id": "sc_billing-svc_9312",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker"
+          },
+          "rationale": "Check email-worker's latency and error rates to identify roo"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any ongoing spikes or trends over a longer peri"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "email-worker"
+          },
+          "rationale": "Email worker service has a high average latency of 785.7 ms "
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "email-worker"
+          },
+          "rationale": "The high average and p95 latencies suggest performance bottl"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker"
+          },
+          "rationale": "Further investigate the spike in latency and potential conne"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker"
+          },
+          "rationale": "Further investigate the spike and latency using metrics to i"
+        }
+      ],
+      "scenario_id": "sc_email-worker_3962",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Check queue-worker service metrics for latency and error spi"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Queue worker spikes indicate potential resource exhaustion o"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency and common OOM-related err"
+        }
+      ],
+      "scenario_id": "sc_queue-worker_4963",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "config-svc"
+          },
+          "rationale": "Check latency and error rates to identify potential issues w"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "config-svc"
+          },
+          "rationale": "To identify root causes of high latency and potential errors"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 880.7 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_config-svc_6776",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway"
+          },
+          "rationale": "Check API Gateway's latency and error rates to identify root"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any sustained spikes or trends over a longer pe"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "api-gateway"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "api-gateway"
+          },
+          "rationale": "The common error messages indicate potential connectivity or"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway"
+          },
+          "rationale": "Further investigate the spike in average latency and p95 lat"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway"
+          },
+          "rationale": "Further investigate the spike in average latency and p95 lat"
+        }
+      ],
+      "scenario_id": "sc_api-gateway_3102",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator"
+          },
+          "rationale": "Check latency and error rates to identify root cause of issu"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any sustained spikes or anomalies over a longer"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        }
+      ],
+      "scenario_id": "sc_pdf-generator_7442",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "First check latency and spikes to identify root cause of iss"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any ongoing spikes or anomalies that could be c"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "Re-run metrics to confirm spike and check p99 latency as it'"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "Further investigate by checking p99 latency and error rates "
+        }
+      ],
+      "scenario_id": "sc_user-auth_9221",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "logs",
+        "deployments",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "checkout-svc"
+          },
+          "rationale": "Check latency and error rates to identify the root cause of "
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "checkout-svc"
+          },
+          "rationale": "To identify root causes of high latency and potential errors"
+        },
+        {
+          "step": 2,
+          "action": "deployments",
+          "args": {
+            "service": "checkout-svc"
+          },
+          "rationale": "Recent spikes and errors suggest potential deployment issues"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "checkout-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could be ca"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "checkout-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that may indicate ongo"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "checkout-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that could indicate on"
+        }
+      ],
+      "scenario_id": "sc_checkout-svc_5742",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "webhook-svc"
+          },
+          "rationale": "Check latency and error rates to identify root cause of issu"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "webhook-svc"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Latency spike and common error messages indicate potential c"
+        }
+      ],
+      "scenario_id": "sc_webhook-svc_9361",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc"
+          },
+          "rationale": "Check review-svc's latency and error rates to identify root "
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "review-svc"
+          },
+          "rationale": "Review logs for potential errors or anomalies that could be "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 337.3 ms and the presen"
+        }
+      ],
+      "scenario_id": "sc_review-svc_7999",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy"
+          },
+          "rationale": "Check cache-proxy service metrics for latency and error spik"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_cache-proxy_6530",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "Check latency and error rates to identify root cause of issu"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any sustained spikes or trends over a longer pe"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "The spike and high latency suggest potential performance or "
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To identify any recent spikes or anomalies that could be con"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To identify any ongoing spikes or trends that may indicate t"
+        }
+      ],
+      "scenario_id": "sc_auth-proxy_3938",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "recommendation-svc"
+          },
+          "rationale": "First check service metrics for any anomalies or spikes that"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "recommendation-svc"
+          },
+          "rationale": "To identify root causes of the high latency and potential er"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 473.8 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_recommendation-svc_5911",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc"
+          },
+          "rationale": "Check feed-svc's latency and error rates to identify root ca"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for longer-term spikes and overall performance tren"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_feed-svc_1402",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "inventory-svc"
+          },
+          "rationale": "First check inventory-svc's latency and any potential spikes"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "inventory-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 582.4 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_inventory-svc_2667",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc"
+          },
+          "rationale": "First check payment-svc's latency and any spikes to identify"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latencies tha"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "Re-run metrics to check for any new spikes or changes in per"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latencies tha"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_payment-svc_5877",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine"
+          },
+          "rationale": "Check pricing-engine's performance metrics to identify any s"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_pricing-engine_5646",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "export-svc"
+          },
+          "rationale": "First check the latency metrics to identify any spikes or an"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "export-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 390.4 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_export-svc_1439",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize"
+          },
+          "rationale": "Check image-resize service's latency and error rates to iden"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 15
+          },
+          "rationale": "To capture any ongoing spikes or changes in performance that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "image-resize"
+          },
+          "rationale": "To identify any error messages or patterns that could indica"
+        },
+        {
+          "step": 4,
+          "action": "logs",
+          "args": {
+            "service": "image-resize"
+          },
+          "rationale": "The spike and high latency suggest potential network or serv"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 15
+          },
+          "rationale": "To identify any recent spikes or anomalies that could be con"
+        }
+      ],
+      "scenario_id": "sc_image-resize_1908",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "catalog-svc"
+          },
+          "rationale": "First check catalog-svc's latency and any potential spikes o"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "catalog-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "catalog-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "catalog-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "catalog-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "catalog-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        }
+      ],
+      "scenario_id": "sc_catalog-svc_6161",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "First check latency and spikes to identify potential bottlen"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "Further investigate the spike by checking p95 latency and po"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "Based on the high error count and common error messages, it'"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "Further investigate the spike by checking p95 latency and po"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth",
+            "time_range_minutes": 15
+          },
+          "rationale": "To identify any spikes or anomalies over the past hour that "
+        }
+      ],
+      "scenario_id": "sc_user-auth_3248",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Check file-upload service metrics for latency and error rate"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Further investigate the spike by checking p95 latency and an"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "File upload spikes indicate potential performance bottleneck"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "The common error messages indicate potential issues with Kaf"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Further investigate by checking the average and p95 latencie"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Further investigate by checking latency and error rates to p"
+        }
+      ],
+      "scenario_id": "sc_file-upload_3304",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc"
+          },
+          "rationale": "Check cart-svc's latency and error rates to identify potenti"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies in latencies tha"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies in latencies tha"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_cart-svc_6052",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy"
+          },
+          "rationale": "Check cache-proxy service metrics for latency and error spik"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_cache-proxy_4892",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "catalog-svc"
+          },
+          "rationale": "First check catalog-svc's latency and any potential spikes o"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "catalog-svc"
+          },
+          "rationale": "To identify root causes of high latency and potential errors"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 439.9 ms and the presen"
+        }
+      ],
+      "scenario_id": "sc_catalog-svc_8520",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Check queue-worker service metrics for latency and error spi"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "queue-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any sustained spikes or trends over an hour per"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Queue worker spikes indicate potential resource exhaustion o"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "The common error messages indicate network or service connec"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Further investigate the spike and potential root causes with"
+        },
+        {
+          "step": 5,
+          "action": "logs",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Further investigate error patterns and common messages to id"
+        }
+      ],
+      "scenario_id": "sc_queue-worker_3954",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "webhook-svc"
+          },
+          "rationale": "Check latency and error rates to identify potential issues w"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "webhook-svc"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency and common error messages "
+        }
+      ],
+      "scenario_id": "sc_webhook-svc_3247",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "health-checker"
+          },
+          "rationale": "Check health-checker service metrics for anomalies or spikes"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "health-checker"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 350.9 ms and frequent c"
+        }
+      ],
+      "scenario_id": "sc_health-checker_5286",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "First check CDN edge service metrics for latency spikes or o"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "Re-run metrics to check for any changes or spikes that might"
+        }
+      ],
+      "scenario_id": "sc_cdn-edge_1761",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc"
+          },
+          "rationale": "First check scheduler-svc's latency and any potential spikes"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "scheduler-svc"
+          },
+          "rationale": "To identify root causes of high latencies and potential erro"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 841.2 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_scheduler-svc_9866",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc"
+          },
+          "rationale": "Check billing-svc's latency and error rates to identify root"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "billing-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_billing-svc_1404",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "audit-log"
+          },
+          "rationale": "Check audit-log metrics for anomalies or spikes that could i"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "audit-log"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 817.1 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_audit-log_4617",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway"
+          },
+          "rationale": "Check API Gateway's latency and error rates to identify root"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_api-gateway_9542",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Check rate-limiter's latency and error rates to identify pot"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Check the spike again as it might be due to increased load o"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Re-run metrics to check for any changes or spikes that might"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Re-run metrics to confirm any potential spikes or anomalies."
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Re-run metrics to confirm spike and check p99 latency as it "
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Further check the average and p95 latencies to understand th"
+        }
+      ],
+      "scenario_id": "sc_rate-limiter_2577",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine"
+          },
+          "rationale": "Check pricing-engine's performance metrics to identify any a"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "pricing-engine",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        }
+      ],
+      "scenario_id": "sc_pricing-engine_2951",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc"
+          },
+          "rationale": "Check review-svc's latency and error rates to identify root "
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_review-svc_1448",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "checkout-svc"
+          },
+          "rationale": "Check latency and error rates to identify the root cause of "
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "checkout-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency and common error messages "
+        }
+      ],
+      "scenario_id": "sc_checkout-svc_9066",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator"
+          },
+          "rationale": "Check latency and error rates to identify root cause of issu"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that may indicate ongo"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "pdf-generator",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_pdf-generator_6818",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "Check shipping-calc service metrics for anomalies or spikes."
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 522.6 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_shipping-calc_5973",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 5
+          },
+          "rationale": "Check recent metrics for spikes or anomalies that could indi"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "metrics-collector",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        }
+      ],
+      "scenario_id": "sc_metrics-collector_7375",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker"
+          },
+          "rationale": "First check import-worker's latency and error rates to ident"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that may indicate ongo"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends over the past hour tha"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 15
+          },
+          "rationale": "To capture current latency and identify any changes since la"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "import-worker",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_import-worker_3627",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "recommendation-svc"
+          },
+          "rationale": "First check the service's latency and any potential spikes o"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "recommendation-svc"
+          },
+          "rationale": "To identify root causes of high latency and potential errors"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Latency spike and common error messages indicate potential c"
+        }
+      ],
+      "scenario_id": "sc_recommendation-svc_9747",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "session-store"
+          },
+          "rationale": "Check session-store service metrics for latency and error sp"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any ongoing spikes or anomalies that could be c"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_session-store_9269",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "config-svc"
+          },
+          "rationale": "Check latency and error rates to identify potential issues w"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "config-svc"
+          },
+          "rationale": "Logs will provide insights into any errors or anomalies that"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Latency spike and common error messages indicate configurati"
+        }
+      ],
+      "scenario_id": "sc_config-svc_7237",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc"
+          },
+          "rationale": "First check payment-svc's latency and any spikes to identify"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "payment-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_payment-svc_9230",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "Check latency and error rates to identify root cause of issu"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any ongoing spikes or trends over a longer peri"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "The common error messages indicate network or connection-rel"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "Further investigate the spike in latency and potential conne"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "Further investigate the spike in latency and potential conne"
+        }
+      ],
+      "scenario_id": "sc_auth-proxy_8449",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "export-svc"
+          },
+          "rationale": "First check the latency metrics to identify any spikes or an"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "export-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 460.1 ms and the common"
+        }
+      ],
+      "scenario_id": "sc_export-svc_3204",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker"
+          },
+          "rationale": "Check email-worker's latency and error rates to identify roo"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_email-worker_2838",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc"
+          },
+          "rationale": "First check search-svc's latency and any potential spikes or"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_search-svc_3159",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest"
+          },
+          "rationale": "First check the latency and error rates of the service to id"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        }
+      ],
+      "scenario_id": "sc_analytics-ingest_7208",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize"
+          },
+          "rationale": "Check image-resize service's latency and error rates to iden"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_image-resize_9220",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 5
+          },
+          "rationale": "Check recent latency spikes to identify root cause."
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or changes in latency that might"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "order-svc"
+          },
+          "rationale": "Logs will provide direct insights into any errors or anomali"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "order-svc",
+            "contains": "JSON parse error"
+          },
+          "rationale": "Logs indicate common errors related to parsing and schema va"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that may indicate the "
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that could indicate on"
+        }
+      ],
+      "scenario_id": "sc_order-svc_7533",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "notification-svc"
+          },
+          "rationale": "Check latency and error rates to identify potential bottlene"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "notification-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 759.4 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_notification-svc_3483",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "inventory-svc"
+          },
+          "rationale": "First check inventory-svc's latency and any potential spikes"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "inventory-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 310.6 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_inventory-svc_7586",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc"
+          },
+          "rationale": "First check feed-svc's latency and any spikes to identify po"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_feed-svc_8287",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc"
+          },
+          "rationale": "First check media-svc's latency and any potential spikes or "
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "media-svc"
+          },
+          "rationale": "To identify root causes of high latency and potential errors"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 878.7 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_media-svc_8452",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker"
+          },
+          "rationale": "Check email-worker's latency and error rates to identify roo"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "email-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_email-worker_1351",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "notification-svc"
+          },
+          "rationale": "Check latency and error rates to identify potential bottlene"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "notification-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency (450.2 ms) and the presenc"
+        }
+      ],
+      "scenario_id": "sc_notification-svc_6206",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "webhook-svc"
+          },
+          "rationale": "First check latency and spikes to identify potential root ca"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "webhook-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 220.5 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_webhook-svc_1798",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "catalog-svc"
+          },
+          "rationale": "First check catalog-svc's latency and any potential spikes o"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "catalog-svc"
+          },
+          "rationale": "To identify root causes of high latency and potential errors"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 395 ms and p95 latency "
+        }
+      ],
+      "scenario_id": "sc_catalog-svc_9202",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc"
+          },
+          "rationale": "First check cart-svc's latency and any spikes or anomalies."
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latencies tha"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "cart-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latencies tha"
+        }
+      ],
+      "scenario_id": "sc_cart-svc_7557",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "feed-svc"
+          },
+          "rationale": "First check feed-svc's latency and any potential spikes or a"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "feed-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 816.6 ms and the presen"
+        }
+      ],
+      "scenario_id": "sc_feed-svc_7189",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc"
+          },
+          "rationale": "First check review-svc's latency and any potential spikes or"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "review-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_review-svc_8656",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "recommendation-svc"
+          },
+          "rationale": "First check the service's latency and any potential spikes o"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "recommendation-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "recommendation-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "recommendation-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "recommendation-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "recommendation-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the past hour that"
+        }
+      ],
+      "scenario_id": "sc_recommendation-svc_6947",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "checkout-svc"
+          },
+          "rationale": "Check latency and error rates to identify potential bottlene"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "checkout-svc"
+          },
+          "rationale": "To identify root cause of high latencies and potential error"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 848.4 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_checkout-svc_5262",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest"
+          },
+          "rationale": "First check the latency and error rates of the service to id"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 15
+          },
+          "rationale": "To capture any ongoing spikes or trends that may indicate th"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "analytics-ingest"
+          },
+          "rationale": "Logs will provide insights into any potential errors or anom"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "analytics-ingest"
+          },
+          "rationale": "Further investigate with logs to identify root cause of high"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 15
+          },
+          "rationale": "To analyze recent spikes and identify potential root causes "
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "analytics-ingest",
+            "time_range_minutes": 15
+          },
+          "rationale": "To identify any recent spikes or anomalies that could be cau"
+        }
+      ],
+      "scenario_id": "sc_analytics-ingest_9470",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "First check CDN edge service metrics for latency spikes or o"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge",
+            "time_range_minutes": 15
+          },
+          "rationale": "To see if there's been any change in performance since the l"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "Further investigate the CDN edge service's latency and perfo"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "Further investigate the CDN edge service's latency and spike"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "cdn-edge"
+          },
+          "rationale": "Further investigate the CDN edge service's latency and spike"
+        }
+      ],
+      "scenario_id": "sc_cdn-edge_3525",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Check queue-worker service metrics for latency and error spi"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "queue-worker",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any ongoing spikes or trends over the past hour"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Queue worker spikes indicate potential resource exhaustion o"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "The common error messages indicate potential network or DNS-"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Further investigate by checking p99 latency and error count "
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "queue-worker"
+          },
+          "rationale": "Further investigate the spike and potential root causes with"
+        }
+      ],
+      "scenario_id": "sc_queue-worker_8974",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "logs",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "session-store"
+          },
+          "rationale": "Check session-store service metrics for latency and error sp"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any ongoing spikes or trends over a longer peri"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "session-store"
+          },
+          "rationale": "To identify root causes of high latency and potential errors"
+        },
+        {
+          "step": 3,
+          "action": "logs",
+          "args": {
+            "service": "session-store"
+          },
+          "rationale": "The high average and p95 latencies suggest performance bottl"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "session-store",
+            "time_range_minutes": 15
+          },
+          "rationale": "To identify any spikes or anomalies in the session store's p"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "session-store"
+          },
+          "rationale": "Further investigate with latency and p95 latency metrics to "
+        }
+      ],
+      "scenario_id": "sc_session-store_2412",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs",
+        "metrics",
+        "logs",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy"
+          },
+          "rationale": "Check cache-proxy service metrics for latency and error spik"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any ongoing spikes or trends over the past hour"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "cache-proxy"
+          },
+          "rationale": "Cache proxy spikes indicate potential performance or configu"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To identify any sustained spikes or trends that could indica"
+        },
+        {
+          "step": 4,
+          "action": "logs",
+          "args": {
+            "service": "cache-proxy",
+            "contains": "schema validation failed"
+          },
+          "rationale": "The common error message indicates that schema validation fa"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "cache-proxy",
+            "time_range_minutes": 60
+          },
+          "rationale": "To identify any sustained spikes or trends that could indica"
+        }
+      ],
+      "scenario_id": "sc_cache-proxy_6157",
+      "root_cause": "deploy_regression"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.6,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "api-gateway"
+          },
+          "rationale": "Check API Gateway's latency and error rates to identify root"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "api-gateway"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency and common error messages "
+        }
+      ],
+      "scenario_id": "sc_api-gateway_4483",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.8,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": true,
+      "efficiency": true,
+      "steps": 3,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 5
+          },
+          "rationale": "Check recent latency spikes to identify root cause."
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "order-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any ongoing spikes or trends over a longer peri"
+        },
+        {
+          "step": 2,
+          "action": "logs",
+          "args": {
+            "service": "order-svc"
+          },
+          "rationale": "Logs will provide context on any observed spikes and potenti"
+        },
+        {
+          "step": 3,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 313 ms and the presence"
+        }
+      ],
+      "scenario_id": "sc_order-svc_1394",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc"
+          },
+          "rationale": "First check search-svc's latency and any potential spikes or"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To capture current latency and detect any new spikes."
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To capture current latency and identify any spikes or trends"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "search-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To capture any potential spikes over the last hour and get a"
+        }
+      ],
+      "scenario_id": "sc_search-svc_3014",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "First check user-auth service metrics for latency spikes or "
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth"
+          },
+          "rationale": "Further check the average and p95 latencies to understand th"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "user-auth",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_user-auth_5489",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.1,
+      "coverage": 0.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize"
+          },
+          "rationale": "First check the latency and response times of the service to"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any ongoing spikes or anomalies that could be c"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "image-resize",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_image-resize_3064",
+      "root_cause": "infrastructure"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Check rate-limiter's latency and error rates to identify pot"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Re-run metrics to confirm any potential spikes or changes in"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Further investigate by checking the average and p95 latencie"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Further check the average and p95 latencies to understand th"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Further check the average and p95 latencies to understand th"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "rate-limiter"
+          },
+          "rationale": "Further check the average and p95 latencies to understand th"
+        }
+      ],
+      "scenario_id": "sc_rate-limiter_5029",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "audit-log"
+          },
+          "rationale": "Check audit-log metrics for anomalies or spikes that could i"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "audit-log"
+          },
+          "rationale": "To identify the root cause of the spike in latency and poten"
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency and frequent errors report"
+        }
+      ],
+      "scenario_id": "sc_audit-log_7963",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc"
+          },
+          "rationale": "First check media-svc's latency and any potential spikes or "
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "media-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_media-svc_9808",
+      "root_cause": "healthy"
+    },
+    {
+      "traj_accurate": true,
+      "composite": 1.0,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": true,
+      "completion": true,
+      "efficiency": true,
+      "steps": 2,
+      "tools_called": [
+        "metrics",
+        "logs"
+      ],
+      "required": [
+        "logs"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "inventory-svc"
+          },
+          "rationale": "First check inventory-svc's latency and any potential spikes"
+        },
+        {
+          "step": 1,
+          "action": "logs",
+          "args": {
+            "service": "inventory-svc"
+          },
+          "rationale": "To identify root cause of high latency and potential errors "
+        },
+        {
+          "step": 2,
+          "action": "final",
+          "args": {},
+          "rationale": "Based on the high average latency of 509.4 ms and p95 latenc"
+        }
+      ],
+      "scenario_id": "sc_inventory-svc_9615",
+      "root_cause": "upstream_dependency"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc"
+          },
+          "rationale": "First check scheduler-svc's latency and any potential spikes"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any new spikes or trends over the past hour."
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "scheduler-svc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_scheduler-svc_2684",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc"
+          },
+          "rationale": "Check shipping-calc service metrics for latency and spikes."
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over a longer period of"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "shipping-calc",
+            "time_range_minutes": 60
+          },
+          "rationale": "To check for any spikes or anomalies over the last hour that"
+        }
+      ],
+      "scenario_id": "sc_shipping-calc_3484",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.4,
+      "coverage": 1.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy"
+          },
+          "rationale": "Check auth-proxy's latency and error rates to identify root "
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any ongoing spikes or anomalies that could be c"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "auth-proxy",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        }
+      ],
+      "scenario_id": "sc_auth-proxy_8688",
+      "root_cause": "resource_exhaustion"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.0,
+      "coverage": 0.0,
+      "bonus_coverage": 0.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "deployments"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Check file-upload service metrics for latency and error rate"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any new spikes or trends that may indicate ongo"
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Re-run metrics to check for any changes or spikes that may i"
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies that could indic"
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "file-upload"
+          },
+          "rationale": "Re-run metrics to confirm any changes in latency or spikes a"
+        }
+      ],
+      "scenario_id": "sc_file-upload_4482",
+      "root_cause": "config_change"
+    },
+    {
+      "traj_accurate": false,
+      "composite": 0.5,
+      "coverage": 1.0,
+      "bonus_coverage": 1.0,
+      "no_redundancy": false,
+      "completion": false,
+      "efficiency": false,
+      "steps": 6,
+      "tools_called": [
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics",
+        "metrics"
+      ],
+      "required": [
+        "metrics"
+      ],
+      "steps_log": [
+        {
+          "step": 0,
+          "action": "metrics",
+          "args": {
+            "service": "config-svc"
+          },
+          "rationale": "Check latency and error rates to identify potential issues w"
+        },
+        {
+          "step": 1,
+          "action": "metrics",
+          "args": {
+            "service": "config-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 2,
+          "action": "metrics",
+          "args": {
+            "service": "config-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "Re-run metrics to check for any new spikes or changes in beh"
+        },
+        {
+          "step": 3,
+          "action": "metrics",
+          "args": {
+            "service": "config-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 4,
+          "action": "metrics",
+          "args": {
+            "service": "config-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        },
+        {
+          "step": 5,
+          "action": "metrics",
+          "args": {
+            "service": "config-svc",
+            "time_range_minutes": 15
+          },
+          "rationale": "To check for any recent spikes or anomalies in latency that "
+        }
+      ],
+      "scenario_id": "sc_config-svc_9520",
+      "root_cause": "healthy"
+    }
+  ]
+}
