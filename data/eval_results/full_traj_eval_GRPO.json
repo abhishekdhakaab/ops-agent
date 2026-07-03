@@ -1,6 +1,6 @@
 {
   "label": "GRPO",
-  "model_path": "/workspace/tmp/ops-agent/data/trained_models/grpo_on_sft_v2/final",
+  "model_path": "data/trained_models/grpo_on_sft_v2/final",
   "scenarios": 100,
   "trajectory_accuracy": 0.67,
   "avg_composite_score": 0.863,

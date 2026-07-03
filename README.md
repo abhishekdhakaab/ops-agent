@@ -1,209 +1,201 @@
-# Autonomous AI Operations Agent
+# Ops Agent
 
-An autonomous multi-agent system that investigates operational incidents by reasoning step-by-step, calling tools to gather evidence, and producing grounded explanations. Built with LangGraph, FastAPI, and local LLMs via Ollama.
+Ops Agent is an evidence-grounded incident investigation system built around a small local language model. It plans diagnostic steps, calls simulated metrics/log/deployment tools, retrieves relevant runbooks, checks its own conclusions for grounding, and produces a structured response with an optional incident ticket.
+
+The project also includes the data pipeline and experiments used to fine-tune Qwen2.5-1.5B with SFT, GRPO, and DPO. The strongest policy improved full-trajectory accuracy from 18% to 67% while sharply reducing repeated tool calls.
+
+## What is technically interesting
+
+- A LangGraph state machine separates planning, evidence collection, drafting, validation, and action selection.
+- Pydantic contracts validate every tool boundary and structured model response.
+- The validator can send an ungrounded draft back through the planner for one more evidence-gathering pass.
+- Runbook retrieval uses embeddings when available and a keyword fallback when they are not.
+- The training pipeline materializes planner state at each step, preventing future evidence from leaking into next-action labels.
+- Evaluation covers both first-tool selection and complete multi-step trajectories, including completion, coverage, efficiency, and redundancy.
 
 ## Architecture
 
-```
-User Question
-    |
-    v
-[Intake] --> [Retrieval Agent] --> [Planner LLM] --> [Act: Tool Call]
-                                        ^                   |
-                                        |___ loop __________|
-                                                            |
-                                                            v
-                                    [Draft Answer LLM] --> [Validation Agent LLM]
-                                                            |
-                                              grounded? ----|---- not grounded?
-                                              |                      |
-                                              v                      v
-                                    [Action Agent LLM]          back to Planner
-                                              |
-                                              v
-                                         [Finalize]
-                                              |
-                                              v
-                                    Structured Response
-                                    + Incident Ticket (optional)
+```text
+Question
+   |
+   v
+Intake -> Runbook retrieval -> Planner -> Tool execution
+                                  ^             |
+                                  |_____________|
+                                      loop
+                                                 |
+                                                 v
+Draft answer -> Grounding validator -- missing evidence --> Planner
+                       |
+                    grounded
+                       v
+Structured action -> Optional ticket -> Final response
 ```
 
-**4 LLM calls per pass**: Planner, Draft, Validator, Action Agent  
-**3 tools**: Metrics, Logs, Deployments (+ Ticket creation)  
-**RAG**: Runbook retrieval with embeddings or keyword fallback  
-**Validation loop**: Re-investigates if draft answer lacks evidence grounding  
+The API in `app/main.py` exposes the graph synchronously and as a background job. Tool responses come from reproducible incident scenarios in `data/scenarios.json`; the same evidence model is reused by the training pipeline.
 
-## Quick Start (New Laptop Setup)
+## Stack
 
-### Prerequisites
 - Python 3.10+
-- [Ollama](https://ollama.ai) installed and running
+- FastAPI and Uvicorn
+- LangGraph
+- Pydantic
+- Ollama or another OpenAI-compatible endpoint
+- PyTorch, Transformers, PEFT, TRL, Accelerate, and Datasets for training
 
-### Step 1: Install Ollama models
+## Local setup
+
+Install [Ollama](https://ollama.com/), then clone the repository and create an environment:
+
 ```bash
-# Required - pick one (or all for comparison):
-ollama pull gemma3:4b          # ~3GB, good balance (recommended start)
-ollama pull gemma3:1b          # ~1GB, fast but weak at JSON
-ollama pull qwen2.5:7b         # ~5GB, strong JSON/tool-use
-ollama pull phi4:14b           # ~9GB, best quality (needs 16GB+ RAM)
-
-# Required for RAG embeddings:
-ollama pull all-minilm         # ~50MB, fast embeddings
-```
-
-### Step 2: Setup Python environment
-```bash
-cd ops_agent
-python3 -m venv venv
-source venv/bin/activate       # On Windows: venv\Scripts\activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+cp .env.example .env
 ```
 
-### Step 3: Verify .env
-The `.env` file is in the project root. Default config:
-```
-LLM_PROVIDER=openai_compatible
-LLM_BASE_URL=http://localhost:11434/v1
-LLM_API_KEY=ollama
-LLM_MODEL=gemma3:4b
-MAX_STEPS=6
+Pull the default local models:
 
-EMBEDDING_PROVIDER=ollama
-EMBEDDING_BASE_URL=http://localhost:11434
-EMBEDDING_API_KEY=ollama
-EMBEDDING_MODEL=all-minilm
-```
-
-### Step 4: Ingest runbooks (one-time)
 ```bash
-# Start the server first
+ollama pull gemma3:4b
+ollama pull all-minilm
+```
+
+The defaults in `.env.example` target Ollama on localhost. For another OpenAI-compatible service, set `LLM_BASE_URL`, `LLM_API_KEY`, and `LLM_MODEL`; set the corresponding embedding variables if that service also supplies embeddings.
+
+Start the API:
+
+```bash
 uvicorn app.main:app --reload
-
-# In another terminal, ingest the runbook documents:
-curl -X POST http://localhost:8000/runbooks/ingest
 ```
 
-### Step 5: Test it
-```bash
-curl -s -X POST http://localhost:8000/run \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Why is service-x slow?"}' | python3 -m json.tool
-```
-
-## API Endpoints
-
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/run` | Run agent investigation (synchronous) |
-| POST | `/runs` | Start async investigation (returns run_id) |
-| GET | `/runs` | List recent runs |
-| GET | `/runs/{run_id}` | Get run status/result |
-| GET | `/tools` | List available tools and schemas |
-| POST | `/tools/{name}` | Call a tool directly |
-| GET | `/tickets` | List created incident tickets |
-| POST | `/runbooks/ingest` | Ingest runbook documents for RAG |
-| GET | `/health` | Health check |
-
-## Running Evaluations
-
-### Single model eval
-```bash
-# With server running:
-cd app/eval
-python run_eval.py
-```
-
-### Compare multiple models (automated)
-```bash
-cd app/eval
-python run_eval.py --compare gemma3:1b gemma3:4b qwen2.5:7b
-```
-This will:
-1. Update `.env` for each model
-2. Start/stop the server automatically
-3. Run all 15 eval questions per model
-4. Print a comparison table
-
-### View past results
-```bash
-python run_eval.py --report
-```
-
-### Eval Metrics
-| Metric | What it measures |
-|--------|-----------------|
-| Tool Selection Accuracy | Did the agent use the right tools? |
-| Tool Any Accuracy | Did it use at least one correct tool? |
-| Tool Diversity | Ratio of unique/total calls (1.0 = no repeats) |
-| Efficiency Score | Were tool counts in expected range? |
-| Grounding Score | Does the answer reference actual evidence? |
-| Answer Quality | Is the answer well-structured and sized? |
-
-## Training Data Pipeline
-
-The agent logs every run to `data/trajectories.jsonl`. Convert to training format:
+Build the runbook index once the server is running:
 
 ```bash
-python app/eval/convert_for_training.py
+curl -X POST http://127.0.0.1:8000/runbooks/ingest
 ```
 
-Generates:
-- `data/trl_planner_sft.jsonl` — SFT training data (prompt → tool choice)
-- `data/trl_planner_grpo.jsonl` — GRPO/RL training data (with expected actions)
+Run an investigation:
 
-## Project Structure
-
-```
-ops_agent/
-├── .env                        # LLM and embedding config
-├── requirements.txt
-├── app/
-│   ├── main.py                 # FastAPI endpoints
-│   ├── agent/
-│   │   ├── graph.py            # LangGraph pipeline (7 nodes)
-│   │   ├── prompts.py          # All LLM system prompts
-│   │   └── retrieval_stub.py   # Fallback runbook data
-│   ├── core/
-│   │   ├── config.py           # Settings from .env
-│   │   ├── types.py            # Request/Response models
-│   │   ├── storage.py          # Trajectory logging
-│   │   ├── run_store.py        # Async run management
-│   │   ├── runner.py           # Blocking agent runner
-│   │   └── metadata.py         # Version fingerprinting
-│   ├── eval/
-│   │   ├── questions.json      # 15 eval scenarios
-│   │   ├── run_eval.py         # Multi-model eval runner
-│   │   └── convert_for_training.py
-│   ├── llm/
-│   │   ├── base.py             # LLMClient ABC
-│   │   ├── http_provider.py    # OpenAI-compatible provider
-│   │   ├── ollama_provider.py  # Native Ollama provider
-│   │   ├── json_utils.py       # JSON extraction/repair
-│   │   └── providers.py        # Provider factory
-│   ├── rag/
-│   │   ├── embeddings.py       # Embedding generation
-│   │   ├── index.py            # Chunking and index I/O
-│   │   ├── ingest.py           # Runbook ingestion
-│   │   └── retrieve.py         # Cosine + keyword retrieval
-│   └── tools/
-│       ├── contracts.py        # Pydantic I/O schemas
-│       ├── impl.py             # Tool implementations
-│       ├── registry.py         # MCP-style tool registry
-│       └── ticket_store.py     # Incident ticket creation
-├── data/
-│   ├── runbooks/               # 10 operational runbooks
-│   ├── rag_index.json          # Pre-built RAG index
-│   ├── trajectories.jsonl      # Agent run logs
-│   ├── tickets.jsonl           # Created tickets
-│   └── eval_results/           # Model comparison results
-└── gemma-agent/
-    └── Modelfile               # Custom Ollama model config
+```bash
+curl -s -X POST http://127.0.0.1:8000/run \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"Did a deployment cause the checkout-svc latency spike?"}' \
+  | python3 -m json.tool
 ```
 
-## Key Design Decisions
+`setup.sh` performs the same local setup interactively and finishes with a smoke test.
 
-- **LangGraph over plain loops**: Gives us conditional edges (validation loop), state management, and graph visualization for free
-- **Pydantic contracts for tools**: Every tool has typed input/output — the registry validates automatically
-- **JSON extraction with retry**: Small models often wrap JSON in markdown; `json_utils.py` strips fences and retries
-- **Validation agent loop**: Catches hallucinated conclusions by checking if claims have evidence backing
-- **Trajectory logging**: Every run is logged with metadata (model, prompt version, graph version) for reproducibility
+## API
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/health` | Process health check |
+| `POST` | `/run` | Run an investigation synchronously |
+| `POST` | `/runs` | Queue a background investigation |
+| `GET` | `/runs` | List recent background runs |
+| `GET` | `/runs/{run_id}` | Poll one background run |
+| `GET` | `/tools` | Inspect tool schemas |
+| `POST` | `/tools/{tool_name}` | Invoke one tool directly |
+| `GET` / `POST` | `/tickets` | List or create incident tickets |
+| `POST` | `/runbooks/ingest` | Rebuild the retrieval index |
+
+Runtime JSONL files and the generated RAG index are intentionally ignored by Git.
+
+## Training and evaluation
+
+Training dependencies are separate from the API environment:
+
+```bash
+pip install -r requirements-training.txt
+```
+
+Useful entry points:
+
+```bash
+# Check the three-stage data pipeline without calling a model
+python sft_pipeline/run_pipeline.py --dry-run
+
+# Generate the SFT dataset with Ollama
+python sft_pipeline/run_pipeline.py --model gemma3:12b --clean
+
+# Train SFT on one GPU (use accelerate for multi-GPU)
+python sft_pipeline/run_sft_gpu.py --model qwen2.5:1.5b
+
+# Generate prompts and train GRPO on the merged SFT model
+python sft_pipeline/grpo_train.py full --model qwen2.5:1.5b
+
+# Compare complete trajectories across available checkpoints
+python full_traj_eval.py --compare --count 100
+
+# Compare first-step decisions on generated unseen services
+python unseen_eval.py --count 100
+```
+
+`setup_gpu.sh` configures a Linux CUDA environment. `run_overnight.sh` runs the SFT, GRPO, DPO, and evaluation stages on available GPUs while avoiding devices already in use.
+
+Model checkpoints are excluded because they are too large for a normal source repository. Evaluation commands expect them under `data/trained_models/`.
+
+## Results
+
+All headline results use Qwen2.5-1.5B-Instruct and 100 scenarios. The detailed records are in `data/eval_results/`.
+
+### Full investigation trajectories
+
+This benchmark runs the planner until it chooses `final` or reaches the five-step limit.
+
+| Model | Trajectory accuracy | Required-tool coverage | No repeated calls | Completion | Average steps |
+|---|---:|---:|---:|---:|---:|
+| Base | 18% | 64% | 30% | 31% | 4.77 |
+| SFT | 46% | 73% | 72% | 72% | 3.18 |
+| GRPO | **67%** | **74%** | **93%** | **94%** | **2.48** |
+| DPO | 40% | 71% | 66% | 66% | 3.36 |
+
+GRPO improved trajectory accuracy by 49 percentage points over the base model. Repeated-call scenarios fell from 70% to 7%, and investigations used 2.29 fewer tool calls on average.
+
+### First action on unseen services
+
+The final four-model run evaluates the first decision before any evidence is available.
+
+| Model | Tool accuracy | Average reward | Valid JSON |
+|---|---:|---:|---:|
+| Base | 54% | 2.172 | 100% |
+| SFT | **67%** | **2.269** | 100% |
+| GRPO | 65% | 2.255 | 100% |
+| DPO | 65% | 2.255 | 100% |
+
+### Run variance retained for transparency
+
+Two earlier SFT-only runs produced different tradeoffs, so both were retained instead of selecting only the more flattering score.
+
+| Benchmark | Run | SFT tool accuracy | Average reward | Valid JSON |
+|---|---|---:|---:|---:|
+| Unseen first action | Earlier SFT-only | 75% | 2.185 | 95% |
+| Unseen first action | Final four-model comparison | 67% | 2.269 | 100% |
+| In-distribution first action | Earlier SFT-only | 63% | 2.213 | 99% |
+| In-distribution first action | Later rerun | 48% | 2.136 | 100% |
+
+The in-distribution benchmark reuses training scenarios and should not be treated as a generalization result. The full-trajectory and unseen-service evaluations are the more useful measures of behavior.
+
+## Repository map
+
+```text
+app/
+  agent/        LangGraph workflow and role prompts
+  core/         configuration, metadata, storage, and run lifecycle
+  eval/         API evaluation, scoring, and scenario generation
+  llm/          Ollama and OpenAI-compatible clients
+  rag/          runbook ingestion and retrieval
+  tools/        typed simulated operations tools
+  training/     original SFT/GRPO training entry point
+sft_pipeline/   staged data generation and current GPU training pipeline
+data/
+  eval_results/ retained benchmark records
+  runbooks/     retrieval corpus
+  scenarios.json
+  trl_planner_sft.jsonl
+```
+
+## Scope
+
+This is a research/demo system, not an automated production responder. Its tools operate on generated incident scenarios, ticket creation writes to a local JSONL file, and recommendations should be reviewed by an operator before any real action is taken.

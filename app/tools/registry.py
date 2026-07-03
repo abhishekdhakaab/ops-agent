@@ -1,3 +1,5 @@
+"""Register tools with schemas and enforce their Pydantic boundaries."""
+
 from __future__ import annotations
 from typing import Any, Callable, Dict, List, Type
 from pydantic import BaseModel 
@@ -11,19 +13,20 @@ from .contracts import TicketIn, TicketOut
 from .impl import ticket_tool
 
 class ToolSpec(BaseModel):
+    """Public description and JSON schemas exposed by the API."""
     name: str
     description : str
     input_schema : Dict[str, Any]
     output_schema : Dict[str, Any]
 
 class ToolEntry(BaseModel):
+    """Internal link between a specification, models, and handler."""
     spec : ToolSpec
     input_model : Type[BaseModel]
     output_model : Type[BaseModel]
-    handler : Callable[[BaseModel],BaseModel] ## basically a function that takes a subclass of BaseModel( not it' instance because we will use this variable to create objects later) and returns a output class which is also subclass of BaseModel
+    handler : Callable[[BaseModel],BaseModel]
 
 def _schema_for(model:Type[BaseModel]) -> Dict[str,Any]:
-    ## general method to get schema for any of the pydantic class
     return model.model_json_schema()
 
 TOOLS: Dict[str, ToolEntry] = {
@@ -58,7 +61,7 @@ TOOLS: Dict[str, ToolEntry] = {
         ),
         input_model=DeploymentsIn,
         output_model=DeploymentsOut,
-        handler=lambda inp: deployments_tool(inp),  # right now it just takes the input and get the output from the mode, later we can use this to do some preprocessing on our output before sending back to the user 
+        handler=lambda inp: deployments_tool(inp),
     ),
     "ticket": ToolEntry(
         spec=ToolSpec(
@@ -75,15 +78,18 @@ TOOLS: Dict[str, ToolEntry] = {
 }
 
 def list_tool_specs()->List[ToolSpec]:
+    """Return schemas for every tool exposed by the service."""
     return [entry.spec for entry in TOOLS.values()]
 
 def invoke_tool(name:str, payload : Dict[str,Any])->Dict[str,Any]:
+    """Validate a payload, call its handler, and normalize the response."""
     if name not in TOOLS:
         raise KeyError(f"Unkown tool : {name}")
     entry = TOOLS[name]
     inp = entry.input_model(**payload)
     out = entry.handler(inp)
 
-    if isinstance(out, BaseModel): ## in our metrics_tool we have defined that output of metrices_tool is MetricsOut() which is subclass of BaseModel
+    # Handlers may return either a model or a plain provider dictionary.
+    if isinstance(out, BaseModel):
         return out.model_dump() 
     return entry.output_model(**out).model_dump()

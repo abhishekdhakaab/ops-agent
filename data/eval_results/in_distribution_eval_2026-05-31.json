@@ -1,0 +1,20 @@
+{
+  "benchmark": "in_distribution_first_step",
+  "source_run_modified_at": "2026-05-31T15:10:27-07:00",
+  "scenarios": 100,
+  "warning": "This evaluation reuses training scenarios and may overstate generalization.",
+  "results": [
+    {
+      "label": "Base (no training)",
+      "first_step_avg_reward": 2.15,
+      "first_tool_accuracy": 0.5,
+      "json_valid_rate": 1.0
+    },
+    {
+      "label": "After SFT",
+      "first_step_avg_reward": 2.136,
+      "first_tool_accuracy": 0.48,
+      "json_valid_rate": 1.0
+    }
+  ]
+}

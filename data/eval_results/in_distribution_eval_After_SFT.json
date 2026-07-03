@@ -1,6 +1,6 @@
 {
   "label": "After SFT",
-  "model_path": "/Users/abhishekdhaka/Project winter 2027/ML/ops_agent(new changes)_updated/data/trained_models/sft_qwen2.5_1.5b/final",
+  "model_path": "data/trained_models/sft_qwen2.5_1.5b/final",
   "scenarios": 100,
   "first_step_avg_reward": 2.213,
   "first_tool_accuracy": 0.63,

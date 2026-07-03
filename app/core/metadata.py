@@ -1,18 +1,22 @@
+"""Attach reproducibility metadata to stored agent runs."""
+
 from __future__ import annotations
 from hashlib import sha256
 from app.core.config import settings
 
-PROMPT_VERSION = "v1.2"   # bump when you change prompts
-GRAPH_VERSION  = "v1.3"   # bump when you change graph logic
-DATASET_VERSION = "sft_grpo_v1"  # bump when you retrain
+# These versions make behavioral changes visible in otherwise similar run records.
+PROMPT_VERSION = "v1.2"
+GRAPH_VERSION  = "v1.3"
+DATASET_VERSION = "sft_grpo_v1"
 
 
 def model_fingerprint()->str:
+    """Return a short, non-secret identifier for the active model endpoint."""
     s = f"{settings.llm_provider}:{settings.llm_base_url}:{settings.llm_model}"
     return sha256(s.encode('utf-8')).hexdigest()[:12]
 
-## basic model config will be saved with log for easy debug 
 def run_metadata()->dict:
+    """Capture the model and artifact versions needed to interpret a run."""
     return {
         "llm_provider": settings.llm_provider,
         "llm_model": settings.llm_model,

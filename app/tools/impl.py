@@ -1,4 +1,5 @@
-## here we have all our tool call implemenation for tool execution where each tool takes the tool data model input and returns the defined tool output model (defined in contract.py)
+"""Scenario-backed metrics, logs, deployments, and ticket tools."""
+
 from datetime import datetime, timedelta
 from pathlib import Path
 import json
@@ -13,17 +14,10 @@ from .contracts import (
 from .ticket_store import create_ticket
 
 
-# ── Load scenarios ─────────────────────────────────────────────────
-
 SCENARIOS_PATH = Path(__file__).resolve().parents[2] / "data" / "scenarios.json"
 
 def _load_scenarios() -> dict:
-    """
-    Load scenario index keyed by service name.
-    If multiple scenarios share a service name, the one with the highest
-    severity is kept (most interesting for investigation simulation).
-    Logs a warning when duplicates are detected.
-    """
+    """Index scenarios by service, preferring the highest-severity duplicate."""
     import logging
     if not SCENARIOS_PATH.exists():
         return {}
@@ -41,12 +35,12 @@ def _load_scenarios() -> dict:
                     f"keeping higher-severity entry (id={s.get('id', '?')})"
                 )
                 index[svc] = s
-            # else keep existing
+            # Equal or lower severity leaves the existing representative intact.
         else:
             index[svc] = s
     return index
 
-# Load once at import time (fast — it's a small JSON file)
+# Tool calls are frequent, while the scenario fixture changes only during development.
 _SCENARIO_INDEX = _load_scenarios()
 
 
@@ -85,8 +79,6 @@ def reload_scenarios():
     _SCENARIO_INDEX = _load_scenarios()
 
 
-# ── Series generation ──────────────────────────────────────────────
-
 def _build_series(avg: float, spike: bool, service: str = "", points: int = 10) -> list:
     rng = random.Random(hash(service + "metrics_series"))
     if spike:
@@ -97,14 +89,13 @@ def _build_series(avg: float, spike: bool, service: str = "", points: int = 10) 
             for i in range(points)]
 
 
-# ── Tool implementations ──────────────────────────────────────────
-
 def metrics_tool(inp: MetricsIn) -> MetricsOut:
+    """Return scenario latency with the requested window applied."""
     sc = _get_scenario(inp.service)
     m = sc.get("metrics", DEFAULT_SCENARIO["metrics"])
     spike = m["has_latency_spike"]
 
-    # Time range affects spike visibility
+    # A query window that predates the spike should still look healthy.
     spike_start = m.get("spike_start_minutes_ago")
     if spike and spike_start and inp.time_range_minutes < spike_start:
         spike = False
@@ -130,17 +121,18 @@ def metrics_tool(inp: MetricsIn) -> MetricsOut:
 
 
 def logs_tool(inp: LogsIn) -> LogsOut:
+    """Return aggregate errors and filtered representative log lines."""
     sc = _get_scenario(inp.service)
     lg = sc.get("logs", DEFAULT_SCENARIO["logs"])
     error_count = lg["error_count"]
     common = lg["error_messages"]
     level = lg.get("log_level", "ERROR")
 
-    # Sanitize contains — model can sometimes produce non-string types
+    # Model-produced filters are normalized before they reach string matching.
     contains = inp.contains
     if contains is not None:
         if isinstance(contains, bool):
-            contains = None  # boolean contains is meaningless
+            contains = None  # Boolean filters have no meaningful substring form.
         elif isinstance(contains, list):
             contains = contains[0] if contains else None
         elif not isinstance(contains, str):
@@ -166,6 +158,7 @@ def logs_tool(inp: LogsIn) -> LogsOut:
 
 
 def deployments_tool(inp: DeploymentsIn) -> DeploymentsOut:
+    """Return one scenario deployment and one stable historical baseline."""
     sc = _get_scenario(inp.service)
     dep = sc.get("deployments", DEFAULT_SCENARIO["deployments"])
     now = datetime.utcnow()
@@ -191,5 +184,6 @@ def deployments_tool(inp: DeploymentsIn) -> DeploymentsOut:
 
 
 def ticket_tool(inp: TicketIn) -> TicketOut:
+    """Persist an action-node ticket through the shared ticket store."""
     out = create_ticket(inp.model_dump())
     return TicketOut(**out)

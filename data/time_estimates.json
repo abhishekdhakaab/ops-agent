@@ -1,8 +1,0 @@
-{
-  "eval_1b_per_question_s": 98.4,
-  "eval_7b_per_question_est_s": 492.0,
-  "sft_5rows_1epoch_s": 163.7,
-  "grpo_5prompts_1epoch_s": 283.7,
-  "estimated_total_s": 129410.0,
-  "estimated_total_human": "35h 56m"
-}

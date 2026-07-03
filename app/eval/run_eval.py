@@ -49,7 +49,9 @@ sys.path.insert(0, str(PROJ_ROOT))
 # ── Run eval ───────────────────────────────────────────────────────
 
 async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, max_questions: int = 0) -> Dict[str, Any]:
-    # Lazy import to avoid loading config at module level
+    """Evaluate the running API and return per-question and aggregate scores."""
+
+    # Import after environment selection so comparisons use the active model config.
     from app.eval.smart_scorer import score_full
 
     with open(QUESTIONS_PATH, "r", encoding="utf-8") as f:
@@ -91,25 +93,22 @@ async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, ma
 
             data = resp.json()
 
-            # Build agent_result dict with fields the scorer expects
+            # The public endpoint omits internal action fields, so reconstruct only
+            # the enum values needed by the structured scorer.
             agent_result = {
                 "tools_used": data.get("tools_used", []),
                 "final_answer": data.get("final_answer", ""),
                 "evidence": data.get("evidence", {}),
-                "action_payload": {},  # Will be in the raw state if we can get it
+                "action_payload": {},
                 "validation": {},
             }
-            # The /run endpoint returns RunResponse which doesn't include action_payload.
-            # We extract what we can from the final_answer text for structured scoring.
             answer_text = data.get("final_answer", "").lower()
-            # Infer severity from answer text
             if "high" in answer_text:
                 agent_result["action_payload"]["severity"] = "high"
             elif "medium" in answer_text:
                 agent_result["action_payload"]["severity"] = "medium"
             else:
                 agent_result["action_payload"]["severity"] = "low"
-            # Infer action
             for act in ["rollback", "escalate", "mitigate", "investigate"]:
                 if act in answer_text:
                     agent_result["action_payload"]["recommended_action"] = act
@@ -117,7 +116,6 @@ async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, ma
             else:
                 agent_result["action_payload"]["recommended_action"] = "investigate"
 
-            # Score
             score_result = await score_full(
                 question=question,
                 agent_result=agent_result,
@@ -167,7 +165,7 @@ async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, ma
         "success_count": scores["successes"],
         "error_count": scores["errors"],
         "success_rate": round(scores["successes"] / max(1, len(items)), 4),
-        # Core metrics
+        # These are the stable headline metrics used by comparison reports.
         "combined_score": safe_avg(scores["combined"]),
         "tool_selection_accuracy": safe_avg(scores["tool_all"]),
         "tool_diversity": safe_avg(scores["diversity"]),
@@ -181,12 +179,14 @@ async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, ma
 
 
 def run_eval(model_name: str = "unknown", use_judge: bool = True, max_questions: int = 0) -> Dict[str, Any]:
+    """Synchronous wrapper for CLI callers."""
     return asyncio.run(run_eval_async(model_name, use_judge, max_questions))
 
 
 # ── Save/load results ─────────────────────────────────────────────
 
 def save_result(result: Dict[str, Any], model_name: str) -> Path:
+    """Write one timestamped evaluation result."""
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     safe = model_name.replace(":", "_").replace("/", "_")
     ts = _now_stamp()
@@ -198,6 +198,7 @@ def save_result(result: Dict[str, Any], model_name: str) -> Path:
 
 
 def load_all_results() -> List[Dict[str, Any]]:
+    """Load timestamped API evaluations for reporting."""
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     return [json.loads(p.read_text()) for p in sorted(RESULTS_DIR.glob("eval_*.json"))]
 
@@ -205,6 +206,7 @@ def load_all_results() -> List[Dict[str, Any]]:
 # ── Comparison table ──────────────────────────────────────────────
 
 def print_comparison(results: List[Dict[str, Any]]):
+    """Print a compact comparison of evaluation summaries."""
     if not results:
         print("No eval results found.")
         return
@@ -252,6 +254,7 @@ def print_comparison(results: List[Dict[str, Any]]):
 # ── Multi-model comparison ────────────────────────────────────────
 
 def update_env_model(model: str):
+    """Select a model in the local environment file for the next server run."""
     env = PROJ_ROOT / ".env"
     lines = env.read_text().splitlines()
     out = []
@@ -264,6 +267,7 @@ def update_env_model(model: str):
 
 
 def wait_for_server(timeout: int = 30) -> bool:
+    """Poll the health endpoint until startup completes or times out."""
     start = time.time()
     while time.time() - start < timeout:
         try:
@@ -277,6 +281,7 @@ def wait_for_server(timeout: int = 30) -> bool:
 
 
 def run_compare(models: List[str], use_judge: bool = True, max_questions: int = 0):
+    """Restart the API per model and evaluate each under identical settings."""
     all_results = []
     for model in models:
         print(f"\n{'='*55}")
@@ -285,7 +290,7 @@ def run_compare(models: List[str], use_judge: bool = True, max_questions: int = 
 
         update_env_model(model)
 
-        # Pull if needed
+        # Pulling here keeps the comparison command usable on a fresh machine.
         check = subprocess.run(["ollama", "list"], capture_output=True, text=True)
         if model not in check.stdout:
             print(f"  Pulling {model}...")
@@ -320,6 +325,7 @@ def run_compare(models: List[str], use_judge: bool = True, max_questions: int = 
 # ── CLI ────────────────────────────────────────────────────────────
 
 def main():
+    """Parse CLI flags and run evaluation or historical reporting."""
     args = sys.argv[1:]
 
     use_judge = "--no-judge" not in args

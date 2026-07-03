@@ -1,15 +1,19 @@
+"""Environment-backed configuration shared by the API and agent graph."""
+
 import os
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-# Load .env as soon as config module is imported
+# Local development uses .env; deployments can inject the same variables directly.
 load_dotenv()
-## basic model config will be saved with log for easy debug 
+
 class Settings(BaseModel):
+    """Runtime settings for chat, embeddings, and graph limits."""
+
     llm_base_url : str = os.getenv("LLM_BASE_URL","")
     llm_api_key: str = os.getenv("LLM_API_KEY", "")
-    llm_model: str = os.getenv("LLM_MODEL", "gpt-4o-mini")  # example default
-    llm_provider: str = os.getenv("LLM_PROVIDER", "openai_compatible")  # generic
+    llm_model: str = os.getenv("LLM_MODEL", "gpt-4o-mini")
+    llm_provider: str = os.getenv("LLM_PROVIDER", "openai_compatible")
     llm_timeout_s: float = float(os.getenv("LLM_TIMEOUT_S", "600"))
 
     embedding_provider: str = os.getenv("EMBEDDING_PROVIDER", "")
@@ -22,4 +26,3 @@ class Settings(BaseModel):
 
 
 settings = Settings()
-

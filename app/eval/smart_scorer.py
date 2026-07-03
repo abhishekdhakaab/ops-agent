@@ -1,13 +1,4 @@
-"""
-Smart evaluation scorer for the Ops Agent.
-
-Two scoring methods:
-1. Structured comparison — compare agent's severity/action enums against ground truth
-2. LLM-as-judge — use the same Ollama model to score diagnosis quality
-
-This replaces keyword matching with actually understanding whether
-the agent reached the right conclusion.
-"""
+"""Score investigations with deterministic checks and an optional LLM judge."""
 
 import json
 import httpx
@@ -19,6 +10,7 @@ from app.core.config import settings
 # ── Structured scoring (no LLM needed) ────────────────────────────
 
 def score_tools(tools_used: List[str], expected_all: List[str], expected_any: List[str]) -> Dict[str, Any]:
+    """Measure required-tool coverage and acceptable-tool presence."""
     used = set(tools_used)
     all_ok = all(t in used for t in expected_all)
     any_ok = True if not expected_any else any(t in used for t in expected_any)
@@ -33,6 +25,7 @@ def score_tools(tools_used: List[str], expected_all: List[str], expected_any: Li
 
 
 def score_tool_diversity(tools_used: List[str]) -> Dict[str, Any]:
+    """Measure repeated tool calls within one investigation."""
     unique = set(tools_used)
     total = len(tools_used) or 1
     return {
@@ -44,6 +37,7 @@ def score_tool_diversity(tools_used: List[str]) -> Dict[str, Any]:
 
 
 def score_efficiency(tools_used: List[str], expected_min: int, expected_max: int) -> Dict[str, Any]:
+    """Reward call counts inside the scenario-specific target range."""
     n = len(tools_used)
     in_range = expected_min <= n <= expected_max
     if in_range:
@@ -60,29 +54,22 @@ def score_efficiency(tools_used: List[str], expected_min: int, expected_max: int
 
 
 def score_structured(agent_output: Dict[str, Any], ground_truth: Dict[str, Any]) -> Dict[str, Any]:
-    """Compare structured fields from agent output against ground truth.
-    
-    This works because the action agent outputs severity and recommended_action
-    as enum values — we can compare directly without keyword matching.
-    """
+    """Compare action enums and the grounding verdict with ground truth."""
     action_payload = agent_output.get("action_payload", {})
     validation = agent_output.get("validation", {})
     
-    # Severity match (exact enum comparison)
+    # Adjacent severity gets partial credit; action remains an exact match.
     agent_severity = (action_payload.get("severity") or "").lower()
     expected_severity = (ground_truth.get("severity") or "").lower()
     severity_match = agent_severity == expected_severity
     severity_close = agent_severity in _adjacent_severity(expected_severity)
     
-    # Action match
     agent_action = (action_payload.get("recommended_action") or "").lower()
     expected_action = (ground_truth.get("correct_action") or "").lower()
     action_match = agent_action == expected_action
     
-    # Grounding (did the validator say the answer is grounded?)
     grounded = validation.get("grounded", False)
     
-    # Composite
     severity_score = 1.0 if severity_match else (0.5 if severity_close else 0.0)
     action_score = 1.0 if action_match else 0.0
     
@@ -205,7 +192,7 @@ Score the agent's diagnosis.
             data = r.json()
             text = data["choices"][0]["message"]["content"]
         
-        # Parse JSON from response
+        # Judges can still wrap valid JSON despite the strict output request.
         import re
         text = text.strip()
         if text.startswith("```"):
@@ -218,7 +205,7 @@ Score the agent's diagnosis.
         else:
             scores = json.loads(text)
         
-        # Normalize to 0-1 scale
+        # Clamp harmful penalties at zero after normalizing to the five-point scale.
         raw_total = scores["root_cause_score"] + scores["evidence_score"] + scores["harmful_penalty"]
         max_possible = 5  # 3 + 2 + 0
         normalized = max(0.0, round(raw_total / max_possible, 3))
@@ -266,13 +253,12 @@ async def score_full(
     efficiency = score_efficiency(tools_used, expected_min_tools, expected_max_tools)
     structured = score_structured(agent_result, ground_truth)
     
-    # LLM judge (optional — can be slow)
+    # The judge is optional because it dominates evaluation latency.
     if use_llm_judge:
         judge = await llm_judge_score(question, evidence, final_answer, ground_truth)
     else:
         judge = {"llm_judge_score": None, "judge_error": "skipped"}
     
-    # Combined score
     components = [
         ("tool_selection", tool_score["all_score"], 0.15),
         ("diversity", diversity["diversity_ratio"], 0.10),
@@ -283,7 +269,7 @@ async def score_full(
     if judge.get("llm_judge_score") is not None:
         components.append(("llm_judge", judge["llm_judge_score"], 0.35))
     else:
-        # Redistribute LLM judge weight to structured
+        # Keep total weights at one when deterministic-only mode is requested.
         components = [
             ("tool_selection", tool_score["all_score"], 0.20),
             ("diversity", diversity["diversity_ratio"], 0.10),

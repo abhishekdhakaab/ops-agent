@@ -160,14 +160,8 @@ def run_single_investigation(
             "tool_output_compressed": compressed,
         })
         
-        # Handle duplicate tool+args: still record the step (model chose it),
-        # but update evidence. The synthesizer in Phase 2 will see both calls
-        # and decide whether the second was needed.
-        #
-        # We use tool_name as the evidence key. If the same tool is called
-        # with different args (e.g., different time_range), the new output
-        # overwrites — this matches the original agent behavior.
-        # For different-args calls, we make the key more specific.
+        # Specific keys preserve repeated calls with different windows or filters;
+        # the step list still records every decision for later synthesis.
         evidence_key = action
         tr = int(args.get("time_range_minutes", 60)) if action == "metrics" else 0
         if action == "metrics" and tr != 60:
@@ -180,11 +174,6 @@ def run_single_investigation(
         evidence_compressed[evidence_key] = compressed
         tools_called.append(action)
     
-    # return {
-    #     "steps": steps,
-    #     "completed": completed,
-    #     "num_tool_calls": sum(1 for s in steps if s["action"] not in ("final", "error")),
-    # }
     auto_final = False
     if not completed and steps and steps[-1].get("action") != "error":
         steps.append({

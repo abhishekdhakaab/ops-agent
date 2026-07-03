@@ -81,7 +81,7 @@ def run_tool(tool_name: str, args: dict, scenario_id: str = "") -> dict:
     if tool_name == "metrics":
         return _metrics_tool(service, int(args.get("time_range_minutes", 60)), scenario_id)
     elif tool_name == "logs":
-        #return _logs_tool(service, args.get("contains"), args.get("limit", 20), scenario_id)
+        # Planner output is untrusted here, so normalize filters before matching.
         contains = args.get("contains")
         if not isinstance(contains, str):  # catches list, bool, int, None
             contains = str(contains) if contains and not isinstance(contains, bool) else None
@@ -101,14 +101,14 @@ def _metrics_tool(service: str, time_range_minutes: int = 60, scenario_id: str =
     spike = m["has_latency_spike"]
     spike_start = m.get("spike_start_minutes_ago")
     
-    # Time range affects spike visibility
+    # A query window that predates the spike should still look healthy.
     if spike and spike_start and time_range_minutes < spike_start:
         spike = False
     
     avg = m["avg_latency_ms"] if spike else m["avg_latency_ms"] * 0.42
     p95 = m["p95_latency_ms"] if spike else m["p95_latency_ms"] * 0.38
     
-    # Deterministic series (seeded by service name to avoid randomness issues)
+    # Stable seeds make training examples reproducible across pipeline phases.
     rng = random.Random(hash(service + "metrics"))
     if spike:
         normal = avg * 0.45
@@ -142,7 +142,7 @@ def _logs_tool(service: str, contains: Optional[str] = None, limit: int = 20, sc
     common = lg["error_messages"]
     level = lg.get("log_level", "ERROR")
     
-    # Generate sample log lines
+    # Samples stay deterministic so evidence does not drift between phases.
     rng = random.Random(hash(service + "logs"))
     base = datetime(2026, 4, 15, 12, 0, 0)
     samples = []
@@ -194,19 +194,7 @@ def _deployments_tool(service: str, scenario_id: str = "") -> dict:
 # ── Evidence compression ─────────────────────────────────────────
 
 def compress_evidence(tool_name: str, raw_output: dict) -> dict:
-    """
-    Extract only decision-relevant signals from tool output.
-    
-    SHARED FUNCTION — used everywhere:
-    - Phase 1: in planner prompts so the large model sees compact state
-    - Phase 2: in synthesizer input so trajectories fit in context
-    - Phase 3: in SFT examples so the small model trains on compact state
-    - Future GRPO: in rollout prompts
-    - Inference: in production planner prompts
-    
-    Changing this function changes the state representation everywhere.
-    Keep it in sync with what the model needs for decision-making.
-    """
+    """Keep only decision signals shared by training and inference prompts."""
     if tool_name == "metrics":
         return {
             "spike_detected": raw_output.get("spike_detected", False),

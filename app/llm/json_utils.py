@@ -1,10 +1,12 @@
-# this file contains code to extract json content from LLM response string
+"""Recover a JSON object from imperfect model output."""
+
 from __future__ import annotations
 import json
 import re
 from typing import Any, Dict
 
 class JSONParseError(Exception):
+    """Raised when no valid object can be recovered from a completion."""
     pass
 
 def _strip_code_fences(s: str) -> str:
@@ -15,16 +17,10 @@ def _strip_code_fences(s: str) -> str:
     return s.strip()
 
 def extract_json_object(text: str) -> Dict[str, Any]:
-    """
-    Attempts to parse a JSON object even if the model adds extra text.
-    Strategy:
-      1) strip code fences
-      2) try direct json.loads
-      3) find first {...} block (greedy-ish) and parse
-    """
+    """Parse direct JSON first, then recover the first object-shaped block."""
     cleaned = _strip_code_fences(text)
 
-    # direct
+    # The fast path preserves normal JSON without applying regex heuristics.
     try:
         obj = json.loads(cleaned)
         if isinstance(obj, dict):
@@ -32,7 +28,7 @@ def extract_json_object(text: str) -> Dict[str, Any]:
     except Exception:
         pass
 
-    # find first JSON object block
+    # Small models often wrap the object in a sentence or Markdown fence.
     m = re.search(r"\{.*\}", cleaned, flags=re.DOTALL)
     if not m:
         raise JSONParseError("No JSON object found in model output.")

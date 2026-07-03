@@ -1,6 +1,6 @@
 {
   "label": "DPO",
-  "model_path": "/workspace/tmp/ops-agent/data/trained_models/dpo_on_sft_v1/final",
+  "model_path": "data/trained_models/dpo_on_sft_v1/final",
   "scenarios": 100,
   "trajectory_accuracy": 0.4,
   "avg_composite_score": 0.714,

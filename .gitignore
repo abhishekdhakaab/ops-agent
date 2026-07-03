@@ -1,32 +1,55 @@
-# ── Model weights (can be GBs — retrain on the cluster instead) ───
-data/trained_models/
-
-# ── Secrets ───────────────────────────────────────────────────────
+# Local configuration and credentials
 .env
-*.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+secrets*.json
 
-# ── macOS junk ────────────────────────────────────────────────────
-.DS_Store
-**/.DS_Store
-
-# ── Python cache ──────────────────────────────────────────────────
+# Python
 __pycache__/
-**/__pycache__/
 *.py[cod]
 *.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
 
-# ── Logs (generated at runtime) ───────────────────────────────────
-
-
-# ── Large binary / archive files ──────────────────────────────────
-*.zip
-*.docx
-*.pdf
-
-# ── Jupyter ───────────────────────────────────────────────────────
-.ipynb_checkpoints/
-*.ipynb
-
-# ── IDE ───────────────────────────────────────────────────────────
-.vscode/
+# Editors and operating systems
+.DS_Store
 .idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Runtime state and generated indexes
+data/runs.jsonl
+data/trajectories.jsonl
+data/tickets.jsonl
+data/rag_index.json
+data/time_estimates.json
+
+# Generated pipeline intermediates
+sft_pipeline/output/phase1_raw_runs.jsonl
+sft_pipeline/output/phase2_synthesized.jsonl
+sft_pipeline/output/sft_dataset.jsonl
+sft_pipeline/output/pipeline_stats.json
+
+# Training artifacts
+data/trained_models/
+checkpoints/
+checkpoint-*/
+wandb/
+runs/
+logs/
+*.log
+
+# Build and packaging output
+build/
+dist/
+*.egg-info/

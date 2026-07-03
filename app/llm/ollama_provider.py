@@ -1,3 +1,5 @@
+"""Native Ollama chat client used when the compatibility API is disabled."""
+
 import httpx
 from typing import Any,Dict,Optional
 from app.core.config import settings
@@ -6,11 +8,13 @@ from .json_utils import extract_json_object, JSONParseError
 
 
 class OllamaHTTP(LLMClient):
+    """Call Ollama's native chat endpoint with a JSON repair retry."""
     def __init__(self)->None:
         self.base_url = settings.llm_base_url.rstrip('/')
         self.model = settings.llm_model
         self.timeout = settings.llm_timeout_s
     async def complete_text(self,*,system:str, user:str)->str:
+        """Return a non-streaming Ollama chat completion."""
         payload = {
             'model':self.model,
             'messages':[
@@ -26,6 +30,7 @@ class OllamaHTTP(LLMClient):
             data = r.json()
             return data['message']['content']
     async def complete_json(self,*,system:str,user:str,json_schema:Dict[str,Any],max_retries:int=2)->Dict[str,Any]:
+            """Request structured output and repair malformed JSON when possible."""
             schema_hint = f"""
                                 Return ONLY valid JSON matching this schema (no markdown, no extra text, no extra keys):
                                 {json_schema}
@@ -47,4 +52,3 @@ class OllamaHTTP(LLMClient):
             raise RuntimeError(f"Ollama did not return valid JSON after retries. Last output: {last_text}")
     
                       
-

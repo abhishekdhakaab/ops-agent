@@ -1,3 +1,5 @@
+"""FastAPI surface for investigations, tools, tickets, and runbook ingestion."""
+
 from fastapi import FastAPI
 from app.core.types import RunRequest, RunResponse
 from app.agent.graph import build_graph
@@ -17,6 +19,7 @@ from pydantic import BaseModel
 from app.rag.ingest import ingest_runbooks
 
 class StartRunRequest(BaseModel):
+    """Question submitted to the background-run endpoint."""
     question: str
 
 app = FastAPI(title="Autonomous AI Ops Agent (Code-First)")
@@ -26,19 +29,21 @@ from app.core.run_store import reload_from_disk as _reload_runs
 
 @app.on_event("startup")
 async def _on_startup():
+    """Restore the latest state of persisted asynchronous runs."""
     count = _reload_runs()
     print(f"[startup] Reloaded {count} runs from disk into RUN_INDEX")
 
 @app.get("/health")
 def health():
+    """Report process health without invoking a model."""
     return {"status": "ok"}
 
 @app.post("/run", response_model=RunResponse)
 async def run(req: RunRequest) -> RunResponse:
-    # takes in the requests a string and invoke graph -> receives the result-> log the result 
+    """Run an investigation synchronously and log its training trajectory."""
     state = {"question": req.question}
     out = await graph.ainvoke(state)
-    meta = run_metadata() ## with each request and it's response we also store meta data (LLM user, API version ,prompt version etc)
+    meta = run_metadata()
     
 
     log_trajectory({**meta,"question":req.question,"service":out.get('service'),
@@ -53,7 +58,6 @@ async def run(req: RunRequest) -> RunResponse:
         "retrieved_context": out.get("retrieved_context", []),
 
     })
-    #return RunResponse data model 
     return RunResponse(
         reasoning=out.get("reasoning", []),
         tools_used=out.get("tools_used", []),
@@ -61,14 +65,15 @@ async def run(req: RunRequest) -> RunResponse:
         final_answer=out.get("final_answer", ""),
     )
 
-@app.get('/tools',response_model = List[ToolSpec]) # here response model will chcek if the outptu of the below defined fucntion is of pydantic type Tool[ToolSpec]
+@app.get('/tools',response_model = List[ToolSpec])
 def tools():
+    """Expose tool contracts for inspection and integration tests."""
     return list_tool_specs()
 
 @app.post('/tools/{tool_name}')
 def tool_call(tool_name : str, payload:Dict[str, Any]):
+    """Invoke one validated tool directly."""
     try: 
-        ## this function takes tool name as input and returns the tool output : exact working : take the tool name -> get all its properties -> call the tools mentioned in the properties 
         return {'tool':tool_name,'output':invoke_tool(tool_name,payload)}
     except KeyError as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -79,9 +84,8 @@ def tool_call(tool_name : str, payload:Dict[str, Any]):
 
 @app.post("/tickets")
 def create_ticket_endpoint(payload: dict):
-    # minimal direct endpoint (tool path is still preferred for agent usage)
+    """Create a ticket directly; graph-driven calls still use the registry."""
     try:
-        ## we take the payload and create a ticket in jsonl along with ticket number + payload + time , this function returns ticket number and output signal
         out = create_ticket(payload)
         return out
     except Exception as e:
@@ -91,8 +95,9 @@ def create_ticket_endpoint(payload: dict):
 
 @app.post('/runs')
 def start_run(req: StartRunRequest, background_tasks:BackgroundTasks):
-    meta = run_metadata() # get the model name and version detail
-    run = create_run(req.question,meta=meta) # req : input query string, create_run will create a run (dictionary) and also stores the run request into logs to data/runs.jsonl
+    """Queue an investigation and return its polling identifier immediately."""
+    meta = run_metadata()
+    run = create_run(req.question,meta=meta)
 
     def job(run_id:str, question:str):
         try:
@@ -103,19 +108,21 @@ def start_run(req: StartRunRequest, background_tasks:BackgroundTasks):
         except Exception as e:
             update_run(run_id,status='error',result=str(e))
 
-    background_tasks.add_task(job,run['run_id'],req.question) # runs FastAPi's add background task 
-    return {"run_id":run['run_id'],'status':run['status'],'created_at':run['created_at']} ## so the moment user request for a run a run id is created now the process is succcess or not depends but user will get a run id and will have to check serparately for the process progress
-    ## basically request is added to background and user is notified
+    # FastAPI owns the task lifecycle after the queued record is persisted.
+    background_tasks.add_task(job,run['run_id'],req.question)
+    return {"run_id":run['run_id'],'status':run['status'],'created_at':run['created_at']}
 
 @app.get('/runs')
 def runs(limit:int=25):
-    return {"runs":list_runs(limit=limit)} # returns all runs in the run dictionary along with last updated time
+    """List recent asynchronous investigations."""
+    return {"runs":list_runs(limit=limit)}
 
 
 
 @app.get('/runs/{run_id}')
 def run_detail(run_id:str):
-    r = get_run(run_id) # when creating a run we store the run detailed in a dictioinary and here we retrieve the same
+    """Return the latest state of one asynchronous investigation."""
+    r = get_run(run_id)
     if not r:
         raise HTTPException(status_code=404,detail='run not found')
 
@@ -124,7 +131,7 @@ def run_detail(run_id:str):
 
 @app.get('/tickets')
 def list_tickets(limit:int =50):
-    # returns list of all the tickets 
+    """List persisted tickets in reverse chronological order."""
     path = Path('data/tickets.jsonl')
     if not path.exists():
         return {"tickets":[]}
@@ -142,4 +149,5 @@ def list_tickets(limit:int =50):
 
 @app.post('/runbooks/ingest')
 async def ingest():
-    return await ingest_runbooks() # will create embedding for all the runbooks and store them in data/rag_index.jsonl for faster and quicker access
+    """Rebuild the runbook index used for retrieval."""
+    return await ingest_runbooks()

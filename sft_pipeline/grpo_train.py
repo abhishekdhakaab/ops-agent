@@ -257,8 +257,7 @@ def compute_reward(completion: str, step_info: Dict[str, Any]) -> float:
         else:
             reward -= 0.5  # stopping at step 0 with no evidence
     elif action in tools_called:
-        # Redundant call — tool output already in evidence
-        # This is the behavioral issue we most want to fix
+        # Repeating an observed tool is the main failure this reward targets.
         reward -= 0.8
     elif action in {"metrics", "logs", "deployments"}:
         # Different tool than expert, but at least gathering evidence
@@ -398,11 +397,9 @@ def run_grpo(
     print(f"{'='*60}\n")
 
     # ── Build dataset and reward lookup ───────────────────────
-    # We need to map from the prompt string back to step_info
-    # for reward computation. Use a dict keyed by prompt text.
+    # Prompt text is the stable join key between TRL batches and reward metadata.
 
-    # First, format prompts with chat template
-    # We need the tokenizer to apply the template
+    # Reward lookup must use the same rendered chat template seen during training.
     sft_path = TRAINED_MODELS_DIR / f"sft_{model_name.replace(':', '_').replace('/', '_')}" / "final"
     is_sft = sft_path.exists()
 

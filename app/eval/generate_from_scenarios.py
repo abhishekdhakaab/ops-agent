@@ -237,7 +237,7 @@ def generate_sft(scenarios: list) -> list:
         if second != "final":
             remaining = {"metrics", "logs", "deployments"} - {first, second}
             third = "final"
-            # For deploy regressions, we want all 3 tools
+            # Deployment regressions need correlation across all three evidence types.
             if sc["root_cause"] == "deploy_regression" and remaining:
                 third = list(remaining)[0]
 

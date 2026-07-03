@@ -1,0 +1,31 @@
+{
+  "benchmark": "unseen_first_step",
+  "source_run_modified_at": "2026-05-31T15:10:27-07:00",
+  "scenarios": 100,
+  "results": [
+    {
+      "label": "Base",
+      "first_step_avg_reward": 2.172,
+      "first_tool_accuracy": 0.54,
+      "json_valid_rate": 1.0
+    },
+    {
+      "label": "SFT",
+      "first_step_avg_reward": 2.269,
+      "first_tool_accuracy": 0.67,
+      "json_valid_rate": 1.0
+    },
+    {
+      "label": "GRPO",
+      "first_step_avg_reward": 2.255,
+      "first_tool_accuracy": 0.65,
+      "json_valid_rate": 1.0
+    },
+    {
+      "label": "DPO",
+      "first_step_avg_reward": 2.255,
+      "first_tool_accuracy": 0.65,
+      "json_valid_rate": 1.0
+    }
+  ]
+}

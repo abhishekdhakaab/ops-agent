@@ -1,4 +1,5 @@
-# this file contains the main agent graph flow 
+"""LangGraph workflow for evidence gathering, validation, and final actions."""
+
 from typing import TypedDict, List, Dict, Any, Literal, Optional
 from pydantic import BaseModel, ValidationError
 from langgraph.graph import StateGraph, END
@@ -17,19 +18,23 @@ from pydantic import BaseModel, Field
 
 Action = Literal["metrics", "logs", "deployments", "final"]
 class ActionOut(BaseModel):
+    """Legacy structured action shape retained for stored-run compatibility."""
     severity: Literal["low", "medium", "high"]
     next_checks: List[str]
     recommended_action: str
     ticket: Optional[Dict[str, Any]] = None
 
 class PlanOut(BaseModel):
+    """One planner decision and its tool arguments."""
     action: Action
     args: Dict[str, Any]
-    rationale: str = "No rationale provided." ## because most of the small sized LLM struggle with rationale so setting it to default to prevent API stopping
+    # Small local models occasionally omit rationale; planning should still continue.
+    rationale: str = "No rationale provided."
 
 
 
 class RetrievalPlan(BaseModel):
+    """Queries and result depth requested from the runbook index."""
     queries: List[str] = Field(default_factory=list, alias="retrieval_queries")
     k: int = 2
 
@@ -39,13 +44,15 @@ class RetrievalPlan(BaseModel):
 
 
 class ActionPayload(BaseModel):
+    """Validated operational recommendation produced after grounding."""
     severity: Literal["low", "medium", "high"]
     next_checks: List[str]
     recommended_action: Literal["investigate", "mitigate", "rollback", "escalate"]
     create_ticket: bool
-    ticket: Optional[Dict[str, Any]] = None  # will validate separately
+    ticket: Optional[Dict[str, Any]] = None
 
 class TicketDraft(BaseModel):
+    """Ticket fields validated before they reach persistent storage."""
     title: str
     description: str
     severity: Literal["low", "medium", "high"]
@@ -54,12 +61,13 @@ class TicketDraft(BaseModel):
 
 
 class ValidationOut(BaseModel):
+    """Grounding verdict and the next evidence request, if any."""
     grounded : bool
     missing_evidence : List[str] = []
     required_next_action : Literal["metrics",'logs','deployments','final'] = 'final'
     rationale : str
-## single agent state shared across all nodes
 class AgentState(TypedDict, total=False):
+    """Shared state accumulated as an investigation moves through the graph."""
     question: str
     service: str
     reasoning: List[str]
@@ -84,33 +92,36 @@ class AgentState(TypedDict, total=False):
 
 def _guess_service(question: str) -> str:
     q = question.lower()
-    # All services from scenarios.json
+    # Longer names come first so a generic alias cannot steal the match.
     for s in [
         "order-svc", "checkout-svc", "api-gateway", "user-auth",
         "search-svc", "notification-svc", "payment-svc", "inventory-svc",
         "cdn-edge", "email-worker", "recommendation-svc", "session-store",
         "image-resize", "analytics-ingest", "auth-proxy", "billing-svc",
         "file-upload", "pricing-engine", "shipping-calc", "feed-svc",
-        # Legacy service names for backward compatibility
+        # Older demo questions still use these aliases.
         "service-x", "checkout", "api", "service-y", "payments",
     ]:
         if s in q:
             return s
-    return "order-svc"  # default to a scenario that exists
+    return "order-svc"  # Keep unknown questions inside the simulated dataset.
 
 async def intake_node(state: AgentState) -> AgentState:
+    """Initialize graph state and infer the target service."""
     state["service"] = state.get("service") or _guess_service(state["question"])
     state["reasoning"] = state.get("reasoning") or []
-    state["tools_used"] = state.get("tools_used") or []  ## tools model decided to use 
+    state["tools_used"] = state.get("tools_used") or []
     state["evidence"] = state.get("evidence") or {}
     state["step"] = state.get("step") or 0
-    state['tool_calls'] = state.get('tool_calls') or [] ## tools model executed ( sometime what model decide is not what is executed due to some error in processing so just to be double sure)
+    state['tool_calls'] = state.get('tool_calls') or []
     return state
 
 async def plan_node(state: AgentState) -> AgentState:
+    """Choose the next tool, honoring evidence requested by the validator."""
     llm = get_llm()
     forced = state.get('forced_next_action')
-    if forced in {'metrics','logs','deployments'}: # if last call forces a particular tool use : then we direclty planOut with that tool call
+    if forced in {'metrics','logs','deployments'}:
+        # A validator request bypasses another model choice for exactly one turn.
         plan = PlanOut(
             action = forced, 
             args = {"service":state['service']},
@@ -119,11 +130,10 @@ async def plan_node(state: AgentState) -> AgentState:
         state["reasoning"].append(plan.rationale)
         state["investigation_plan"] = plan.model_dump()
         state["planner_output"] = plan.model_dump()
-        state["forced_next_action"] = None  # clear it so we don't loop forever
-        return state ## we return the control to 'act' node which execute this forced action because here we manually decided to give the plan for forced action
+        state["forced_next_action"] = None  # Consume the override to avoid a forced loop.
+        return state
 
     evidence_keys = list(state["evidence"].keys())
-    # retrieve related content from 
     ctx_titles = [
     c.get("title") or c.get("ref") or c.get("source") or "context"
             for c in state.get("retrieved_context", [])
@@ -144,18 +154,6 @@ async def plan_node(state: AgentState) -> AgentState:
     Decide the NEXT action.
     """
 
-#     user = f"""
-# Question: {state['question']}
-# Service: {state['service']}
-# Current evidence keys: {evidence_keys}
-
-# Available tools:
-# - metrics(service, time_range_minutes)
-# - logs(service, contains, limit)
-# - deployments(service)
-
-# Decide the NEXT action.
-# """
     schema = {
         "type": "object",
         "properties": {
@@ -170,7 +168,8 @@ async def plan_node(state: AgentState) -> AgentState:
     plan = PlanOut(**raw)
     ALLOWED_ACTIONS = {"metrics", "logs", "deployments", "final"}
 
-    if plan.action not in ALLOWED_ACTIONS: # even if once we get a wrong tool call we stop to prevent from hallucination 
+    if plan.action not in ALLOWED_ACTIONS:
+        # Invalid actions fail closed instead of inventing a tool execution path.
         plan.action = 'final'
         plan.args = {}
         plan.rationale = "Invalid tool requests, stopping to avoid unsafe action."
@@ -180,6 +179,7 @@ async def plan_node(state: AgentState) -> AgentState:
     return state
 
 async def draft_answer_node(state: AgentState)->AgentState:
+    """Draft an investigation summary from collected evidence and context."""
     llm = get_llm()
     user = f"""
 
@@ -199,19 +199,20 @@ async def draft_answer_node(state: AgentState)->AgentState:
     return state
 
 async def act_node(state: AgentState) -> AgentState:
+    """Execute one planned tool and store its result with call metadata."""
 
     plan = PlanOut(**state["planner_output"])
 
-    if plan.action == "final": ## if the tool==final then return without making any tool call 
+    if plan.action == "final":
         return state
 
     payload = dict(plan.args or {})
-    ## if anything missing we will set defaul to service
+    # The graph owns the inferred service when a model omits it from arguments.
     start = time.time()
     payload.setdefault("service",state['service'])
     try : 
         out = invoke_tool(plan.action, payload)
-        success = not( isinstance(out,dict) and "error" in out) # if output anything other then dict that's a failure
+        success = not( isinstance(out,dict) and "error" in out)
 
     except Exception as e:
         out = {"error":str(e), "tool":plan.action, "payload":payload}
@@ -225,7 +226,7 @@ async def act_node(state: AgentState) -> AgentState:
         'latency_ms':latency_ms
     })
     state["tools_used"].append(plan.action)
-    # Build a specific evidence key so repeated tool calls don't overwrite each other
+    # Window/filter suffixes preserve evidence from intentionally repeated tool types.
     _action = plan.action
     _args = getattr(plan, "args", {}) or {}
     if _action == "metrics":
@@ -243,7 +244,7 @@ async def act_node(state: AgentState) -> AgentState:
 
 
 async def validation_agent_node(state :AgentState) -> AgentState:
-    ## Validation Agent: checks if the draft answer is grounded in evidence ( means the output of act node) ; if not, requests more checks
+    """Check grounding and request one missing evidence source when needed."""
     llm= get_llm()
     user = f"""
     Question: {state['question']}
@@ -282,7 +283,7 @@ async def validation_agent_node(state :AgentState) -> AgentState:
     return state
 
 async def action_agent_node(state: AgentState) -> AgentState:
-    ## based on all the evidence and citation we decide which tool to call
+    """Turn a validated draft into a safe structured recommendation."""
     llm = get_llm()
 
    
@@ -336,18 +337,17 @@ Return JSON with:
     }
 
     raw = await llm.complete_json(system=ACTION_SYSTEM, user=user, json_schema=schema)
-    # Normalize common model mistakes
+    # Tool names in this field mean "investigate"; tools are not executed here.
     if raw.get("recommended_action") in {"metrics", "logs", "deployments", "final"}:
-        raw["recommended_action"] = "investigate" # since we dont call tool recommended here and it's just a sign of 'more investigation'
+        raw["recommended_action"] = "investigate"
 
     payload = ActionPayload(**raw)
 
 
-    # If ticket is requested, validate and attach defaults
+    # Missing ticket content gets a bounded draft based only on current state.
     ticket_id_info = None
     if payload.create_ticket:
         if payload.ticket is None:
-            # Auto-generate safe ticket draft
             draft = TicketDraft(
                 title=f"Investigate {state['service']} incident: {payload.severity} severity",
                 description=state.get("draft_answer", "")[:1200],
@@ -358,7 +358,7 @@ Return JSON with:
         else:
             draft = TicketDraft(**payload.ticket)
 
-        # Create ticket via MCP tool registry invocation (same path as agent tools)
+        # The registry keeps ticket validation consistent with direct tool calls.
         try:
             ticket_id_info = invoke_tool("ticket", draft.model_dump())
         except Exception as e:
@@ -377,6 +377,7 @@ Return JSON with:
 
 
 def decide_next(state: AgentState) -> str:
+    """Continue planning until the model stops or the step budget is exhausted."""
     plan = PlanOut(**state["planner_output"])
     if plan.action == "final":
         return "finalize"
@@ -385,10 +386,10 @@ def decide_next(state: AgentState) -> str:
     return "plan"
 
 async def finalize_node(state: AgentState) -> AgentState:
-    ## we want to be honest about the fact that validator says ungrounded so will add that manually to your fiinalize output
+    """Assemble the final answer and make uncertainty explicit."""
 
     val = state.get("validation",{})
-    ## reason for stopping
+    # Stop reasons distinguish a normal final answer from exhausted validation.
     if state.get('step',0) >= settings.max_steps: 
         state['stop_reason'] ="max_steps"
     elif val.get('grounded') is False:
@@ -433,6 +434,7 @@ async def finalize_node(state: AgentState) -> AgentState:
 
 
 async def retrieval_agent_node(state: AgentState)-> AgentState:
+    """Plan runbook queries and attach de-duplicated citation-ready chunks."""
     llm = get_llm()
     user = f"""
     Question : {state['question']}
@@ -459,7 +461,7 @@ async def retrieval_agent_node(state: AgentState)-> AgentState:
 
         hits = retrieve(query=q, query_emb=q_emb, k=k)
 
-        # normalize to citation-ready format
+        # Stable references let the final answer cite the exact runbook chunk.
         for h in hits:
             retrieved_chunks.append({
                 "ref": f"{h['source']}#{h['chunk_id']}",
@@ -468,7 +470,7 @@ async def retrieval_agent_node(state: AgentState)-> AgentState:
                 "text": h["text"],
             })
 
-    # de-dupe by ref
+    # Different queries often retrieve the same high-scoring chunk.
     seen = set()
     uniq = []
     for r in retrieved_chunks:
@@ -476,7 +478,7 @@ async def retrieval_agent_node(state: AgentState)-> AgentState:
             uniq.append(r)
             seen.add(r["ref"])
 
-    state["retrieved_context"] = uniq[:8]  # keep context bounded
+    state["retrieved_context"] = uniq[:8]  # Bound prompt growth across retries.
     state["reasoning"].append(f"Retrieval Agent: retrieved {len(state['retrieved_context'])} chunks.")
     return state
     
@@ -484,8 +486,8 @@ async def retrieval_agent_node(state: AgentState)-> AgentState:
 
 
 def build_graph():
+    """Compile the investigation workflow and its validation loop."""
     g = StateGraph(AgentState)
-    ## for now we have intake -> retrieval -> plan -> act-> loop to plan -> draft -> finalise)
     g.add_node("intake", intake_node)
     g.add_node('retrieve',retrieval_agent_node)
     g.add_node("plan", plan_node)
@@ -502,10 +504,8 @@ def build_graph():
     g.add_conditional_edges("act", decide_next, {"plan": "plan", "finalize": "draft"})
     g.add_edge('draft','validate')
 
-    # If not grounded and validator suggests a tool, loop back to plan; else proceed.
-
     def validate_route(state:AgentState)->str:
-        ## if validaite_router says its not grounded and we still have step remaining then we will call Plan again  AND if steps exhausted then just call 'action' with 'insufficient evidence'
+        """Re-plan ungrounded drafts while the investigation has budget left."""
         val = state.get("validation",{})
         grounded = val.get('grounded',False)
 
@@ -513,15 +513,14 @@ def build_graph():
             return "action"
         
         if state.get('step',0) < settings.max_steps:
-            return 'plan' ## think about it again 
+            return 'plan'
         
-        return 'action' ## mean finalise the action 
+        return 'action'
 
     g.add_conditional_edges("validate", validate_route, {"plan":"plan","action":"action"})
     g.add_edge("action","finalize")
     g.add_edge("finalize",END)
     return g.compile()
-
 
 
 

@@ -1,3 +1,5 @@
+"""OpenAI-compatible chat client with defensive JSON recovery."""
+
 import httpx
 from typing import Dict, Any, Optional
 from .base import LLMClient
@@ -6,21 +8,21 @@ from .json_utils import extract_json_object, JSONParseError
 
 
 class OpenAICompatibleHTTP(LLMClient):
+    """Call an OpenAI-compatible endpoint configured through the environment."""
     def __init__(self)->None:
         self.base_url = settings.llm_base_url.rstrip('/')
         self.api_key = settings.llm_api_key
         self.model = settings.llm_model
         self.timeout = settings.llm_timeout_s
 
-    ## calls LLM for response 
     async def _post_chat(self,payload : Dict[str,Any])->Dict[str,Any]:
         headers = {"Authorization":f"Bearer {self.api_key}"}
         async with httpx.AsyncClient(timeout = self.timeout) as client:
             r = await client.post(f"{self.base_url}/chat/completions",headers =headers, json=payload)
             r.raise_for_status()
             return r.json()
-    ## crate payload prompt structure
     async def complete_text(self,*,system:str,user:str)->str:
+        """Return a regular chat completion."""
         payload = {
             "model":self.model,
             "messages":[
@@ -33,6 +35,7 @@ class OpenAICompatibleHTTP(LLMClient):
         return data["choices"][0]["message"]["content"]
 
     async def complete_json(self,*,system:str,user:str, json_schema:Dict[str,Any],max_retires:int=10)->Dict[str,Any]:
+        """Request JSON and recover from common small-model formatting errors."""
         schema_hint = f"""
                         Return ONLY valid JSON matching this schema (no markdown, no extra text, no extra keys):
                         {json_schema}
@@ -53,9 +56,8 @@ class OpenAICompatibleHTTP(LLMClient):
             try : 
                 return extract_json_object(text)
             except JSONParseError:
-                # Ollama's OpenAI-compatible /v1 often rejects "repair" prompts (400),
-                # and small local models are flaky at JSON anyway.
-                # For Ollama: retry once with a stricter instruction, then fail.
+                # Ollama's compatibility route handles a stricter retry more reliably
+                # than a second repair conversation.
                 if "localhost:11434" in self.base_url or "127.0.0.1:11434" in self.base_url:
                     base_payload["messages"] = [
                         {"role": "system", "content": system},
@@ -63,7 +65,7 @@ class OpenAICompatibleHTTP(LLMClient):
                     ]
                     continue
 
-                # For non-Ollama providers: attempt repair
+                # Remote providers get one explicit repair pass before the next attempt.
                 repair_payload = {
                     "model": self.model,
                     "temperature": 0.0,
@@ -81,7 +83,6 @@ class OpenAICompatibleHTTP(LLMClient):
 
             
         raise RuntimeError(f"LLM did not return valid JSON after retries. Last output: {last_text}")
-
 
 
 

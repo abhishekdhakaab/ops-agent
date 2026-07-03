@@ -1,23 +1,10 @@
-"""
-Shared prompts and prompt builder.
-
-THIS IS THE SINGLE SOURCE OF TRUTH for how planner state is formatted.
-Every component that formats a planner prompt MUST use these functions:
-  - Phase 1 (raw runs): build_planner_user_message()
-  - Phase 3 (SFT formatting): format_sft_example()
-  - Future GRPO rollouts: build_planner_user_message()
-  - Inference: build_planner_user_message()
-
-If you change the prompt format, it changes everywhere. That's the point.
-"""
+"""Canonical planner prompts shared by data generation and evaluation."""
 
 import json
 from typing import Dict, Any, List
 
 
-# ── System prompt ─────────────────────────────────────────────────
-# Used by both SFT training data and future GRPO.
-# Keep it tight — every token here is repeated in every training example.
+# This text is repeated in every example, so additions have a real token cost.
 
 PLANNER_SYSTEM = (
     "You are an SRE investigation planner. Choose the NEXT best action.\n"
@@ -44,8 +31,6 @@ PLANNER_SYSTEM = (
 )
 
 
-# ── State builder ─────────────────────────────────────────────────
-
 def build_planner_state(
     question: str,
     service: str,
@@ -53,12 +38,7 @@ def build_planner_state(
     tools_called: List[str],
     evidence: Dict[str, Any],       # already compressed
 ) -> dict:
-    """
-    Build the canonical state dict.
-    
-    `evidence` should already be compressed via compress_all_evidence().
-    This function doesn't compress — it expects pre-compressed input.
-    """
+    """Build planner state from evidence already compressed by the tool layer."""
     return {
         "question": question,
         "service": service,
@@ -68,16 +48,8 @@ def build_planner_state(
     }
 
 
-# ── User message formatter ────────────────────────────────────────
-
 def build_planner_user_message(state: dict) -> str:
-    """
-    Format a state dict into the user message string.
-    
-    THIS IS THE SHARED FORMAT — never build planner user messages 
-    any other way. If you need to change how the model sees state,
-    change it here and only here.
-    """
+    """Format the one planner-state representation used across all phases."""
     evidence = state.get("evidence", {})
     if evidence:
         evidence_str = json.dumps(evidence, indent=2, default=str)
@@ -102,17 +74,8 @@ def build_planner_user_message(state: dict) -> str:
     )
 
 
-# ── SFT example formatter ────────────────────────────────────────
-
 def format_sft_example(state: dict, action_json: dict) -> dict:
-    """
-    Create one SFT training example in TRL chat format.
-    
-    Returns a dict with a "messages" key containing:
-      [system, user, assistant] messages.
-    
-    This is what TRL's SFTTrainer expects when using chat templates.
-    """
+    """Create one TRL chat example from planner state and its next action."""
     return {
         "messages": [
             {"role": "system", "content": PLANNER_SYSTEM},
@@ -122,10 +85,7 @@ def format_sft_example(state: dict, action_json: dict) -> dict:
     }
 
 
-# ── Question generation ──────────────────────────────────────────
-
-# Templates per root cause. Mix of hinting and neutral questions
-# so the model learns both "follow the hint" and "investigate from scratch."
+# Hinting and neutral variants keep wording from becoming the label.
 _QUESTION_TEMPLATES = {
     "deploy_regression": [
         "Investigate {service}: we're seeing issues that started recently.",
@@ -167,13 +127,7 @@ _QUESTION_TEMPLATES = {
 
 
 def generate_question(scenario: dict, variant: int = 0) -> str:
-    """
-    Generate a realistic incident question for a scenario.
-    
-    `variant` selects which template to use (0, 1, 2, ...).
-    Different variants produce different phrasings for the same scenario,
-    which gives diversity across the 3 runs per scenario.
-    """
+    """Generate a deterministic wording variant for one incident scenario."""
     root_cause = scenario.get("root_cause", "resource_exhaustion")
     service = scenario["service"]
     templates = _QUESTION_TEMPLATES.get(root_cause, _QUESTION_TEMPLATES["resource_exhaustion"])
