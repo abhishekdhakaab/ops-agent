@@ -90,6 +90,7 @@ def load_model(model_path: str):
     is_lora = Path(model_path).exists() and (Path(model_path) / "adapter_config.json").exists()
 
     if is_lora:
+        # Merge the adapter once so evaluation uses a plain model.
         cfg = json.loads((Path(model_path) / "adapter_config.json").read_text())
         base = cfg["base_model_name_or_path"]
         base_model = AutoModelForCausalLM.from_pretrained(base, trust_remote_code=True,
@@ -124,6 +125,7 @@ def generate_action(model, tokenizer, device, prompt: str) -> str:
 
 
 def parse_action(text: str) -> Optional[Dict]:
+    # Pull the first JSON object out of otherwise useful model text.
     text = re.sub(r"^```[a-zA-Z]*\n?", "", text.strip())
     text = re.sub(r"\n?```$", "", text)
     m = re.search(r"\{.*\}", text, flags=re.DOTALL)

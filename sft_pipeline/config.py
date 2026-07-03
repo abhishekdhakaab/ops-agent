@@ -19,7 +19,7 @@ SFT_DATASET_PATH = OUTPUT_DIR / "sft_dataset.jsonl"
 STATS_PATH = OUTPUT_DIR / "pipeline_stats.json"
 
 OLLAMA_BASE_URL = "http://localhost:11434"
-OLLAMA_MODEL = "gemma2:9b"           # ← change to your model
+OLLAMA_MODEL = "gemma2:9b"           # Local default; override it from the CLI.
 
 RUNS_PER_SCENARIO = 3                 # how many investigation attempts per scenario
 MAX_STEPS_PER_RUN = 5                 # cap on tool calls per run (excludes 'final')

@@ -11,6 +11,7 @@ async def embed_texts(texts: List[str]) -> Optional[List[List[float]]]:
     base_url = settings.embedding_base_url or settings.llm_base_url
     model = settings.embedding_model
 
+    # Missing config means retrieval should stay in keyword-only mode.
     if not base_url or not model:
         return None
 

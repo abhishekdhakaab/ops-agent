@@ -55,6 +55,7 @@ def list_runs(limit:int=25)->List[Dict[str,Any]]:
 
 def _append(record:Dict[str,Any]) ->None:
     RUNS_PATH.parent.mkdir(parents=True,exist_ok=True)
+    # One row per update keeps writes simple and replayable.
     with RUNS_PATH.open("a",encoding='utf-8') as f:
         f.write(json.dumps(record, ensure_ascii=False) + '\n')
 
@@ -79,5 +80,4 @@ def reload_from_disk() -> int:
                 continue
     RUN_INDEX.update(latest)
     return len(latest)
-
 

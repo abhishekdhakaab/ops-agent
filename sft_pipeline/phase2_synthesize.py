@@ -226,21 +226,21 @@ def synthesize_one(scenario_entry: dict, model: Optional[str] = None) -> Optiona
         if response is None:
             continue
         
-        # Handle case where model returns a bare list instead of {trajectory: [...]}
-        if isinstance(response, list):                        # ← ADD
-            trajectory = response                              # ← ADD
-            reasoning = ""                                     # ← ADD
-        else:                                                  # ← ADD
+        # Small models sometimes skip the wrapper object.
+        if isinstance(response, list):
+            trajectory = response
+            reasoning = ""
+        else:
             trajectory = response.get("trajectory", [])
             reasoning = response.get("reasoning", "")
         
         service = scenario_entry["service"]
         for step in trajectory:
             step["action"] = step.get("action", "").lower().strip()
-            if not isinstance(step.get("args"), dict):       # ← ADD
-                step["args"] = {}                              # ← ADD
-            if not isinstance(step.get("rationale"), str):    # ← ADD
-                step["rationale"] = str(step.get("rationale", ""))  # ← ADD
+            if not isinstance(step.get("args"), dict):
+                step["args"] = {}
+            if not isinstance(step.get("rationale"), str):
+                step["rationale"] = str(step.get("rationale", ""))
             if step["action"] not in ("final", "error"):
                 args = step.get("args", {})
                 if isinstance(args, dict):

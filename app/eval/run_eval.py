@@ -74,6 +74,7 @@ async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, ma
 
             start = time.time()
             try:
+                # One failed question should not stop the whole benchmark.
                 resp = await client.post(API_URL, json={"question": question})
                 latency_s = round(time.time() - start, 2)
             except Exception as e:
@@ -99,6 +100,7 @@ async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, ma
                 "action_payload": {},
                 "validation": {},
             }
+            # The API stays small, so these two fields are inferred for scoring.
             answer_text = data.get("final_answer", "").lower()
             if "high" in answer_text:
                 agent_result["action_payload"]["severity"] = "high"

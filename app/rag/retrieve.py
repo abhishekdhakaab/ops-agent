@@ -47,6 +47,7 @@ def retrieve(query:str, query_emb:Optional[List[float]],k:int=4,rows=load_index(
         if query_emb is not None and r.get('embedding') is not None:
             s = cosine(query_emb, r['embedding'])
         else:
+            # Keyword scoring keeps retrieval usable without an embedding server.
             s = keyword_score(query,r['text'])
         scored.append((s,r))
 

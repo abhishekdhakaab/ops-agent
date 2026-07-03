@@ -11,6 +11,7 @@ class JSONParseError(Exception):
 
 def _strip_code_fences(s: str) -> str:
     s = s.strip()
+    # Local models still add fences after being told not to.
     if s.startswith("```"):
         s = re.sub(r"^```[a-zA-Z]*\n?", "", s)
         s = re.sub(r"\n?```$", "", s)

@@ -113,6 +113,7 @@ def run_sft(model_name: str, epochs: int = 3, lr: float = 2e-5, batch_size: int 
     hf_model = _ollama_to_hf(model_name)
     print(f"  Loading model: {hf_model}")
     
+    # LoRA keeps the experiment small enough to rerun locally.
     lora_config = LoraConfig(
         r=32,
         lora_alpha=64,
@@ -155,6 +156,7 @@ def run_sft(model_name: str, epochs: int = 3, lr: float = 2e-5, batch_size: int 
     )
 
     tokenizer = AutoTokenizer.from_pretrained(hf_model, trust_remote_code=True)
+    # Qwen needs an explicit padding token for batched training.
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 

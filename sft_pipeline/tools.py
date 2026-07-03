@@ -60,6 +60,7 @@ DEFAULT_SCENARIO = {
 
 def _get_scenario(scenario_id: str) -> dict:
     """Look up scenario by its unique ID."""
+    # Unknown IDs get an empty fixture instead of leaking another scenario.
     return _SCENARIOS_BY_ID.get(scenario_id, {})
 
 
@@ -144,6 +145,7 @@ def _logs_tool(service: str, contains: Optional[str] = None, limit: int = 20, sc
     rng = random.Random(hash(service + "logs"))
     base = datetime(2026, 4, 15, 12, 0, 0)
     samples = []
+    # Six lines are enough context for a planner decision.
     for i in range(min(limit, 6)):
         ts = (base - timedelta(minutes=i * 2 + 1)).isoformat() + "Z"
         msg = common[i % len(common)]

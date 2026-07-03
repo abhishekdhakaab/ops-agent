@@ -103,11 +103,11 @@ def run_single_investigation(
         if not isinstance(rationale, str):
             rationale = str(rationale) if rationale else ""
         args = response.get("args", {})
-        if not isinstance(args, dict):    # ← ADD THIS
-            args = {}                      # ← ADD THIS
+        if not isinstance(args, dict):
+            args = {}
         rationale = response.get("rationale", "")
-        if not isinstance(rationale, str):  # ← ADD THIS
-            rationale = str(rationale) if rationale else ""  # ← ADD THIS
+        if not isinstance(rationale, str):
+            rationale = str(rationale) if rationale else ""
 
         
         

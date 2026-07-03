@@ -107,6 +107,7 @@ def _guess_service(question: str) -> str:
 
 async def intake_node(state: AgentState) -> AgentState:
     """Initialize graph state and infer the target service."""
+    # Start every request with a clean state.
     state["service"] = state.get("service") or _guess_service(state["question"])
     state["reasoning"] = state.get("reasoning") or []
     state["tools_used"] = state.get("tools_used") or []
@@ -133,6 +134,7 @@ async def plan_node(state: AgentState) -> AgentState:
         return state
 
     evidence_keys = list(state["evidence"].keys())
+    # The planner only needs labels here, not another copy of each runbook.
     ctx_titles = [
     c.get("title") or c.get("ref") or c.get("source") or "context"
             for c in state.get("retrieved_context", [])
@@ -214,6 +216,7 @@ async def act_node(state: AgentState) -> AgentState:
         success = not( isinstance(out,dict) and "error" in out)
 
     except Exception as e:
+        # Keep tool failures in state so the final answer can explain them.
         out = {"error":str(e), "tool":plan.action, "payload":payload}
         success = False
 
@@ -519,7 +522,6 @@ def build_graph():
     g.add_edge("action","finalize")
     g.add_edge("finalize",END)
     return g.compile()
-
 
 
 
