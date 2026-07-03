@@ -1,9 +1,5 @@
 #!/bin/bash
-# =============================================================================
-# GPU Environment Setup — Ops Agent Training
 # Run once on a fresh machine before running run_overnight.sh
-# Tested with: 8x A100/H100, CUDA 12.1+, Ubuntu 20.04/22.04
-# =============================================================================
 set -e
 
 echo ""
@@ -12,7 +8,6 @@ echo "  Ops Agent — GPU Environment Setup"
 echo "============================================================"
 echo ""
 
-# ── 1. Check GPU ─────────────────────────────────────────────────
 echo "[1/6] Checking GPU..."
 if ! command -v nvidia-smi &> /dev/null; then
     echo "ERROR: nvidia-smi not found. Install CUDA drivers first."
@@ -22,7 +17,6 @@ nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 GPU_COUNT=$(nvidia-smi --query-gpu=name --format=csv,noheader | wc -l)
 echo "  Found $GPU_COUNT GPU(s)"
 
-# ── 2. Conda ──────────────────────────────────────────────────────
 echo ""
 echo "[2/6] Setting up conda environment..."
 if ! command -v conda &> /dev/null; then
@@ -41,17 +35,14 @@ else
     echo "  Created conda env: $ENV_NAME"
 fi
 
-# Activate
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate "$ENV_NAME"
 
-# ── 3. PyTorch (CUDA) ─────────────────────────────────────────────
 echo ""
 echo "[3/6] Installing PyTorch with CUDA 12.4..."
 pip install --quiet torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 python3 -c "import torch; print(f'  PyTorch {torch.__version__}, CUDA available: {torch.cuda.is_available()}')"
 
-# ── 4. ML Training dependencies ───────────────────────────────────
 echo ""
 echo "[4/6] Installing training dependencies..."
 pip install --quiet \
@@ -70,7 +61,6 @@ pip install --quiet \
 echo "  Installing flash-attn (this takes a few minutes)..."
 pip install --quiet flash-attn --no-build-isolation 2>/dev/null || echo "  flash-attn skipped (not supported on this GPU — OK)"
 
-# ── 5. App dependencies ───────────────────────────────────────────
 echo ""
 echo "[5/6] Installing app dependencies..."
 pip install --quiet \
@@ -81,7 +71,6 @@ pip install --quiet \
     python-dotenv==1.0.1 \
     "langgraph==0.2.44"
 
-# ── 6. Accelerate config ──────────────────────────────────────────
 echo ""
 echo "[6/6] Configuring accelerate for $GPU_COUNT GPU(s)..."
 mkdir -p ~/.cache/huggingface/accelerate
@@ -107,7 +96,6 @@ EOF
 
 echo "  Accelerate configured for $GPU_COUNT GPUs with bf16"
 
-# ── Done ──────────────────────────────────────────────────────────
 echo ""
 echo "============================================================"
 echo "  Setup complete!"

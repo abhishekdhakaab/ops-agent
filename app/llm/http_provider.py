@@ -57,7 +57,6 @@ class OpenAICompatibleHTTP(LLMClient):
                 return extract_json_object(text)
             except JSONParseError:
                 # Ollama's compatibility route handles a stricter retry more reliably
-                # than a second repair conversation.
                 if "localhost:11434" in self.base_url or "127.0.0.1:11434" in self.base_url:
                     base_payload["messages"] = [
                         {"role": "system", "content": system},
@@ -83,7 +82,6 @@ class OpenAICompatibleHTTP(LLMClient):
 
             
         raise RuntimeError(f"LLM did not return valid JSON after retries. Last output: {last_text}")
-
 
 
 

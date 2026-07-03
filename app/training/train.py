@@ -37,11 +37,8 @@ SFT_DATA = DATA_DIR / "trl_planner_sft.jsonl"
 SCENARIOS_PATH = DATA_DIR / "scenarios.json"
 OUTPUT_DIR = DATA_DIR / "trained_models"
 
-# NOTE: compute_reward and _best_first_tools removed.
-# Canonical versions live in sft_pipeline/planner_policy.py
 
 
-# ── Data loading ──────────────────────────────────────────────────
 
 def load_sft_data() -> List[Dict]:
     """Load SFT data in TRL chat format."""
@@ -84,7 +81,6 @@ def load_grpo_prompts() -> List[Dict]:
     return prompts
 
 
-# ── SFT Training ──────────────────────────────────────────────────
 
 def run_sft(model_name: str, epochs: int = 3, lr: float = 2e-5, batch_size: int = 4, gpu: bool = False):
     """Run supervised fine-tuning on planner data."""
@@ -108,18 +104,15 @@ def run_sft(model_name: str, epochs: int = 3, lr: float = 2e-5, batch_size: int 
     print(f"  Epochs: {epochs}, LR: {lr}, Batch/device: {batch_size}")
     print(f"{'='*50}\n")
     
-    # Load data
     sft_rows = load_sft_data()
     print(f"  Loaded {len(sft_rows)} SFT training examples")
     
-    # Convert to HF Dataset
     dataset = Dataset.from_list(sft_rows)
     
     # Resolve model path — if it's an Ollama model name, we need the HF equivalent
     hf_model = _ollama_to_hf(model_name)
     print(f"  Loading model: {hf_model}")
     
-    # Load model with LoRA (parameter-efficient fine-tuning)
     lora_config = LoraConfig(
         r=32,
         lora_alpha=64,
@@ -182,7 +175,6 @@ def run_sft(model_name: str, epochs: int = 3, lr: float = 2e-5, batch_size: int 
     print("  Starting SFT training...\n")
     trainer.train()
     
-    # Save
     trainer.save_model(str(output_dir / "final"))
     tokenizer.save_pretrained(str(output_dir / "final"))
     print(f"\n  SFT model saved to: {output_dir / 'final'}")
@@ -190,7 +182,6 @@ def run_sft(model_name: str, epochs: int = 3, lr: float = 2e-5, batch_size: int 
     return str(output_dir / "final")
 
 
-# ── GRPO Training ─────────────────────────────────────────────────
 
 def run_grpo(model_name: str, epochs: int = 2, lr: float = 1e-5, batch_size: int = 2, num_generations: int = 4):
     """Run GRPO (Group Relative Policy Optimization) with automatic reward."""
@@ -210,11 +201,9 @@ def run_grpo(model_name: str, epochs: int = 2, lr: float = 1e-5, batch_size: int
     print(f"  Epochs: {epochs}, Generations per prompt: {num_generations}")
     print(f"{'='*50}\n")
     
-    # Load prompts with scenarios
     grpo_data = load_grpo_prompts()
     print(f"  Loaded {len(grpo_data)} GRPO prompts")
     
-    # Build scenario lookup for reward function
     scenario_lookup = {}
     dataset_rows = []
     for item in grpo_data:
@@ -225,7 +214,6 @@ def run_grpo(model_name: str, epochs: int = 2, lr: float = 1e-5, batch_size: int
     
     dataset = Dataset.from_list(dataset_rows)
     
-    # Define reward function that GRPO will call
     def reward_fn(completions: List[str], prompts: List[str] = None, **kwargs) -> List[float]:
         """Score each completion against its scenario's ground truth."""
         rewards = []
@@ -240,7 +228,6 @@ def run_grpo(model_name: str, epochs: int = 2, lr: float = 1e-5, batch_size: int
     is_adapter_path = Path(model_name).exists() and (Path(model_name) / "adapter_config.json").exists()
     
     if is_adapter_path:
-        # GRPO on top of SFT: merge SFT adapter into a clean full model
         adapter_cfg = json.loads((Path(model_name) / "adapter_config.json").read_text())
         base_name = adapter_cfg.get("base_model_name_or_path", "")
         print(f"  Loading SFT adapter from: {model_name}")
@@ -323,18 +310,15 @@ def run_grpo(model_name: str, epochs: int = 2, lr: float = 1e-5, batch_size: int
     return str(output_dir / "final")
 
 
-# ── Export to Ollama ──────────────────────────────────────────────
 
 def export_to_ollama(model_path: str, name: str):
     """Export a trained model to Ollama for serving."""
     print(f"\n  Exporting {model_path} to Ollama as '{name}'...")
     print(f"  This requires converting to GGUF format.\n")
     
-    # Check if llama-cpp-python or similar is available
     try:
         import subprocess
         
-        # Step 1: Merge LoRA weights if needed
         merged_path = Path(model_path).parent / "merged"
         if not merged_path.exists():
             print("  Merging LoRA weights...")
@@ -348,7 +332,6 @@ def export_to_ollama(model_path: str, name: str):
             tokenizer.save_pretrained(str(merged_path))
             print(f"  Merged model saved to {merged_path}")
         
-        # Step 2: Convert to GGUF (requires llama.cpp)
         print("\n  To convert to GGUF and import to Ollama:")
         print(f"  1. python llama.cpp/convert_hf_to_gguf.py {merged_path} --outfile {name}.gguf")
         print(f"  2. Create a Modelfile:")
@@ -366,7 +349,6 @@ def export_to_ollama(model_path: str, name: str):
         print(f"  3. ollama create {name} -f Modelfile")
 
 
-# ── Direct evaluation (no Ollama needed) ──────────────────────────
 
 def run_eval_direct(model_path: str, label: str = "model", max_scenarios: int = 0):
     """Evaluate a model directly in Python — no server, no Ollama.
@@ -393,21 +375,18 @@ def run_eval_direct(model_path: str, label: str = "model", max_scenarios: int = 
     
     # Force CPU for eval — MPS has a known bug where model.generate()
     # creates KV-cache tensors >4GB which crash with:
-    # "total bytes of NDArray > 2**32"
     # CPU is fast enough for 1.5B model inference (~3-5s per scenario)
     device = "cpu"
     if torch.cuda.is_available():
         device = "cuda"
     print(f"  Device: {device}")
     
-    # Load model
     hf_path = _ollama_to_hf(model_path) if ":" in model_path else model_path
     is_lora = (Path(model_path) / "adapter_config.json").exists() if ":" not in model_path else False
     
     print(f"  Loading {'LoRA adapter' if is_lora else 'model'}: {hf_path}")
     
     if is_lora:
-        # Find the base model from adapter_config
         adapter_cfg = json.loads((Path(model_path) / "adapter_config.json").read_text())
         base_name = adapter_cfg.get("base_model_name_or_path", "")
         print(f"  Base model: {base_name}")
@@ -451,7 +430,6 @@ def run_eval_direct(model_path: str, label: str = "model", max_scenarios: int = 
             "instruction": "Choose the NEXT action as JSON {action, args, rationale}.",
         })
         
-        # Format as chat
         if hasattr(tokenizer, "apply_chat_template"):
             messages = [
                 {"role": "system", "content": planner_system},
@@ -472,14 +450,11 @@ def run_eval_direct(model_path: str, label: str = "model", max_scenarios: int = 
                 pad_token_id=tokenizer.pad_token_id,
             )
         
-        # Decode only the new tokens
         completion = tokenizer.decode(outputs[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
         
-        # Score
         reward = compute_reward(completion, sc)
         rewards.append(reward)
         
-        # Check if correct tool
         best = _best_first_tools(sc)
         import re
         try:
@@ -499,7 +474,6 @@ def run_eval_direct(model_path: str, label: str = "model", max_scenarios: int = 
     
     total_time = time.time() - total_start
     
-    # Summary
     avg_reward = sum(rewards) / max(1, len(rewards))
     tool_acc = correct_tools / max(1, total)
     json_rate = valid_json / max(1, total)
@@ -530,7 +504,6 @@ def run_eval_direct(model_path: str, label: str = "model", max_scenarios: int = 
     print(f"  │  Time: {total_time:.1f}s ({total_time/max(1,total):.1f}s/scenario)     │")
     print(f"  └─────────────────────────────────────────┘")
     
-    # Save result
     RESULTS_DIR = DATA_DIR / "eval_results"
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     safe = label.replace(" ", "_").replace(":", "_").replace("/", "_")
@@ -576,17 +549,14 @@ def print_comparison_table(results: list):
     print(f"  ╚═══════════════════════════════════════════════════════════╝")
 
 
-# ── Helpers ───────────────────────────────────────────────────────
 
 def _ollama_to_hf(model_name: str) -> str:
     """Map Ollama model names to HuggingFace model IDs."""
     mapping = {
-        # Ungated models (no login needed)
         "qwen2.5:1.5b": "Qwen/Qwen2.5-1.5B-Instruct",
         "qwen2.5:3b": "Qwen/Qwen2.5-3B-Instruct",
         "qwen2.5:7b": "Qwen/Qwen2.5-7B-Instruct",
         "llama3.2:1b": "meta-llama/Llama-3.2-1B-Instruct",  # gated
-        # Gated models (need HF login + license acceptance)
         "gemma3:1b": "google/gemma-3-1b-it",
         "gemma3:4b": "google/gemma-3-4b-it",
         "gemma3:12b": "google/gemma-3-12b-it",
@@ -595,7 +565,6 @@ def _ollama_to_hf(model_name: str) -> str:
     return mapping.get(model_name, model_name)
 
 
-# ── CLI ────────────────────────────────────────────────────────────
 
 def main():
     parser = argparse.ArgumentParser(description="Train the ops agent planner")
@@ -644,7 +613,6 @@ def main():
         return
     
     if args.stage == "eval-compare":
-        # Compare base vs SFT vs GRPO
         base_model = args.model
         sft_path = str(OUTPUT_DIR / f"sft_{base_model.replace(':', '_').replace('/', '_')}" / "final")
         grpo_path = str(OUTPUT_DIR / "grpo_on_sft" / "final")
@@ -653,12 +621,10 @@ def main():
         
         results = []
         
-        # Base model
         print("\n  Evaluating BASE model...")
         r = run_eval_direct(base_model, label="Base (no training)", max_scenarios=args.count)
         results.append(r)
         
-        # SFT model (if exists)
         if Path(sft_path).exists():
             print("\n  Evaluating SFT model...")
             r = run_eval_direct(sft_path, label="After SFT", max_scenarios=args.count)
@@ -666,7 +632,6 @@ def main():
         else:
             print(f"\n  SFT model not found at {sft_path} — skipping")
         
-        # GRPO model (if exists)
         found_grpo = None
         if Path(grpo_path).exists():
             found_grpo = grpo_path

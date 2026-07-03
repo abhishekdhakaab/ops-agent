@@ -20,8 +20,6 @@ QUESTIONS_OUT = REPO_ROOT / "app" / "eval" / "questions.json"
 SFT_OUT = REPO_ROOT / "data" / "trl_planner_sft.jsonl"
 GRPO_OUT = REPO_ROOT / "data" / "trl_planner_grpo.jsonl"
 
-# ── Question templates per root cause ──────────────────────────────
-# Multiple phrasings so the agent can't pattern-match on wording
 
 TEMPLATES = {
     "deploy_regression": [
@@ -70,8 +68,6 @@ def expected_tools_for(scenario: dict) -> tuple:
     has_spike = scenario["metrics"]["has_latency_spike"]
     high_errors = scenario["logs"]["error_count"] > 20
 
-    # expected_all: tools that MUST be used
-    # expected_any: at least one of these
     if root == "deploy_regression":
         return (["deployments"], ["metrics", "logs", "deployments"])
     elif root == "upstream_dependency":
@@ -108,7 +104,6 @@ def generate_questions(scenarios: list) -> list:
         root = sc["root_cause"]
         gt = sc["ground_truth"]
 
-        # Pick 2 random question phrasings per scenario
         templates = TEMPLATES.get(root, TEMPLATES["healthy"])
         chosen = random.sample(templates, min(2, len(templates)))
 
@@ -140,7 +135,6 @@ def generate_questions(scenarios: list) -> list:
     return questions
 
 
-# ── SFT Training Data ─────────────────────────────────────────────
 
 PLANNER_SYSTEM = (
     "You are an ops investigation planner. Choose the NEXT best tool action.\n"
@@ -211,7 +205,6 @@ def generate_sft(scenarios: list) -> list:
             ]
         })
 
-        # Step 2: have first tool's evidence — pick second tool
         second = second_tool_for(sc, first)
         user_2 = json.dumps({
             "question": f"Investigate {service}",
@@ -233,7 +226,6 @@ def generate_sft(scenarios: list) -> list:
             ]
         })
 
-        # Step 3: have two tools — decide to finalize or get one more
         if second != "final":
             remaining = {"metrics", "logs", "deployments"} - {first, second}
             third = "final"
@@ -286,21 +278,18 @@ def generate_grpo(scenarios: list) -> list:
     return rows
 
 
-# ── Main ───────────────────────────────────────────────────────────
 
 def main():
     raw = json.loads(SCENARIOS_PATH.read_text(encoding="utf-8"))
     scenarios = raw["scenarios"]
     print(f"Loaded {len(scenarios)} scenarios from {SCENARIOS_PATH}")
 
-    # Generate eval questions
     random.seed(42)  # reproducible
     questions = generate_questions(scenarios)
     QUESTIONS_OUT.parent.mkdir(parents=True, exist_ok=True)
     QUESTIONS_OUT.write_text(json.dumps(questions, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Wrote {len(questions)} eval questions to {QUESTIONS_OUT}")
 
-    # Generate SFT training data
     sft_rows = generate_sft(scenarios)
     SFT_OUT.parent.mkdir(parents=True, exist_ok=True)
     with SFT_OUT.open("w", encoding="utf-8") as f:
@@ -308,14 +297,12 @@ def main():
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     print(f"Wrote {len(sft_rows)} SFT training rows to {SFT_OUT}")
 
-    # Generate GRPO training data
     grpo_rows = generate_grpo(scenarios)
     with GRPO_OUT.open("w", encoding="utf-8") as f:
         for r in grpo_rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     print(f"Wrote {len(grpo_rows)} GRPO training rows to {GRPO_OUT}")
 
-    # Summary
     by_cause = {}
     for sc in scenarios:
         by_cause.setdefault(sc["root_cause"], []).append(sc["service"])

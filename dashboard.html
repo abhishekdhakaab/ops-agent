@@ -307,7 +307,6 @@ function loadFromInput() {
       const obj = JSON.parse(chunk.trim());
       allData.push(obj);
     } catch(e) {
-      // Try wrapping in array
       try {
         const arr = JSON.parse('[' + chunk.trim() + ']');
         allData.push(...arr);
@@ -367,7 +366,6 @@ function renderDashboard(selectedIdx) {
   let html = '';
   
   if (isComparison) {
-    // Hero metrics — best model
     const best = [...data].sort((a,b) => b.summary.conclusion_accuracy - a.summary.conclusion_accuracy)[0];
     const worst = [...data].sort((a,b) => a.summary.conclusion_accuracy - b.summary.conclusion_accuracy)[0];
     
@@ -389,10 +387,8 @@ function renderDashboard(selectedIdx) {
     </div>
     `;
     
-    // Radar chart
     html += `<div class="card full"><h2>Model comparison</h2><div class="chart-container"><canvas id="radarChart"></canvas></div></div>`;
     
-    // Comparison table
     html += `<div class="card full"><h2>Detailed metrics</h2><div class="per-question"><table>
       <tr><th>Metric</th>${data.map((d,i) => `<th style="color:${COLORS[i%COLORS.length]}">${d.summary.model}</th>`).join('')}</tr>`;
     
@@ -420,7 +416,6 @@ function renderDashboard(selectedIdx) {
     html += '</table></div></div>';
     
   } else {
-    // Single model view
     const s = data[0].summary;
     html += `
     <div class="card">
@@ -440,7 +435,6 @@ function renderDashboard(selectedIdx) {
     </div>
     `;
     
-    // All metrics
     html += `<div class="card"><h2>All metrics</h2>`;
     const rows = [
       ['Success rate', (s.success_rate*100).toFixed(0)+'%', valClass(s.success_rate, [0.9, 0.7])],
@@ -456,11 +450,9 @@ function renderDashboard(selectedIdx) {
     }
     html += '</div>';
     
-    // Bar chart for single model
     html += `<div class="card"><h2>Score breakdown</h2><div class="chart-container"><canvas id="barChart"></canvas></div></div>`;
   }
   
-  // Per-question results (if available)
   if (data[0].results && data[0].results.length > 0) {
     html += `<div class="card full"><h2>Per-question results — ${data[0].summary.model}</h2><div class="per-question"><table>
       <tr><th>Question</th><th>Tools</th><th>ToolSel</th><th>Conclusion</th><th>Latency</th></tr>`;
@@ -485,7 +477,6 @@ function renderDashboard(selectedIdx) {
   
   grid.innerHTML = html;
   
-  // Render charts
   if (isComparison) {
     renderRadarChart(data);
   } else {

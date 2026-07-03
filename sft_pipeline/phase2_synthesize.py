@@ -34,7 +34,6 @@ from ollama_client import call_ollama_json
 VALID_ACTIONS = {"metrics", "logs", "deployments", "final"}
 
 
-# ── Synthesis prompt ──────────────────────────────────────────────
 
 SYNTHESIZER_SYSTEM = """You are an expert SRE reviewing multiple investigation attempts for the same incident.
 Your job: produce ONE optimal investigation trajectory.
@@ -64,7 +63,6 @@ def _build_synthesizer_user_prompt(scenario_entry: dict) -> str:
     # Use the first run's question (they're all for the same scenario)
     question = runs[0].get("question", f"Investigate {service}")
     
-    # Format each run compactly
     runs_text = ""
     for idx, run in enumerate(runs):
         runs_text += f"\n--- ATTEMPT {idx + 1} ---\n"
@@ -86,7 +84,6 @@ def _build_synthesizer_user_prompt(scenario_entry: dict) -> str:
             
             runs_text += f"\n  Step: {action}"
             if args and action != "final":
-                # Show args compactly
                 args_display = {k: v for k, v in args.items() if k != "service"}
                 if args_display:
                     runs_text += f"({json.dumps(args_display)})"
@@ -130,7 +127,6 @@ Return JSON:
 }}"""
 
 
-# ── Validation ────────────────────────────────────────────────────
 
 def _validate_trajectory(trajectory: list, service: str) -> tuple:
     """
@@ -143,7 +139,6 @@ def _validate_trajectory(trajectory: list, service: str) -> tuple:
     if not isinstance(trajectory, list):
         return False, "Trajectory is not a list"
     
-    # Check each step
     for i, step in enumerate(trajectory):
         if not isinstance(step, dict):
             return False, f"Step {i} is not a dict"
@@ -155,7 +150,6 @@ def _validate_trajectory(trajectory: list, service: str) -> tuple:
         if not step.get("rationale"):
             return False, f"Step {i} has no rationale"
     
-    # Last step should be "final"
     if trajectory[-1].get("action") != "final":
         return False, "Trajectory doesn't end with 'final'"
     
@@ -168,12 +162,10 @@ def _validate_trajectory(trajectory: list, service: str) -> tuple:
             if args_i == args_prev:
                 return False, f"Steps {i-1} and {i} are duplicate {trajectory[i]['action']} calls"
     
-    # Not too long
     tool_calls = [s for s in trajectory if s.get("action") != "final"]
     if len(tool_calls) > 4:
         return False, f"Too many tool calls ({len(tool_calls)}), max 4"
     
-    # Not too short (at least 1 tool call before final)
     if len(tool_calls) == 0:
         return False, "No tool calls before final"
 
@@ -208,7 +200,6 @@ def _validate_trajectory(trajectory: list, service: str) -> tuple:
     return True, "OK"
 
 
-# ── Main synthesis ────────────────────────────────────────────────
 
 def synthesize_one(scenario_entry: dict, model: Optional[str] = None) -> Optional[dict]:
     """
@@ -243,7 +234,6 @@ def synthesize_one(scenario_entry: dict, model: Optional[str] = None) -> Optiona
             trajectory = response.get("trajectory", [])
             reasoning = response.get("reasoning", "")
         
-        # Normalize: ensure service is in args, lowercase actions
         service = scenario_entry["service"]
         for step in trajectory:
             step["action"] = step.get("action", "").lower().strip()
@@ -258,7 +248,6 @@ def synthesize_one(scenario_entry: dict, model: Optional[str] = None) -> Optiona
                 else:
                     step["args"] = {"service": service}
         
-        # Validate
         is_valid, error = _validate_trajectory(trajectory, service)
         if is_valid:
             return {
@@ -314,7 +303,6 @@ def run_phase2(model: Optional[str] = None, max_scenarios: int = 0) -> str:
     
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    # Resume support
     existing = load_existing_syntheses()
     
     total = len(raw_entries)
@@ -333,7 +321,6 @@ def run_phase2(model: Optional[str] = None, max_scenarios: int = 0) -> str:
         sc_id = entry["scenario_id"]
         service = entry["service"]
         
-        # Skip if already done
         if sc_id in existing:
             skipped += 1
             continue
@@ -353,7 +340,6 @@ def run_phase2(model: Optional[str] = None, max_scenarios: int = 0) -> str:
         tool_calls = [s["action"] for s in trajectory if s["action"] != "final"]
         print(f"    ✓ {tool_calls} + final ({elapsed:.1f}s)")
         
-        # Build output entry
         output_entry = {
             "scenario_id": sc_id,
             "service": service,
@@ -365,7 +351,6 @@ def run_phase2(model: Optional[str] = None, max_scenarios: int = 0) -> str:
             "trajectory": trajectory,
         }
         
-        # Append to file
         with SYNTHESIZED_PATH.open("a") as f:
             f.write(json.dumps(output_entry, ensure_ascii=False) + "\n")
         

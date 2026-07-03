@@ -42,7 +42,6 @@ import time
 import shutil
 from pathlib import Path
 
-# Ensure sft_pipeline/ is in path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from config import (
@@ -61,14 +60,12 @@ def run_dry_run():
     print("  DRY RUN: Testing pipeline components")
     print("=" * 60)
     
-    # Test 1: Scenario loading
     print("\n  [1/4] Testing scenario loading...")
     from tools import load_scenarios_list
     scenarios = load_scenarios_list()
     print(f"    ✓ Loaded {len(scenarios)} scenarios")
     print(f"    Sample: {scenarios[0]['id']} ({scenarios[0]['service']}, {scenarios[0]['root_cause']})")
     
-    # Test 2: Tool simulation
     print("\n  [2/4] Testing tool simulation...")
     from tools import run_tool, compress_evidence
     
@@ -91,7 +88,6 @@ def run_dry_run():
     print(f"    ✓ deployments({service})")
     print(f"      Compressed: {json.dumps(deploy_comp)}")
     
-    # Test 3: Prompt building
     print("\n  [3/4] Testing prompt building...")
     from prompts import (
         PLANNER_SYSTEM,
@@ -109,23 +105,19 @@ def run_dry_run():
     msg0 = build_planner_user_message(state0)
     print(f"    ✓ Step 0 prompt ({len(msg0)} chars)")
     
-    # State at step 1 (with metrics evidence)
     state1 = build_planner_state(question, service, 1, ["metrics"], {"metrics": metrics_comp})
     msg1 = build_planner_user_message(state1)
     print(f"    ✓ Step 1 prompt ({len(msg1)} chars)")
     
-    # State at step 2 (with metrics + logs evidence)
     state2 = build_planner_state(question, service, 2, ["metrics", "logs"],
                                   {"metrics": metrics_comp, "logs": logs_comp})
     msg2 = build_planner_user_message(state2)
     print(f"    ✓ Step 2 prompt ({len(msg2)} chars)")
     
-    # Format an SFT example
     action = {"action": "logs", "args": {"service": service}, "rationale": "Check error logs for patterns."}
     sft_ex = format_sft_example(state1, action)
     print(f"    ✓ SFT example has {len(sft_ex['messages'])} messages")
     
-    # Test 4: Show a full example
     print("\n  [4/4] Full SFT example preview:")
     print(f"  {'─'*50}")
     print(f"  SYSTEM ({len(PLANNER_SYSTEM)} chars):")
@@ -136,8 +128,6 @@ def run_dry_run():
     print(f"    {json.dumps(action)}")
     print(f"  {'─'*50}")
     
-    # Token estimation
-    # Rough: 1 token ≈ 4 chars for English text
     avg_example_chars = len(PLANNER_SYSTEM) + len(msg1) + len(json.dumps(action))
     est_tokens = avg_example_chars / 4
     print(f"\n  Estimated tokens per example: ~{int(est_tokens)}")
@@ -179,18 +169,15 @@ Examples:
                        help="Clean previous outputs before running")
     args = parser.parse_args()
     
-    # Dry run
     if args.dry_run:
         run_dry_run()
         return
     
-    # Clean if requested
     if args.clean:
         clean_outputs()
     
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    # Check Ollama for phases that need it
     needs_llm = args.phase in (1, 2) or args.phase is None
     if needs_llm:
         from ollama_client import check_ollama_ready
@@ -198,7 +185,6 @@ Examples:
             sys.exit(1)
         print(f"  ✓ Ollama ready with model: {args.model}")
     
-    # Timer
     pipeline_start = time.time()
     
     print(f"\n{'═'*60}")
@@ -208,22 +194,18 @@ Examples:
     print(f"  Phase: {'all' if args.phase is None else args.phase}")
     print(f"{'═'*60}")
     
-    # Phase 1
     if args.phase is None or args.phase == 1:
         from phase1_raw_runs import run_phase1
         run_phase1(model=args.model, max_scenarios=args.max_scenarios)
     
-    # Phase 2
     if args.phase is None or args.phase == 2:
         from phase2_synthesize import run_phase2
         run_phase2(model=args.model, max_scenarios=args.max_scenarios)
     
-    # Phase 3
     if args.phase is None or args.phase == 3:
         from phase3_format_sft import run_phase3
         run_phase3(max_scenarios=args.max_scenarios)
     
-    # Final summary
     elapsed = time.time() - pipeline_start
     
     print(f"\n{'═'*60}")

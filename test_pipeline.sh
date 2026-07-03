@@ -1,12 +1,4 @@
 #!/usr/bin/env bash
-# ============================================================
-#  Ops Agent — Training Pipeline Smoke Test v4
-#
-#  Tests training effectiveness with GRPO building on SFT.
-#  Uses 10 scenarios for enough diversity to see improvement.
-#
-#  Usage: chmod +x test_pipeline.sh && ./test_pipeline.sh
-# ============================================================
 set -e
 
 GREEN='\033[0;32m'
@@ -43,7 +35,6 @@ echo "║  Scenarios: $NUM_SCENARIOS, SFT: ${SFT_EPOCHS}ep (lr=${SFT_LR}), GRPO:
 echo "╚══════════════════════════════════════════════════════╝"
 echo ""
 
-# ━━━ PHASE 0: Setup ━━━
 step "PHASE 0: Setup"
 
 info "Checking Python..."
@@ -59,7 +50,6 @@ info "Installing dependencies..."
 pip install -q -r requirements.txt 2>&1 | tail -1
 pip install -q -r requirements-training.txt 2>&1 | tail -1
 
-# Clean old trained models to start fresh
 info "Cleaning old trained models..."
 rm -rf data/trained_models
 rm -rf data/eval_results/direct_eval_*
@@ -68,13 +58,11 @@ mkdir -p data/trained_models data/eval_results
 echo -e "  ${GREEN}✓ Setup OK${NC}"
 
 
-# ━━━ PHASE 1: Generate scenarios ━━━
 step "PHASE 1: Generate $NUM_SCENARIOS scenarios"
 
 python3 app/eval/generate_scenarios.py --count $NUM_SCENARIOS --seed 42
 
 
-# ━━━ PHASE 2: Eval BASE model ━━━
 step "PHASE 2: Eval BASE $TRAIN_MODEL (before any training)"
 
 info "Uses CPU for inference (avoids MPS tensor size bug)"
@@ -96,7 +84,6 @@ else
 fi
 
 
-# ━━━ PHASE 3: SFT Training ━━━
 step "PHASE 3: SFT Training ($SFT_EPOCHS epochs, lr=$SFT_LR)"
 
 info "Higher LR and more epochs than default to ensure learning"
@@ -121,7 +108,6 @@ else
 fi
 
 
-# ━━━ PHASE 4: Eval SFT model ━━━
 step "PHASE 4: Eval AFTER SFT"
 
 SFT_PATH="data/trained_models/sft_$(echo $TRAIN_MODEL | tr ':' '_')/final"
@@ -147,7 +133,6 @@ else
 fi
 
 
-# ━━━ PHASE 5: GRPO Training (ON SFT MODEL) ━━━
 step "PHASE 5: GRPO Training ON SFT model ($GRPO_EPOCHS epochs, lr=$GRPO_LR)"
 
 info "GRPO builds on what SFT learned — not from scratch"
@@ -177,7 +162,6 @@ else
 fi
 
 
-# ━━━ PHASE 6: Eval GRPO model ━━━
 step "PHASE 6: Eval AFTER SFT+GRPO"
 
 GRPO_PATH="data/trained_models/grpo_on_sft/final"
@@ -203,7 +187,6 @@ else
 fi
 
 
-# ━━━ PHASE 7: Full comparison ━━━
 step "PHASE 7: Before/After Comparison"
 
 set +e
@@ -213,7 +196,6 @@ python3 app/training/train.py eval-compare \
 set -e
 
 
-# ━━━ Summary ━━━
 TOTAL_END=$(now_s)
 TOTAL_TIME=$(python3 -c "print(round($TOTAL_END-$TOTAL_START, 1))")
 

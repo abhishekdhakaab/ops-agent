@@ -1,18 +1,4 @@
 #!/usr/bin/env bash
-# ============================================================
-#  Ops Agent — Full Training & Evaluation Pipeline
-#
-#  Generates 100 scenarios, trains SFT + GRPO, evaluates
-#  base vs trained models, and saves comprehensive results.
-#
-#  Usage:
-#    chmod +x run_full_pipeline.sh
-#    nohup ./run_full_pipeline.sh > full_run.log 2>&1 &
-#    tail -f full_run.log   # watch progress
-#
-#  Estimated time: ~1.5 hours on M1 Mac 32GB
-#  Output: data/full_run_results.json + full_run.log
-# ============================================================
 
 PROJ_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$PROJ_DIR"
@@ -47,7 +33,6 @@ echo ""
 
 PIPELINE_START=$(now_s)
 
-# ── Setup ──────────────────────────────────────────────────────────
 echo "[$(now_human)] Setting up environment..."
 
 if [ ! -d "venv" ]; then
@@ -57,7 +42,6 @@ source venv/bin/activate
 pip install -q -r requirements.txt 2>&1 | tail -1
 pip install -q -r requirements-training.txt 2>&1 | tail -1
 
-# Clean previous training artifacts
 rm -rf data/trained_models
 rm -rf data/eval_results/direct_eval_*
 mkdir -p data/trained_models data/eval_results
@@ -66,7 +50,6 @@ echo "[$(now_human)] Setup complete."
 echo ""
 
 
-# ── Phase 1: Generate scenarios ───────────────────────────────────
 echo "================================================================"
 echo "[$(now_human)] PHASE 1: Generating $NUM_SCENARIOS scenarios..."
 echo "================================================================"
@@ -76,7 +59,6 @@ python3 app/eval/generate_scenarios.py --count $NUM_SCENARIOS --seed $SEED
 echo ""
 
 
-# ── Phase 2: Evaluate base model ─────────────────────────────────
 echo "================================================================"
 echo "[$(now_human)] PHASE 2: Evaluating BASE model ($TRAIN_MODEL)..."
 echo "================================================================"
@@ -92,7 +74,6 @@ echo "[$(now_human)] Base eval done in $(python3 -c "print(f'{($T1-$T0)/60:.1f}'
 echo ""
 
 
-# ── Phase 3: SFT training ────────────────────────────────────────
 echo "================================================================"
 echo "[$(now_human)] PHASE 3: SFT Training ($SFT_EPOCHS epochs, lr=$SFT_LR)..."
 echo "================================================================"
@@ -110,7 +91,6 @@ echo "[$(now_human)] SFT training done in $(python3 -c "print(f'{($T1-$T0)/60:.1
 echo ""
 
 
-# ── Phase 4: Evaluate SFT model ──────────────────────────────────
 echo "================================================================"
 echo "[$(now_human)] PHASE 4: Evaluating SFT model..."
 echo "================================================================"
@@ -128,7 +108,6 @@ echo "[$(now_human)] SFT eval done in $(python3 -c "print(f'{($T1-$T0)/60:.1f}')
 echo ""
 
 
-# ── Phase 5: GRPO training on SFT model ──────────────────────────
 echo "================================================================"
 echo "[$(now_human)] PHASE 5: GRPO Training on SFT model ($GRPO_EPOCHS epochs)..."
 echo "================================================================"
@@ -146,7 +125,6 @@ echo "[$(now_human)] GRPO training done in $(python3 -c "print(f'{($T1-$T0)/60:.
 echo ""
 
 
-# ── Phase 6: Evaluate GRPO model ─────────────────────────────────
 echo "================================================================"
 echo "[$(now_human)] PHASE 6: Evaluating SFT+GRPO model..."
 echo "================================================================"
@@ -164,7 +142,6 @@ echo "[$(now_human)] GRPO eval done in $(python3 -c "print(f'{($T1-$T0)/60:.1f}'
 echo ""
 
 
-# ── Phase 7: Final comparison ─────────────────────────────────────
 echo "================================================================"
 echo "[$(now_human)] PHASE 7: Final comparison (re-evaluating all 3 models)..."
 echo "================================================================"
@@ -174,7 +151,6 @@ python3 app/training/train.py eval-compare \
     --count $NUM_SCENARIOS
 
 
-# ── Phase 8: Generate comprehensive results JSON ─────────────────
 echo ""
 echo "================================================================"
 echo "[$(now_human)] PHASE 8: Generating results report..."
@@ -189,12 +165,10 @@ from pathlib import Path
 results_dir = Path("data/eval_results")
 all_evals = {}
 
-# Load all direct eval results
 for f in sorted(results_dir.glob("direct_eval_*.json")):
     data = json.loads(f.read_text())
     all_evals[data["label"]] = data
 
-# Pipeline metadata
 pipeline = {
     "train_model": "$TRAIN_MODEL",
     "num_scenarios": $NUM_SCENARIOS,
@@ -207,7 +181,6 @@ pipeline = {
     "total_time_human": f"{($PIPELINE_END - $PIPELINE_START)/60:.1f} minutes",
 }
 
-# Build comparison
 models = ["Base (no training)", "After SFT", "After SFT+GRPO"]
 comparison = {}
 for m in models:
@@ -222,7 +195,6 @@ for m in models:
             "per_scenario_s": e["per_scenario_s"],
         }
 
-# Compute deltas
 if "Base (no training)" in comparison and "After SFT" in comparison:
     base = comparison["Base (no training)"]
     sft = comparison["After SFT"]
@@ -244,7 +216,6 @@ if "Base (no training)" in comparison and "After SFT+GRPO" in comparison:
         "strong_delta_pp": round((grpo["strong_pct"] - base["strong_pct"]) * 100, 1),
     }
 
-# SFT training curve (from the training output if available)
 pipeline["sft_training_curve"] = {
     "note": "Check full_run.log for per-epoch loss/accuracy progression"
 }
@@ -260,7 +231,6 @@ out_path.parent.mkdir(parents=True, exist_ok=True)
 out_path.write_text(json.dumps(output, indent=2))
 print(f"  Results saved to: {out_path}")
 
-# Print resume-ready summary
 print()
 print("╔═══════════════════════════════════════════════════════════════╗")
 print("║                    FINAL RESULTS                             ║")

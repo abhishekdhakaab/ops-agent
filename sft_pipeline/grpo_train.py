@@ -36,7 +36,6 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from collections import Counter
 
-# ── Path setup ────────────────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 DATA_DIR = PROJECT_ROOT / "data"
@@ -46,7 +45,6 @@ SYNTHESIZED_PATH = OUTPUT_DIR / "phase2_synthesized.jsonl"
 GRPO_PROMPTS_PATH = OUTPUT_DIR / "grpo_prompts.jsonl"
 TRAINED_MODELS_DIR = DATA_DIR / "trained_models"
 
-# Add sft_pipeline to path for shared imports
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from tools import run_tool, compress_evidence
@@ -58,9 +56,6 @@ from prompts import (
 from planner_policy import normalize_action, VALID_ACTIONS
 
 
-# ══════════════════════════════════════════════════════════════════
-# PHASE A: Generate GRPO prompts at multiple evidence states
-# ══════════════════════════════════════════════════════════════════
 
 def generate_grpo_prompts(max_scenarios: int = 0) -> str:
     """
@@ -79,7 +74,6 @@ def generate_grpo_prompts(max_scenarios: int = 0) -> str:
       - prompt: the formatted prompt string
       - step_info: metadata for reward computation (expected action, etc.)
     """
-    # Load synthesized trajectories
     if not SYNTHESIZED_PATH.exists():
         print(f"  ERROR: {SYNTHESIZED_PATH} not found. Run Phase 2 first.")
         sys.exit(1)
@@ -108,7 +102,6 @@ def generate_grpo_prompts(max_scenarios: int = 0) -> str:
         question = entry["question"]
         trajectory = entry["trajectory"]
 
-        # Walk through the trajectory, building evidence at each step
         evidence_compressed = {}
         tools_called = []
 
@@ -116,8 +109,6 @@ def generate_grpo_prompts(max_scenarios: int = 0) -> str:
             action = step["action"]
             args = step.get("args", {})
 
-            # Build the prompt for this decision point
-            # (state BEFORE the action — what the model sees when deciding)
             state = build_planner_state(
                 question=question,
                 service=service,
@@ -127,7 +118,6 @@ def generate_grpo_prompts(max_scenarios: int = 0) -> str:
             )
             prompt_text = build_planner_user_message(state)
 
-            # Store the prompt with metadata for reward computation
             step_info = {
                 "scenario_id": scenario_id,
                 "service": service,
@@ -145,7 +135,6 @@ def generate_grpo_prompts(max_scenarios: int = 0) -> str:
             })
             step_distribution[step_idx] += 1
 
-            # Now simulate the tool to build evidence for the NEXT step
             if action != "final":
                 sim_args = dict(args) if isinstance(args, dict) else {}
                 sim_args.setdefault("service", service)
@@ -153,7 +142,6 @@ def generate_grpo_prompts(max_scenarios: int = 0) -> str:
                 raw_output = run_tool(action, sim_args, scenario_id=scenario_id)
                 compressed = compress_evidence(action, raw_output)
 
-                # Evidence key (handle different args for same tool)
                 evidence_key = action
                 tr = int(sim_args.get("time_range_minutes", 60)) if action == "metrics" else 0
                 if action == "metrics" and tr != 60:
@@ -165,18 +153,15 @@ def generate_grpo_prompts(max_scenarios: int = 0) -> str:
                 evidence_compressed[evidence_key] = compressed
                 tools_called.append(action)
 
-    # Write prompts
     with GRPO_PROMPTS_PATH.open("w") as f:
         for p in all_prompts:
             f.write(json.dumps(p, ensure_ascii=False) + "\n")
 
-    # Stats
     print(f"  Total GRPO prompts: {len(all_prompts)}")
     print(f"  Step distribution:")
     for step, count in sorted(step_distribution.items()):
         print(f"    Step {step}: {count}")
 
-    # Expected action distribution
     action_dist = Counter(p["step_info"]["expected_action"] for p in all_prompts)
     print(f"  Expected action distribution:")
     for a, c in sorted(action_dist.items()):
@@ -187,9 +172,6 @@ def generate_grpo_prompts(max_scenarios: int = 0) -> str:
     return str(GRPO_PROMPTS_PATH)
 
 
-# ══════════════════════════════════════════════════════════════════
-# REWARD FUNCTION
-# ══════════════════════════════════════════════════════════════════
 
 def compute_reward(completion: str, step_info: Dict[str, Any]) -> float:
     """
@@ -217,7 +199,6 @@ def compute_reward(completion: str, step_info: Dict[str, Any]) -> float:
     service = step_info.get("service", "")
     step = step_info.get("step", 0)
 
-    # ── 1. Parse JSON ─────────────────────────────────────────
     text = completion.strip()
     if text.startswith("```"):
         text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
@@ -236,7 +217,6 @@ def compute_reward(completion: str, step_info: Dict[str, Any]) -> float:
 
     reward += 0.3  # valid JSON
 
-    # ── 2. Valid action? ──────────────────────────────────────
     action = normalize_action(parsed.get("action", ""))
 
     if action not in VALID_ACTIONS:
@@ -244,12 +224,9 @@ def compute_reward(completion: str, step_info: Dict[str, Any]) -> float:
 
     reward += 0.2  # valid action name
 
-    # ── 3. Tool choice (main signal) ──────────────────────────
     if action == expected_action:
-        # Perfect match with expert trajectory
         reward += 1.5
     elif action == "final":
-        # Model wants to stop
         if step >= 2:
             reward += 0.4  # stopping after 2+ tools is reasonable
         elif step == 1 and len(tools_called) >= 1:
@@ -260,13 +237,11 @@ def compute_reward(completion: str, step_info: Dict[str, Any]) -> float:
         # Repeating an observed tool is the main failure this reward targets.
         reward -= 0.8
     elif action in {"metrics", "logs", "deployments"}:
-        # Different tool than expert, but at least gathering evidence
         if action not in tools_called:
             reward += 0.3  # new information, just not the expert choice
         else:
             reward -= 0.3  # somehow still redundant
 
-    # ── 4. Service correctness ────────────────────────────────
     args = parsed.get("args", {})
     if isinstance(args, dict):
         pred_service = args.get("service", "")
@@ -275,10 +250,8 @@ def compute_reward(completion: str, step_info: Dict[str, Any]) -> float:
         elif pred_service and action != "final":
             reward += 0.1  # has a service, just wrong one
     elif action != "final":
-        # No args at all for a tool call
         reward -= 0.1
 
-    # ── 5. Rationale present and non-trivial ──────────────────
     rationale = parsed.get("rationale", "")
     if isinstance(rationale, str) and len(rationale) > 15:
         reward += 0.2
@@ -288,9 +261,6 @@ def compute_reward(completion: str, step_info: Dict[str, Any]) -> float:
     return round(reward, 3)
 
 
-# ══════════════════════════════════════════════════════════════════
-# GRPO TRAINING
-# ══════════════════════════════════════════════════════════════════
 
 def _ollama_to_hf(model_name: str) -> str:
     mapping = {
@@ -377,7 +347,6 @@ def run_grpo(
         print("Install with: pip install trl transformers peft datasets torch")
         sys.exit(1)
 
-    # ── Load prompts ──────────────────────────────────────────
     if not GRPO_PROMPTS_PATH.exists():
         print(f"  ERROR: {GRPO_PROMPTS_PATH} not found.")
         print(f"  Run: python grpo_train.py generate")
@@ -396,7 +365,6 @@ def run_grpo(
     print(f"  Epochs: {epochs}, Generations/prompt: {num_generations}")
     print(f"{'='*60}\n")
 
-    # ── Build dataset and reward lookup ───────────────────────
     # Prompt text is the stable join key between TRL batches and reward metadata.
 
     # Reward lookup must use the same rendered chat template seen during training.
@@ -440,7 +408,6 @@ def run_grpo(
         user_msg = item["prompt"]
         step_info = item["step_info"]
 
-        # Apply chat template
         if hasattr(tokenizer, "apply_chat_template"):
             messages = [
                 {"role": "system", "content": PLANNER_SYSTEM},
@@ -455,7 +422,6 @@ def run_grpo(
         step_info_lookup[formatted_prompt] = step_info
         dataset_rows.append({"prompt": formatted_prompt})
 
-    # ── Inject redundancy-trap prompts ────────────────────────────────
     # These prompts show a state where one tool has already been called
     # and give the model a chance to either repeat it (bad) or move on (good).
     # This ensures the -0.8 redundancy penalty actually fires during training.
@@ -477,14 +443,12 @@ def run_grpo(
         if len(tool_steps) < 2:
             continue
 
-        # Build a prompt where the first tool has already been called,
         # but the expected next action is the second tool (not the first again)
         first_tool = tool_steps[0]["action"]
         second_tool = tool_steps[1]["action"]
         first_args = tool_steps[0].get("args", {})
         service = entry.get("service", "unknown")
 
-        # Simulate the first tool output as evidence
         try:
             first_output = run_tool(first_tool, first_args, entry["scenario_id"])
             evidence_so_far = {first_tool: compress_evidence(first_tool, first_output)}
@@ -521,12 +485,10 @@ def run_grpo(
         trap_prompts_added += 1
 
     print(f"  Added {trap_prompts_added} redundancy-trap prompts to GRPO dataset")
-    # ─────────────────────────────────────────────────────────────────
 
     dataset = Dataset.from_list(dataset_rows)
     print(f"  Dataset size: {len(dataset_rows)} prompts")
 
-    # ── Reward function ───────────────────────────────────────
     def reward_fn(completions: List[str], prompts: List[str] = None, **kwargs) -> List[float]:
         """Score each completion using step-aware reward."""
         rewards = []
@@ -557,7 +519,6 @@ def run_grpo(
         task_type="CAUSAL_LM",
     )
 
-    # ── GRPO config ───────────────────────────────────────────
     output_dir = TRAINED_MODELS_DIR / "grpo_on_sft_v2"
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -592,7 +553,6 @@ def run_grpo(
         bf16=use_bf16,
     )
 
-    # ── Train ─────────────────────────────────────────────────
     trainer = GRPOTrainer(
         model=model,
         args=grpo_config,
@@ -616,9 +576,6 @@ def run_grpo(
     return str(output_dir / "final")
 
 
-# ══════════════════════════════════════════════════════════════════
-# REWARD FUNCTION TESTS
-# ══════════════════════════════════════════════════════════════════
 
 def test_reward():
     """Test the reward function on hand-crafted examples."""
@@ -654,7 +611,6 @@ def test_reward():
         r = compute_reward(completion, info_step0)
         print(f"    {r:>+6.2f}  {label}")
 
-    # Step 1: has logs evidence, expected=deployments
     info_step1 = {
         "expected_action": "deployments",
         "tools_called": ["logs"],
@@ -678,7 +634,6 @@ def test_reward():
         r = compute_reward(completion, info_step1)
         print(f"    {r:>+6.2f}  {label}")
 
-    # Step 2: has logs+deployments, expected=final
     info_step2 = {
         "expected_action": "final",
         "tools_called": ["logs", "deployments"],
@@ -700,7 +655,6 @@ def test_reward():
         r = compute_reward(completion, info_step2)
         print(f"    {r:>+6.2f}  {label}")
 
-    # Verify ordering
     print(f"\n  Reward ordering check:")
     print(f"    Expert > Alternative > Redundant > Invalid JSON?")
 
@@ -724,9 +678,7 @@ def test_reward():
     print(f"    ✓ Ordering correct")
 
 
-# ══════════════════════════════════════════════════════════════════
 # DPO TRAINING  (standard preference-learning fallback)
-# ══════════════════════════════════════════════════════════════════
 
 _CHOSEN_RATIONALE = {
     "deployments": "A recent deployment is the most likely cause. Checking deployment history to identify the offending change.",
@@ -785,7 +737,6 @@ def run_dpo(
     print(f"  Epochs: {epochs}, LR: {lr}, Batch: {batch_size}")
     print(f"{'='*60}\n")
 
-    # ── Load merged SFT model (auto-merge if not yet done) ───────────
     merged_path = merge_sft(model_name)
 
     # Device detection: CUDA > MPS > CPU
@@ -804,7 +755,6 @@ def run_dpo(
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    # ── Build preference pairs ────────────────────────────────
     pairs = []
     skipped = 0
     for item in grpo_data:
@@ -836,7 +786,6 @@ def run_dpo(
 
     dataset = Dataset.from_list(pairs)
 
-    # ── LoRA — same spec as fixed GRPO ───────────────────────
     lora_config = LoraConfig(
         r=16,
         lora_alpha=32,
@@ -881,9 +830,6 @@ def run_dpo(
     return str(output_dir / "final")
 
 
-# ══════════════════════════════════════════════════════════════════
-# CLI
-# ══════════════════════════════════════════════════════════════════
 
 def main():
     parser = argparse.ArgumentParser(description="GRPO/DPO Training (SFT-aligned)")

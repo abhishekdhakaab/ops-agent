@@ -59,12 +59,10 @@ def _rationale_has_numeric_mismatch(rationale: str, evidence: dict) -> bool:
     that are not present anywhere in the current evidence dict.
     This catches cases where the synthesizer hallucinated specific numbers.
     """
-    # Extract numbers from rationale (e.g. 1900, 900ms, 99%)
     rationale_numbers = set(re.findall(r'\b\d{2,}\b', rationale))
     if not rationale_numbers:
         return False  # No numbers to check
 
-    # Build flat string of all evidence values
     evidence_str = json.dumps(evidence)
     evidence_numbers = set(re.findall(r'\b\d{2,}\b', evidence_str))
 
@@ -108,14 +106,12 @@ def trajectory_to_sft_examples(entry: dict) -> List[dict]:
             evidence=dict(evidence_compressed),
         )
         
-        # The correct action for this state
         action_json = {
             "action": action,
             "args": args if action != "final" else {},
             "rationale": rationale,
         }
         
-        # Before appending each example:
         if _rationale_has_numeric_mismatch(rationale, evidence_compressed):
             # Replace the rationale with a safe generic one derived from evidence
             if action == "metrics":
@@ -137,7 +133,6 @@ def trajectory_to_sft_examples(entry: dict) -> List[dict]:
                     f"Deployment check: has_recent_deploy={dep.get('has_recent_deploy', '?')}, "
                     f"minutes_ago={dep.get('minutes_ago', '?')}."
                 )
-            # For final, keep rationale as-is (it summarizes all evidence)
             action_json = {
                 "action": action,
                 "args": args if action != "final" else {},
@@ -145,10 +140,8 @@ def trajectory_to_sft_examples(entry: dict) -> List[dict]:
             }
             example = format_sft_example(state, action_json)
 
-        # Create SFT example
         example = format_sft_example(state, action_json)
 
-        # Add metadata (not used in training, useful for analysis)
         example["_metadata"] = {
             "scenario_id": entry["scenario_id"],
             "service": service,
@@ -159,13 +152,10 @@ def trajectory_to_sft_examples(entry: dict) -> List[dict]:
 
         examples.append(example)
         
-        # Now simulate the tool to build evidence for the NEXT step
         if action != "final":
-            # Ensure service is in args
             sim_args = dict(args) if isinstance(args, dict) else {}
             sim_args.setdefault("service", service)
             
-            # Run actual tool
             raw_output = run_tool(action, sim_args, scenario_id=scenario_id)
             compressed = compress_evidence(action, raw_output)
             
@@ -215,7 +205,6 @@ def balance_final_ratio(examples: List[dict], max_ratio: float) -> List[dict]:
         final_examples = final_examples[:max_final]
     
     combined = tool_examples + final_examples
-    # Shuffle so finals aren't all at the end
     random.seed(42)
     random.shuffle(combined)
     
@@ -309,7 +298,6 @@ def run_phase3(max_scenarios: int = 0) -> str:
             print(f"  [{i+1}/{total}] {sc_id}: ERROR {e}")
             failed += 1
     
-    # Balance final ratio
     before_balance = len(all_examples)
     all_examples = balance_final_ratio(all_examples, MAX_FINAL_RATIO)
     after_balance = len(all_examples)
@@ -317,21 +305,16 @@ def run_phase3(max_scenarios: int = 0) -> str:
     if before_balance != after_balance:
         print(f"\n  Balanced 'final' ratio: {before_balance} → {after_balance} examples")
     
-    # Compute stats
     stats = compute_stats(all_examples, entries)
     
-    # Write SFT dataset
     with SFT_DATASET_PATH.open("w") as f:
         for ex in all_examples:
-            # Remove _metadata from training data (keep it clean)
             clean = {"messages": ex["messages"]}
             f.write(json.dumps(clean, ensure_ascii=False) + "\n")
     
-    # Write stats
     with STATS_PATH.open("w") as f:
         json.dump(stats, f, indent=2)
     
-    # Print summary
     print(f"\n  {'─'*50}")
     print(f"  DATASET STATS:")
     print(f"  {'─'*50}")
@@ -351,13 +334,11 @@ def run_phase3(max_scenarios: int = 0) -> str:
     print(f"  Output: {SFT_DATASET_PATH}")
     print(f"  Stats:  {STATS_PATH}")
     
-    # Print a few sample examples for inspection
     print(f"\n  SAMPLE EXAMPLES (first 2):")
     print(f"  {'─'*50}")
     for ex in all_examples[:2]:
         user_msg = ex["messages"][1]["content"]
         asst_msg = ex["messages"][2]["content"]
-        # Truncate for display
         print(f"  USER (first 200 chars):")
         print(f"    {user_msg[:200]}...")
         print(f"  ASSISTANT:")

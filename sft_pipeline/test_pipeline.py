@@ -24,10 +24,7 @@ from config import OUTPUT_DIR, RAW_RUNS_PATH, SYNTHESIZED_PATH, SFT_DATASET_PATH
 from tools import load_scenarios_list, compress_evidence, run_tool
 
 
-# ── Mock LLM responses ───────────────────────────────────────────
 
-# These simulate what a large model would plausibly return
-# for different investigation scenarios.
 
 _INVESTIGATION_PLANS = {
     "deploy_regression": [
@@ -142,7 +139,6 @@ def _get_mock_plan(root_cause: str, run_index: int, step_index: int, service: st
     
     if step_index < len(plan):
         response = dict(plan[step_index])
-        # Fill in service
         if response["action"] != "final":
             response["args"] = {"service": service}
         return response
@@ -155,7 +151,6 @@ def _get_mock_synthesis(scenario_entry: dict) -> dict:
     root_cause = scenario_entry["root_cause"]
     service = scenario_entry["service"]
     
-    # Pick the first plan for this root cause as the "synthesis"
     plans = _INVESTIGATION_PLANS.get(root_cause, _INVESTIGATION_PLANS["resource_exhaustion"])
     chosen = plans[0]
     
@@ -174,7 +169,6 @@ def _get_mock_synthesis(scenario_entry: dict) -> dict:
     }
 
 
-# ── Mock call_ollama_json ─────────────────────────────────────────
 
 _mock_call_count = 0
 _mock_scenario_context = {}  # thread-unsafe but fine for testing
@@ -187,7 +181,6 @@ def mock_call_ollama_json(system, user, model=None, temperature=0.7, num_predict
     
     # Detect if this is a Phase 1 call (investigation) or Phase 2 call (synthesis)
     if "ATTEMPT" in user or "investigation attempts" in user:
-        # Phase 2: synthesis
         ctx = _mock_scenario_context.get("current_entry")
         if ctx:
             return _get_mock_synthesis(ctx)
@@ -196,7 +189,6 @@ def mock_call_ollama_json(system, user, model=None, temperature=0.7, num_predict
             {"action": "final", "args": {}, "rationale": "test"},
         ]}
     else:
-        # Phase 1: investigation step
         ctx = _mock_scenario_context.get("current_scenario", {})
         root_cause = ctx.get("root_cause", "resource_exhaustion")
         service = ctx.get("service", "unknown")
@@ -209,7 +201,6 @@ def mock_call_ollama_json(system, user, model=None, temperature=0.7, num_predict
         return result
 
 
-# ── Patched Phase 1 ───────────────────────────────────────────────
 
 def run_phase1_mocked(max_scenarios=3):
     """Run Phase 1 with mocked LLM calls."""
@@ -220,7 +211,6 @@ def run_phase1_mocked(max_scenarios=3):
     
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    # Clear existing
     if RAW_RUNS_PATH.exists():
         RAW_RUNS_PATH.unlink()
     
@@ -252,7 +242,6 @@ def run_phase1_mocked(max_scenarios=3):
                 f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
-# ── Patched Phase 2 ───────────────────────────────────────────────
 
 def run_phase2_mocked(max_scenarios=3):
     """Run Phase 2 with mocked LLM calls."""
@@ -285,7 +274,6 @@ def run_phase2_mocked(max_scenarios=3):
                     f.write(json.dumps(output_entry, ensure_ascii=False) + "\n")
 
 
-# ── Tests ─────────────────────────────────────────────────────────
 
 def test_full_pipeline(n_scenarios=3):
     """Test the full pipeline end-to-end with mock LLM."""
@@ -294,12 +282,10 @@ def test_full_pipeline(n_scenarios=3):
     print(f"  END-TO-END PIPELINE TEST ({n_scenarios} scenarios)")
     print(f"{'='*60}")
     
-    # Clean output
     if OUTPUT_DIR.exists():
         shutil.rmtree(OUTPUT_DIR)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    # Phase 1
     print(f"\n  Phase 1: Generating raw runs...")
     run_phase1_mocked(max_scenarios=n_scenarios)
     
@@ -315,7 +301,6 @@ def test_full_pipeline(n_scenarios=3):
             assert run["steps"][-1]["action"] == "final", f"Run didn't end with final: {[s['action'] for s in run['steps']]}"
     print(f"    ✓ All runs complete and end with 'final'")
     
-    # Phase 2
     print(f"\n  Phase 2: Synthesizing trajectories...")
     run_phase2_mocked(max_scenarios=n_scenarios)
     
@@ -335,7 +320,6 @@ def test_full_pipeline(n_scenarios=3):
                 assert False, f"Consecutive duplicate: {traj[i]['action']}"
     print(f"    ✓ All trajectories valid (no duplicates, end with final)")
     
-    # Phase 3
     print(f"\n  Phase 3: Formatting SFT dataset...")
     from phase3_format_sft import run_phase3
     run_phase3(max_scenarios=n_scenarios)
@@ -346,7 +330,6 @@ def test_full_pipeline(n_scenarios=3):
     
     print(f"    ✓ Generated {len(sft_examples)} SFT examples")
     
-    # Validate SFT format
     for i, ex in enumerate(sft_examples):
         msgs = ex["messages"]
         assert len(msgs) == 3, f"Example {i}: expected 3 messages, got {len(msgs)}"
@@ -354,7 +337,6 @@ def test_full_pipeline(n_scenarios=3):
         assert msgs[1]["role"] == "user", f"Example {i}: second message not user"
         assert msgs[2]["role"] == "assistant", f"Example {i}: third message not assistant"
         
-        # Assistant message should be valid JSON
         asst = json.loads(msgs[2]["content"])
         assert "action" in asst, f"Example {i}: no 'action' in assistant response"
         assert "rationale" in asst, f"Example {i}: no 'rationale' in assistant response"
@@ -363,7 +345,6 @@ def test_full_pipeline(n_scenarios=3):
     
     print(f"    ✓ All examples have valid format (system/user/assistant, valid JSON)")
     
-    # Check evidence materialization
     step1_examples = [ex for ex in sft_examples 
                       if 'Step: 1' in ex["messages"][1]["content"]
                       or 'Step: 2' in ex["messages"][1]["content"]]
@@ -375,7 +356,6 @@ def test_full_pipeline(n_scenarios=3):
     
     print(f"    ✓ Evidence materialized in {evidence_present}/{len(step1_examples)} step>0 examples")
     
-    # Action distribution
     actions = Counter()
     for ex in sft_examples:
         a = json.loads(ex["messages"][2]["content"])["action"]
@@ -388,12 +368,10 @@ def test_full_pipeline(n_scenarios=3):
         bar = "█" * int(pct / 3)
         print(f"    {action:12s}: {count:3d} ({pct:5.1f}%) {bar}")
     
-    # Final ratio check
     final_pct = actions.get("final", 0) / total * 100
     assert final_pct <= 35, f"Too many 'final' examples: {final_pct:.1f}% (max 30%)"
     print(f"    ✓ 'final' ratio OK ({final_pct:.1f}% ≤ 30%)")
     
-    # Print a full example
     print(f"\n  FULL EXAMPLE (step 1 with evidence):")
     print(f"  {'─'*55}")
     for ex in sft_examples:

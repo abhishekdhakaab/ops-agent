@@ -99,7 +99,6 @@ def _guess_service(question: str) -> str:
         "cdn-edge", "email-worker", "recommendation-svc", "session-store",
         "image-resize", "analytics-ingest", "auth-proxy", "billing-svc",
         "file-upload", "pricing-engine", "shipping-calc", "feed-svc",
-        # Older demo questions still use these aliases.
         "service-x", "checkout", "api", "service-y", "payments",
     ]:
         if s in q:
@@ -470,7 +469,6 @@ async def retrieval_agent_node(state: AgentState)-> AgentState:
                 "text": h["text"],
             })
 
-    # Different queries often retrieve the same high-scoring chunk.
     seen = set()
     uniq = []
     for r in retrieved_chunks:
@@ -521,7 +519,6 @@ def build_graph():
     g.add_edge("action","finalize")
     g.add_edge("finalize",END)
     return g.compile()
-
 
 
 

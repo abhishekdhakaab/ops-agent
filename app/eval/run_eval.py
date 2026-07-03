@@ -42,11 +42,9 @@ def _read_model_from_env() -> str:
                 return line.split("=", 1)[1].strip()
     return os.getenv("LLM_MODEL", "unknown")
 
-# Add project root to path so we can import the scorer
 sys.path.insert(0, str(PROJ_ROOT))
 
 
-# ── Run eval ───────────────────────────────────────────────────────
 
 async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, max_questions: int = 0) -> Dict[str, Any]:
     """Evaluate the running API and return per-question and aggregate scores."""
@@ -94,7 +92,6 @@ async def run_eval_async(model_name: str = "unknown", use_judge: bool = True, ma
             data = resp.json()
 
             # The public endpoint omits internal action fields, so reconstruct only
-            # the enum values needed by the structured scorer.
             agent_result = {
                 "tools_used": data.get("tools_used", []),
                 "final_answer": data.get("final_answer", ""),
@@ -183,7 +180,6 @@ def run_eval(model_name: str = "unknown", use_judge: bool = True, max_questions:
     return asyncio.run(run_eval_async(model_name, use_judge, max_questions))
 
 
-# ── Save/load results ─────────────────────────────────────────────
 
 def save_result(result: Dict[str, Any], model_name: str) -> Path:
     """Write one timestamped evaluation result."""
@@ -203,7 +199,6 @@ def load_all_results() -> List[Dict[str, Any]]:
     return [json.loads(p.read_text()) for p in sorted(RESULTS_DIR.glob("eval_*.json"))]
 
 
-# ── Comparison table ──────────────────────────────────────────────
 
 def print_comparison(results: List[Dict[str, Any]]):
     """Print a compact comparison of evaluation summaries."""
@@ -251,7 +246,6 @@ def print_comparison(results: List[Dict[str, Any]]):
     print()
 
 
-# ── Multi-model comparison ────────────────────────────────────────
 
 def update_env_model(model: str):
     """Select a model in the local environment file for the next server run."""
@@ -322,7 +316,6 @@ def run_compare(models: List[str], use_judge: bool = True, max_questions: int = 
     print_comparison(all_results)
 
 
-# ── CLI ────────────────────────────────────────────────────────────
 
 def main():
     """Parse CLI flags and run evaluation or historical reporting."""

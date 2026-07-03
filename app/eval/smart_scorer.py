@@ -7,7 +7,6 @@ from typing import Dict, Any, List, Optional
 from app.core.config import settings
 
 
-# ── Structured scoring (no LLM needed) ────────────────────────────
 
 def score_tools(tools_used: List[str], expected_all: List[str], expected_any: List[str]) -> Dict[str, Any]:
     """Measure required-tool coverage and acceptable-tool presence."""
@@ -99,7 +98,6 @@ def _adjacent_severity(s: str) -> set:
     return adj.get(s, {s})
 
 
-# ── LLM-as-Judge scoring ──────────────────────────────────────────
 
 JUDGE_SYSTEM = """You are an evaluation judge for an AI operations investigation agent.
 
@@ -230,7 +228,6 @@ Score the agent's diagnosis.
         }
 
 
-# ── Combined scoring ──────────────────────────────────────────────
 
 async def score_full(
     question: str,
@@ -253,7 +250,6 @@ async def score_full(
     efficiency = score_efficiency(tools_used, expected_min_tools, expected_max_tools)
     structured = score_structured(agent_result, ground_truth)
     
-    # The judge is optional because it dominates evaluation latency.
     if use_llm_judge:
         judge = await llm_judge_score(question, evidence, final_answer, ground_truth)
     else:

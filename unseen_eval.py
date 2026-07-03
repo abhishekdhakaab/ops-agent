@@ -33,12 +33,10 @@ import random
 import argparse
 from pathlib import Path
 
-# ── Path setup ────────────────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_DIR = SCRIPT_DIR / "data"
 RESULTS_DIR = DATA_DIR / "eval_results"
 
-# Import shared prompt format from sft_pipeline
 sys.path.insert(0, str(SCRIPT_DIR / "sft_pipeline"))
 from prompts import PLANNER_SYSTEM, build_planner_state, build_planner_user_message
 import sys
@@ -46,11 +44,7 @@ sys.path.insert(0, str(SCRIPT_DIR / "sft_pipeline"))
 from planner_policy import normalize_action, best_first_tools
 
 
-# ══════════════════════════════════════════════════════════════════
-# UNSEEN SCENARIO GENERATION
-# ══════════════════════════════════════════════════════════════════
 
-# Services that were NEVER in training data
 UNSEEN_SERVICES = [
     "auth-gateway", "log-aggregator", "report-engine", "data-pipeline",
     "graphql-proxy", "feature-flag-svc", "ab-test-engine", "sitemap-builder",
@@ -149,7 +143,6 @@ _QUESTIONS = {
 
 def generate_unseen_scenarios(count: int = 30, seed: int = 42) -> list:
     """Generate new scenarios with unseen services."""
-    # Verify no overlap with training scenarios
     import json as _json
     from pathlib import Path as _Path
     _scenarios_path = _Path(__file__).resolve().parent / "data" / "scenarios.json"
@@ -184,7 +177,6 @@ def generate_unseen_scenarios(count: int = 30, seed: int = 42) -> list:
         root_cause = root_causes[i % len(root_causes)]
         severity = severities[root_cause]
 
-        # Metrics
         if root_cause in ("deploy_regression", "resource_exhaustion", "upstream_dependency", "infrastructure"):
             has_spike = True
             avg_lat = round(rng.uniform(200, 900), 1)
@@ -196,7 +188,6 @@ def generate_unseen_scenarios(count: int = 30, seed: int = 42) -> list:
             p95_lat = round(avg_lat * rng.uniform(1.5, 2.5), 1)
             spike_start = None
 
-        # Logs
         log_templates = _LOG_MESSAGES[root_cause]
         error_msgs = rng.choice(log_templates)
         if root_cause == "healthy":
@@ -206,7 +197,6 @@ def generate_unseen_scenarios(count: int = 30, seed: int = 42) -> list:
             error_count = rng.randint(50, 400)
             log_level = "ERROR"
 
-        # Deployments
         if root_cause in ("deploy_regression", "config_change"):
             has_deploy = True
             deploy_mins = rng.randint(15, 90)
@@ -219,11 +209,9 @@ def generate_unseen_scenarios(count: int = 30, seed: int = 42) -> list:
             deploy_summary = "Routine dependency update"
             deploy_author = "ci-bot"
 
-        # Question
         q_templates = _QUESTIONS[root_cause]
         question = rng.choice(q_templates).format(service=service)
 
-        # Ground truth
         if root_cause == "deploy_regression":
             must_mention = ["deploy"]
         elif root_cause == "infrastructure":
@@ -270,9 +258,6 @@ def generate_unseen_scenarios(count: int = 30, seed: int = 42) -> list:
     return scenarios
 
 
-# ══════════════════════════════════════════════════════════════════
-# TOOL SIMULATION (for unseen scenarios)
-# ══════════════════════════════════════════════════════════════════
 
 def simulate_tool(tool_name: str, args: dict, scenario: dict) -> dict:
     """Simulate a tool call using the scenario's data."""
@@ -308,9 +293,6 @@ def simulate_tool(tool_name: str, args: dict, scenario: dict) -> dict:
     return {"error": f"Unknown tool: {tool_name}"}
 
 
-# ══════════════════════════════════════════════════════════════════
-# REWARD + TOOL ACCURACY
-# ══════════════════════════════════════════════════════════════════
 
 def compute_reward(completion: str, scenario: dict) -> float:
     """Score a completion. Same logic as sft_eval.py."""
@@ -377,9 +359,6 @@ def compute_reward(completion: str, scenario: dict) -> float:
     return round(reward, 3)
 
 
-# ══════════════════════════════════════════════════════════════════
-# MODEL LOADING
-# ══════════════════════════════════════════════════════════════════
 
 def _ollama_to_hf(model_name: str) -> str:
     mapping = {
@@ -427,12 +406,7 @@ def load_model(model_path: str):
 
 # SCOPE NOTE: This eval tests only the first tool decision (step 0).
 # Every prompt is built with empty evidence and no prior tool calls.
-# It does not test multi-step investigation planning.
-# See: first_tool_accuracy in results.
 
-# ══════════════════════════════════════════════════════════════════
-# EVALUATION
-# ══════════════════════════════════════════════════════════════════
 
 def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
     """Evaluate a model on unseen scenarios."""
@@ -460,7 +434,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
         service = sc["service"]
         question = sc["question"]
 
-        # Build prompt — SAME format as training
         state = build_planner_state(
             question=question,
             service=service,
@@ -509,7 +482,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
         except Exception:
             pass
 
-        # Track per root cause
         rc = sc["root_cause"]
         if rc not in per_rc:
             per_rc[rc] = {"correct": 0, "total": 0, "rewards": []}
@@ -565,7 +537,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
 
     print(f"  └─────────────────────────────────────────────┘")
 
-    # Save
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     safe = label.replace(" ", "_").replace(":", "_").replace("/", "_")
     out_path = RESULTS_DIR / f"unseen_eval_{safe}.json"
@@ -576,9 +547,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
     return result
 
 
-# ══════════════════════════════════════════════════════════════════
-# CLI
-# ══════════════════════════════════════════════════════════════════
 
 def main():
     parser = argparse.ArgumentParser(description="Unseen data evaluation")
@@ -588,7 +556,6 @@ def main():
     parser.add_argument("--generate-only", action="store_true", help="Just generate and print scenarios")
     args = parser.parse_args()
 
-    # Generate unseen scenarios
     scenarios = generate_unseen_scenarios(count=args.count)
 
     if args.generate_only:
@@ -607,26 +574,21 @@ def main():
         return
 
     if args.model_path:
-        # Single model eval
         run_eval(args.model_path, scenarios, label=args.model_path)
         return
 
-    # Full comparison: base → SFT → GRPO
     results = []
 
-    # Base
     print("\n  Evaluating BASE model on unseen data...")
     r = run_eval(args.model, scenarios, label="Base (unseen)")
     results.append(r)
 
-    # SFT
     sft_path = str(DATA_DIR / f"trained_models/sft_{args.model.replace(':', '_').replace('/', '_')}" / "final")
     if Path(sft_path).exists():
         print("\n  Evaluating SFT model on unseen data...")
         r = run_eval(sft_path, scenarios, label="SFT (unseen)")
         results.append(r)
 
-    # GRPO
     grpo_path = str(DATA_DIR / "trained_models" / "grpo_on_sft_v2" / "final")
     if Path(grpo_path).exists():
         print("\n  Evaluating GRPO model on unseen data...")
@@ -640,7 +602,6 @@ def main():
         r = run_eval(dpo_path, scenarios, label="DPO (unseen)")
         results.append(r)
 
-    # Comparison table
     if len(results) >= 2:
         print(f"\n  ╔═══════════════════════════════════════════════════════════╗")
         print(f"  ║         UNSEEN DATA COMPARISON                            ║")
@@ -665,7 +626,6 @@ def main():
         print(f"  ║    Tool acc:   {d_tool:>+.1f}pp                                  ║")
         print(f"  ╚═══════════════════════════════════════════════════════════╝")
 
-        # Seen vs unseen comparison
         print(f"\n  ┌─────────────────────────────────────────────────────────┐")
         print(f"  │  GENERALIZATION CHECK (best model)                      │")
         print(f"  │  Seen data tool acc:   from sft_aligned_eval results    │")

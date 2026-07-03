@@ -62,7 +62,6 @@ def run_single_investigation(
     completed = False
     
     for step_idx in range(MAX_STEPS_PER_RUN + 1):  # +1 to allow final after max tools
-        # Build state with compressed evidence
         state = build_planner_state(
             question=question,
             service=service,
@@ -73,7 +72,6 @@ def run_single_investigation(
         
         user_msg = build_planner_user_message(state)
         
-        # Call the large model
         response = call_ollama_json(
             system=PLANNER_SYSTEM,
             user=user_msg,
@@ -83,7 +81,6 @@ def run_single_investigation(
         )
         
         if response is None:
-            # LLM call failed after retries — end this run
             steps.append({
                 "action": "error",
                 "args": {},
@@ -92,10 +89,8 @@ def run_single_investigation(
             })
             break
         
-        # Parse response
         action = response.get("action", "").lower().strip()
         
-        # Auto-correct common LLM typos
         action_fixes = {"metric": "metrics", "log": "logs", "deployment": "deployments",
                         "deploy": "deployments", "finish": "final", "done": "final",
                         "stop": "final", "end": "final"}
@@ -116,10 +111,8 @@ def run_single_investigation(
 
         
         
-        # Validate action
         if action not in VALID_ACTIONS:
             # Invalid tool — try to salvage by mapping to closest valid action,
-            # or just stop this run
             steps.append({
                 "action": action,
                 "args": args,
@@ -129,7 +122,6 @@ def run_single_investigation(
             })
             break
         
-        # Handle "final"
         if action == "final":
             steps.append({
                 "action": "final",
@@ -140,7 +132,6 @@ def run_single_investigation(
             completed = True
             break
         
-        # Ensure service is in args
         if isinstance(args, dict):
             args.setdefault("service", service)
             if isinstance(args.get("service"), str):
@@ -148,11 +139,9 @@ def run_single_investigation(
         else:
             args = {"service": service}
         
-        # Run the tool
         raw_output = run_tool(action, args, scenario_id=scenario_id)
         compressed = compress_evidence(action, raw_output)
         
-        # Record step
         steps.append({
             "action": action,
             "args": args,
@@ -222,7 +211,6 @@ def run_phase1(model: Optional[str] = None, max_scenarios: int = 0) -> str:
     
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    # Resume support
     existing = load_existing_runs()
     
     total = len(scenarios)
@@ -242,7 +230,6 @@ def run_phase1(model: Optional[str] = None, max_scenarios: int = 0) -> str:
         sc_id = scenario["id"]
         service = scenario["service"]
         
-        # Skip if already done
         if sc_id in existing:
             existing_runs = existing[sc_id].get("runs", [])
             if len(existing_runs) >= RUNS_PER_SCENARIO:
@@ -253,7 +240,6 @@ def run_phase1(model: Optional[str] = None, max_scenarios: int = 0) -> str:
         
         runs = []
         for run_idx in range(RUNS_PER_SCENARIO):
-            # Use different question variant per run for diversity
             question = generate_question(scenario, variant=run_idx)
             
             t0 = time.time()
@@ -269,7 +255,6 @@ def run_phase1(model: Optional[str] = None, max_scenarios: int = 0) -> str:
             tools = [s["action"] for s in result["steps"] if s["action"] != "error"]
             print(f"    Run {run_idx+1}: {status} {tools} ({elapsed:.1f}s)")
         
-        # Build entry
         entry = {
             "scenario_id": sc_id,
             "service": service,
@@ -279,13 +264,11 @@ def run_phase1(model: Optional[str] = None, max_scenarios: int = 0) -> str:
             "runs": runs,
         }
         
-        # Append to file (incremental save)
         with RAW_RUNS_PATH.open("a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         
         generated += 1
     
-    # Summary
     print(f"\n  Phase 1 complete:")
     print(f"    Generated: {generated}")
     print(f"    Skipped (resume): {skipped}")

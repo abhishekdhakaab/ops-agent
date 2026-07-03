@@ -23,7 +23,6 @@ from typing import Dict, Any, Optional
 from config import SCENARIOS_PATH
 
 
-# ── Load scenarios ────────────────────────────────────────────────
 
 def load_scenarios_by_id() -> Dict[str, dict]:
     """Load scenario index keyed by scenario ID (unique)."""
@@ -64,7 +63,6 @@ def _get_scenario(scenario_id: str) -> dict:
     return _SCENARIOS_BY_ID.get(scenario_id, {})
 
 
-# ── Tool implementations ─────────────────────────────────────────
 
 def run_tool(tool_name: str, args: dict, scenario_id: str = "") -> dict:
     """
@@ -191,7 +189,6 @@ def _deployments_tool(service: str, scenario_id: str = "") -> dict:
     }
 
 
-# ── Evidence compression ─────────────────────────────────────────
 
 def compress_evidence(tool_name: str, raw_output: dict) -> dict:
     """Keep only decision signals shared by training and inference prompts."""

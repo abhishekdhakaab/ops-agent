@@ -92,7 +92,6 @@ def run_sft(model_name: str, epochs: int = 3, lr: float = 2e-5, batch_size: int 
     print(f"  Output:       {output_dir}")
     print(f"{'='*60}\n")
 
-    # ── Load SFT data ────────────────────────────────────────────────
     if not SFT_DATA_PATH.exists():
         print(f"  ERROR: SFT dataset not found at {SFT_DATA_PATH}")
         print(f"  Run:  cd sft_pipeline && python phase3_format_sft.py")
@@ -107,7 +106,6 @@ def run_sft(model_name: str, epochs: int = 3, lr: float = 2e-5, batch_size: int 
     print(f"  Loaded {len(rows)} SFT training examples")
     dataset = Dataset.from_list(rows)
 
-    # ── LoRA: full 7-module coverage, high rank for SFT ─────────────
     lora_config = LoraConfig(
         r=32,
         lora_alpha=64,

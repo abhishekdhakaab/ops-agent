@@ -1,34 +1,17 @@
 #!/bin/bash
-# =============================================================================
-# Overnight GPU Training + Evaluation Pipeline — Ops Agent
-#
-# Runs on a single machine with 1–8 GPUs.
-# Trains: SFT → GRPO (on SFT) → DPO (on SFT)
-# Evaluates: all models on 100 in-distribution + 100 unseen scenarios
-#
-# Usage:
-#   conda activate ops_agent
-#   bash run_overnight.sh                          # Qwen2.5-1.5B (default)
-#   bash run_overnight.sh qwen2.5:7b               # Qwen2.5-7B
-#   bash run_overnight.sh qwen2.5:1.5b qwen2.5:7b  # Both models back-to-back
-# =============================================================================
 set -e
 
-# ── Args ──────────────────────────────────────────────────────────
 MODELS=("${@}")
 if [ ${#MODELS[@]} -eq 0 ]; then
     MODELS=("qwen2.5:1.5b")
 fi
 
-# ── Paths ─────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RESULTS_DIR="$SCRIPT_DIR/data/eval_results"
 LOG_DIR="$SCRIPT_DIR/logs"
 mkdir -p "$LOG_DIR"
 
-# ── GPU Check — only use GPUs with < 500 MB already occupied ──────
 # On a shared cluster other users may be running jobs. We detect free
-# GPUs by checking used memory; anything under 500 MB is considered free.
 FREE_GPU_IDS=()
 if command -v nvidia-smi &> /dev/null; then
     while IFS=", " read -r idx mem_used; do
@@ -63,7 +46,6 @@ else
     echo "  CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
 fi
 
-# ── Helper ────────────────────────────────────────────────────────
 run_step() {
     local STEP="$1"
     local CMD="$2"
@@ -77,9 +59,6 @@ run_step() {
     echo "  Done: $STEP ($(date))"
 }
 
-# ─────────────────────────────────────────────────────────────────
-# PHASE 0 — Verify training data exists
-# ─────────────────────────────────────────────────────────────────
 echo "[Phase 0] Checking training data..."
 SFT_DATA="$SCRIPT_DIR/sft_pipeline/output/sft_dataset.jsonl"
 GRPO_DATA="$SCRIPT_DIR/sft_pipeline/output/grpo_prompts.jsonl"
@@ -103,9 +82,6 @@ GRPO_COUNT=$(wc -l < "$GRPO_DATA")
 echo "  SFT examples: $SFT_COUNT"
 echo "  GRPO prompts: $GRPO_COUNT"
 
-# ─────────────────────────────────────────────────────────────────
-# Per-model training loop
-# ─────────────────────────────────────────────────────────────────
 for MODEL in "${MODELS[@]}"; do
     MODEL_SAFE="${MODEL//:/_}"
     MODEL_SAFE="${MODEL_SAFE//\//_}"
@@ -114,7 +90,6 @@ for MODEL in "${MODELS[@]}"; do
     echo "  MODEL: $MODEL"
     echo "============================================================"
 
-    # ── Phase 1: SFT ──────────────────────────────────────────────
     SFT_FINAL="$SCRIPT_DIR/data/trained_models/sft_${MODEL_SAFE}/final"
 
     if [ -d "$SFT_FINAL" ]; then
@@ -127,7 +102,6 @@ for MODEL in "${MODELS[@]}"; do
             "sft_${MODEL_SAFE}"
     fi
 
-    # ── Phase 2: Merge SFT adapter into base (needed by GRPO + DPO) ──
     MERGED_PATH="$SCRIPT_DIR/data/trained_models/sft_${MODEL_SAFE}/merged_for_grpo"
     if [ ! -d "$MERGED_PATH" ]; then
         run_step "Merging SFT weights ($MODEL)" \
@@ -138,7 +112,6 @@ for MODEL in "${MODELS[@]}"; do
         echo "  [Merge] Already done at $MERGED_PATH — skipping."
     fi
 
-    # ── Phase 3: GRPO on SFT ──────────────────────────────────────
     GRPO_FINAL="$SCRIPT_DIR/data/trained_models/grpo_on_sft_v2/final"
 
     if [ -d "$GRPO_FINAL" ]; then
@@ -150,7 +123,6 @@ for MODEL in "${MODELS[@]}"; do
             "grpo_${MODEL_SAFE}"
     fi
 
-    # ── Phase 4: DPO on SFT ───────────────────────────────────────
     DPO_FINAL="$SCRIPT_DIR/data/trained_models/dpo_on_sft_v1/final"
 
     if [ -d "$DPO_FINAL" ]; then
@@ -164,15 +136,11 @@ for MODEL in "${MODELS[@]}"; do
 
 done  # end model loop
 
-# ─────────────────────────────────────────────────────────────────
-# PHASE 5 — Evaluation (single GPU, no distributed needed)
-# ─────────────────────────────────────────────────────────────────
 echo ""
 echo "============================================================"
 echo "  PHASE 5: Evaluation"
 echo "============================================================"
 
-# Use only the first free GPU for eval (no distributed needed)
 export CUDA_VISIBLE_DEVICES="${FREE_GPU_IDS[0]:-0}"
 
 for MODEL in "${MODELS[@]}"; do
@@ -195,9 +163,6 @@ for MODEL in "${MODELS[@]}"; do
         "eval_unseen100_${MODEL//:/_}"
 done
 
-# ─────────────────────────────────────────────────────────────────
-# DONE — Print summary
-# ─────────────────────────────────────────────────────────────────
 echo ""
 echo "============================================================"
 echo "  ALL DONE — $(date)"

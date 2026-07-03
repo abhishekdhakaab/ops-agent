@@ -48,8 +48,6 @@ MAX_STEPS = 5          # hard cap — prevents infinite loops
 OPTIMAL_MAX_STEPS = 3  # ≤3 tool calls is considered efficient
 
 
-# ── Required tools per root cause ────────────────────────────────────────────
-# A correct investigation must call at least these tools.
 # Ordered: [must_call, secondary] — must_call is mandatory, secondary is a bonus.
 
 REQUIRED_TOOLS: Dict[str, Set[str]] = {
@@ -71,7 +69,6 @@ BONUS_TOOLS: Dict[str, Set[str]] = {
 }
 
 
-# ── Model loading ─────────────────────────────────────────────────────────────
 
 def _ollama_to_hf(model_name: str) -> str:
     mapping = {
@@ -138,7 +135,6 @@ def parse_action(text: str) -> Optional[Dict]:
         return None
 
 
-# ── Trajectory scorer ─────────────────────────────────────────────────────────
 
 def score_trajectory(tools_called: List[str], reached_final: bool, scenario: dict) -> dict:
     root = scenario.get("root_cause", "")
@@ -148,25 +144,19 @@ def score_trajectory(tools_called: List[str], reached_final: bool, scenario: dic
     called_set = set(tools_called)
     n_steps    = len(tools_called)
 
-    # Coverage: fraction of required tools actually called
     coverage = len(called_set & required) / max(1, len(required))
 
-    # Bonus coverage (secondary tools called)
     bonus_coverage = len(called_set & bonus) / max(1, len(bonus)) if bonus else 1.0
 
-    # No redundancy: all tool calls were unique
     no_redundancy = len(tools_called) == len(called_set)
 
-    # Completion: agent chose to stop
     completion = reached_final
 
-    # Efficiency: stopped in ≤ OPTIMAL_MAX_STEPS
     efficiency = n_steps <= OPTIMAL_MAX_STEPS and reached_final
 
     # Trajectory accuracy: required tools called + no redundancy + completed
     traj_accurate = (coverage == 1.0) and no_redundancy and completion
 
-    # Composite score (0–1)
     composite = (
         coverage       * 0.40 +
         bonus_coverage * 0.10 +
@@ -189,7 +179,6 @@ def score_trajectory(tools_called: List[str], reached_final: bool, scenario: dic
     }
 
 
-# ── Single-scenario runner ────────────────────────────────────────────────────
 
 def run_scenario(model, tokenizer, device, scenario: dict) -> dict:
     service     = scenario["service"]
@@ -242,7 +231,6 @@ def run_scenario(model, tokenizer, device, scenario: dict) -> dict:
         if action not in {"metrics", "logs", "deployments"}:
             break
 
-        # Simulate the tool
         args = parsed.get("args", {})
         if "service" not in args:
             args["service"] = service
@@ -258,7 +246,6 @@ def run_scenario(model, tokenizer, device, scenario: dict) -> dict:
     return scores
 
 
-# ── Full eval ─────────────────────────────────────────────────────────────────
 
 def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
     print(f"\n{'='*60}")
@@ -288,7 +275,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
 
     total_time = time.time() - t0
 
-    # Aggregate
     n = len(results)
     traj_acc      = sum(r["traj_accurate"]  for r in results) / n
     avg_composite = sum(r["composite"]      for r in results) / n
@@ -298,7 +284,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
     efficiency    = sum(r["efficiency"]     for r in results) / n
     avg_steps     = sum(r["steps"]          for r in results) / n
 
-    # Per root-cause breakdown
     by_root: Dict[str, list] = {}
     for r in results:
         by_root.setdefault(r["root_cause"], []).append(r)
@@ -327,7 +312,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
         "per_root_cause":     per_root,
     }
 
-    # Print summary box
     print(f"\n  ┌────────────────────────────────────────────────────────┐")
     print(f"  │  {label:^54s} │")
     print(f"  ├────────────────────────────────────────────────────────┤")
@@ -347,7 +331,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
               f"coverage={s['avg_coverage']*100:5.1f}%  "
               f"n={s['count']}")
 
-    # Save
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     safe = label.replace(" ", "_").replace(":", "_").replace("/", "_")
     out = RESULTS_DIR / f"full_traj_eval_{safe}.json"
@@ -367,7 +350,6 @@ def run_eval(model_path: str, scenarios: list, label: str = "model") -> dict:
     return summary
 
 
-# ── Comparison table ──────────────────────────────────────────────────────────
 
 def print_comparison(results: list):
     if len(results) < 2:
@@ -396,7 +378,6 @@ def print_comparison(results: list):
     print(f"  ╚══════════════════════════════════════════════════════════════════╝")
 
 
-# ── CLI ───────────────────────────────────────────────────────────────────────
 
 def main():
     parser = argparse.ArgumentParser(description="Full trajectory evaluation for ops agent")
@@ -418,12 +399,10 @@ def main():
     if args.compare:
         all_results = []
 
-        # 1. Base model
         hf_base = _ollama_to_hf(args.model) if ":" in args.model else args.model
         r = run_eval(hf_base, all_scenarios, label="Base")
         all_results.append(r)
 
-        # 2. SFT
         sft_path = DATA_DIR / f"trained_models/sft_{model_safe}/final"
         if sft_path.exists():
             r = run_eval(str(sft_path), all_scenarios, label="SFT")
@@ -431,7 +410,6 @@ def main():
         else:
             print(f"\n  [SKIP] SFT model not found: {sft_path}")
 
-        # 3. GRPO
         grpo_path = DATA_DIR / "trained_models/grpo_on_sft_v2/final"
         if grpo_path.exists():
             r = run_eval(str(grpo_path), all_scenarios, label="GRPO")
@@ -439,7 +417,6 @@ def main():
         else:
             print(f"\n  [SKIP] GRPO model not found: {grpo_path}")
 
-        # 4. DPO
         dpo_path = DATA_DIR / "trained_models/dpo_on_sft_v1/final"
         if dpo_path.exists():
             r = run_eval(str(dpo_path), all_scenarios, label="DPO")

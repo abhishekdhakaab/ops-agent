@@ -26,7 +26,6 @@ def check_ollama_ready(model: Optional[str] = None) -> bool:
     """Verify Ollama is running and the model is available."""
     model = model or OLLAMA_MODEL
     
-    # Check server
     try:
         r = httpx.get(f"{OLLAMA_BASE_URL}/api/tags", timeout=5)
         r.raise_for_status()
@@ -38,13 +37,10 @@ def check_ollama_ready(model: Optional[str] = None) -> bool:
         print(f"\n  ERROR: Ollama check failed: {e}")
         return False
     
-    # Check model
     available = [m["name"] for m in r.json().get("models", [])]
     # Ollama returns names like "gemma3:12b" or "gemma3:12b-instruct-q4_0"
-    # Match on prefix
     model_found = any(m.startswith(model.split(":")[0]) for m in available)
     if not model_found:
-        # Try exact match too
         model_found = model in available or f"{model}:latest" in available
     
     if not model_found:
@@ -97,13 +93,11 @@ def call_ollama_json(
             
             content = r.json()["message"]["content"].strip()
             
-            # Try direct parse
             try:
                 return json.loads(content)
             except json.JSONDecodeError:
                 pass
             
-            # Try extracting JSON from markdown fences or surrounding text
             cleaned = content
             if cleaned.startswith("```"):
                 cleaned = re.sub(r"^```[a-zA-Z]*\n?", "", cleaned)
@@ -113,7 +107,6 @@ def call_ollama_json(
             if match:
                 return json.loads(match.group(0))
             
-            # Parse failed
             if attempt < max_retries - 1:
                 time.sleep(RETRY_DELAY_S)
                 continue

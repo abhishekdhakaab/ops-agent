@@ -25,10 +25,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 OUT_PATH = REPO_ROOT / "data" / "scenarios.json"
 
 
-# ── Building blocks ────────────────────────────────────────────────
 # Each root cause has a template for what metrics/logs/deploys look
 # like.  The generator picks a root cause, then fills in the template
-# with randomized values and optionally adds red herrings.
 
 SERVICE_NAMES = [
     "order-svc", "checkout-svc", "payment-svc", "user-auth", "search-svc",
@@ -145,7 +143,6 @@ DEPENDENCIES = [
 ]
 
 
-# ── Generator ──────────────────────────────────────────────────────
 
 def _fill(template: str, rng: random.Random) -> str:
     """Fill placeholders in a template string."""
@@ -190,7 +187,6 @@ def generate_scenario(
 
     sc_id = f"sc_{service}_{rng.randint(1000, 9999)}"
 
-    # ── Decide scenario parameters based on root cause ─────────
     if root_cause == "deploy_regression":
         subtype = rng.choice(["retry_storm", "oom", "query_regression", "serialization"])
         spike_start = rng.randint(10, 90)
@@ -216,7 +212,6 @@ def generate_scenario(
         has_spike = True
         error_count = rng.randint(50, 400)
         errors = _pick_errors(rng, ERROR_TEMPLATES["upstream_dependency"])
-        # Replace {dep} with chosen dependency
         errors = [e.replace(rng.choice(DEPENDENCIES), dep) if DEPENDENCIES[0] not in e else e for e in errors]
         severity = rng.choice(["high", "high", "medium"])
         correct_action = "escalate"
@@ -224,7 +219,6 @@ def generate_scenario(
         should_mention = [dep.split("-")[0], "upstream", "connection"]
         should_not_conclude = ["deploy caused", "rollback"]
 
-        # RED HERRING: recent deploy that is NOT the cause
         if difficulty in ("medium", "hard"):
             deploy_ago = rng.randint(15, 60)  # looks suspicious but isn't the cause
             deploy_summary = _fill(rng.choice(DEPLOY_SUMMARIES["neutral"]), rng)
@@ -309,7 +303,6 @@ def generate_scenario(
     else:
         raise ValueError(f"Unknown root cause: {root_cause}")
 
-    # ── Build metrics ──────────────────────────────────────────
     if has_spike:
         avg_lat = round(rng.uniform(200, 900), 1)
         p95_lat = round(avg_lat * rng.uniform(1.8, 3.5), 1)
@@ -317,7 +310,6 @@ def generate_scenario(
         avg_lat = round(rng.uniform(20, 120), 1)
         p95_lat = round(avg_lat * rng.uniform(1.5, 2.8), 1)
 
-    # ── Build scenario ─────────────────────────────────────────
     has_recent_deploy = deploy_ago < 120
 
     scenario = {
@@ -378,7 +370,6 @@ def generate_dataset(
     used_services = set()
 
     for i in range(count):
-        # Pick service (try not to reuse too much)
         available = [s for s in SERVICE_NAMES if s not in used_services]
         if not available:
             used_services.clear()
@@ -395,7 +386,6 @@ def generate_dataset(
     return scenarios
 
 
-# ── Question generation ────────────────────────────────────────────
 
 QUESTION_TEMPLATES = {
     "deploy_regression": [
@@ -491,7 +481,6 @@ def generate_questions(scenarios: List[Dict], rng: random.Random) -> list:
     return questions
 
 
-# ── SFT Training Data ─────────────────────────────────────────────
 
 PLANNER_SYSTEM = (
     "You are an ops investigation planner. Choose the NEXT best tool action.\n"
@@ -563,7 +552,6 @@ def generate_sft(scenarios: list) -> list:
     return rows
 
 
-# ── Main ───────────────────────────────────────────────────────────
 
 def main():
     import argparse
@@ -575,10 +563,8 @@ def main():
 
     hard_ratio = 0.6 if args.hard else 0.3
 
-    # Generate scenarios
     scenarios = generate_dataset(count=args.count, seed=args.seed, hard_ratio=hard_ratio)
 
-    # Save scenarios
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     out = {
         "version": "3.0",
@@ -589,14 +575,12 @@ def main():
     OUT_PATH.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Wrote {len(scenarios)} scenarios to {OUT_PATH}")
 
-    # Generate eval questions
     rng = random.Random(args.seed)
     questions = generate_questions(scenarios, rng)
     q_path = REPO_ROOT / "app" / "eval" / "questions.json"
     q_path.write_text(json.dumps(questions, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Wrote {len(questions)} eval questions to {q_path}")
 
-    # Generate SFT training data
     sft_rows = generate_sft(scenarios)
     sft_path = REPO_ROOT / "data" / "trl_planner_sft.jsonl"
     with sft_path.open("w", encoding="utf-8") as f:
@@ -604,7 +588,6 @@ def main():
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     print(f"Wrote {len(sft_rows)} SFT training rows to {sft_path}")
 
-    # Summary
     by_cause = {}
     by_diff = {}
     for sc in scenarios:

@@ -24,7 +24,6 @@ import argparse
 from pathlib import Path
 from typing import Dict, Any, List
 
-# Add sft_pipeline to path so we can import the shared prompts
 sys.path.insert(0, str(Path(__file__).resolve().parent / "sft_pipeline"))
 
 from prompts import PLANNER_SYSTEM, build_planner_state, build_planner_user_message
@@ -38,13 +37,11 @@ SCENARIOS_PATH = DATA_DIR / "scenarios.json"
 RESULTS_DIR = DATA_DIR / "eval_results"
 
 
-# ── Reward function ──────────────────────────────────────────────
 
 def compute_reward(completion: str, scenario: Dict) -> float:
     """Score a planner completion. Same structure as train.py but with updated tool mapping."""
     reward = 0.0
     
-    # Parse JSON
     text = completion.strip()
     if text.startswith("```"):
         text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
@@ -83,7 +80,6 @@ def compute_reward(completion: str, scenario: Dict) -> float:
         reward -= 0.3
         return reward
     
-    # Tool correctness — using updated mapping
     best = best_first_tools(scenario)
     
     if action in best:
@@ -93,7 +89,6 @@ def compute_reward(completion: str, scenario: Dict) -> float:
     elif action == "final":
         reward -= 0.2
     
-    # Service match
     args = parsed.get("args", {})
     if isinstance(args, dict):
         service = args.get("service", "")
@@ -102,7 +97,6 @@ def compute_reward(completion: str, scenario: Dict) -> float:
         elif service:
             reward += 0.1
     
-    # Rationale
     rationale = parsed.get("rationale", "")
     if isinstance(rationale, str) and len(rationale) > 10:
         reward += 0.2
@@ -110,7 +104,6 @@ def compute_reward(completion: str, scenario: Dict) -> float:
     return round(reward, 3)
 
 
-# ── Model loading ────────────────────────────────────────────────
 
 def _ollama_to_hf(model_name: str) -> str:
     mapping = {
@@ -159,10 +152,7 @@ def load_model(model_path: str):
 
 # SCOPE NOTE: This eval tests only the first tool decision (step 0).
 # Every prompt is built with empty evidence and no prior tool calls.
-# It does not test multi-step investigation planning.
-# See: first_tool_accuracy in results.
 
-# ── Eval ─────────────────────────────────────────────────────────
 
 def run_eval(model_path: str, label: str = "model", max_scenarios: int = 0) -> dict:
     """Evaluate using the SAME prompt format as SFT training."""
@@ -212,7 +202,6 @@ def run_eval(model_path: str, label: str = "model", max_scenarios: int = 0) -> d
         )
         user_msg = build_planner_user_message(state)
         
-        # Format as chat using tokenizer's template
         if hasattr(tokenizer, "apply_chat_template"):
             messages = [
                 {"role": "system", "content": PLANNER_SYSTEM},
@@ -238,7 +227,6 @@ def run_eval(model_path: str, label: str = "model", max_scenarios: int = 0) -> d
         reward = compute_reward(completion, sc)
         rewards.append(reward)
         
-        # Check tool accuracy
         best = best_first_tools(sc)
         try:
             m = re.search(r"\{.*\}", completion, flags=re.DOTALL)
@@ -308,12 +296,10 @@ def main():
     if args.compare:
         results = []
         
-        # Base model
         print("\n  Evaluating BASE model...")
         r = run_eval(args.model, label="Base (no training)", max_scenarios=args.count)
         results.append(r)
         
-        # SFT model
         sft_path = str(DATA_DIR / f"trained_models/sft_{args.model.replace(':', '_').replace('/', '_')}" / "final")
         if Path(sft_path).exists():
             print("\n  Evaluating SFT model...")
@@ -322,7 +308,6 @@ def main():
         else:
             print(f"\n  SFT model not found at {sft_path}")
         
-        # Print comparison
         if len(results) >= 2:
             base, sft = results[0], results[-1]
             print(f"\n  ╔═══════════════════════════════════════════╗")
